@@ -866,6 +866,57 @@ body {
 .event-banner-title { font-size: 0.72rem; color: #c8a0e8; letter-spacing: 2px; margin-bottom: 6px; }
 .event-banner-text { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
 
+/* Item image */
+.item-img-wrap {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.item-img-wrap svg { width: 90px; height: 120px; }
+
+.item-img-wrap.rarity-uncommon { background: rgba(41,128,185,0.08); }
+.item-img-wrap.rarity-rare { background: rgba(142,68,173,0.10); box-shadow: inset 0 0 20px rgba(142,68,173,0.15); }
+.item-img-wrap.rarity-legendary { background: rgba(201,164,74,0.08); box-shadow: inset 0 0 30px rgba(201,164,74,0.2); }
+
+.rarity-pip {
+  position: absolute;
+  bottom: 5px; right: 7px;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+}
+
+/* Appraisal observation narrative */
+.obs-block {
+  background: rgba(0,0,0,0.2);
+  border-left: 2px solid var(--gold-dark);
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+}
+
+.obs-verdict {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  font-style: normal;
+}
+
+.obs-verdict.real { background: rgba(44,168,96,0.12); border: 1px solid rgba(44,168,96,0.3); color: #80d0a0; }
+.obs-verdict.fake { background: rgba(192,57,43,0.12); border: 1px solid rgba(192,57,43,0.3); color: #e08878; }
+.obs-verdict.uncertain { background: rgba(201,164,74,0.08); border: 1px solid rgba(201,164,74,0.2); color: var(--gold); }
+
 /* Responsive */
 @media (max-width: 900px) {
   #layout { grid-template-columns: 1fr; }
@@ -989,92 +1040,283 @@ const ITEMS = [
   // 瓷器
   { id:'cer_folk_bowl', name:'民間陶碗', cat:'瓷器', diff:1, base:120, fakeRate:0.05, rare:'common',
     desc:'日常使用的粗陶碗，年代難以確認，表面有明顯使用痕跡。',
-    locs:['flea','secondhand'], conds:['品相尚可','有輕微磕碰','略有磨損'] },
+    locs:['flea','secondhand'], conds:['品相尚可','有輕微磕碰','略有磨損'],
+    obs:['碗身圓潤厚實，胎體粗糙，明顯是日用器物的手感','外壁施醬釉，釉色深沉，有自然的流釉痕跡','底部露胎，胎泥呈灰白色，有細小砂眼','口沿磨損均勻，看得出長年使用的痕跡'],
+    realClue:'老化程度自然，胎土與釉面的氧化層一致，非人工做舊所能仿造',
+    fakeClue:'底部切削過於整齊，砂眼分布太規律，像是刻意製造的效果' },
   { id:'cer_republic_vase', name:'民國粉彩花瓶', cat:'瓷器', diff:2, base:850, fakeRate:0.35, rare:'uncommon',
     desc:'民國時期粉彩瓷瓶，花鳥圖案細膩，底款模糊。',
-    locs:['flea','secondhand','warehouse'], conds:['品相完好','有輕微瑕疵','口沿略有磕損'] },
+    locs:['flea','secondhand','warehouse'], conds:['品相完好','有輕微瑕疵','口沿略有磕損'],
+    obs:['瓶身線條流暢，頸部修長，整體比例協調','粉彩筆觸細膩，花鳥圖案生動，線條有力度','釉面光澤柔和，手感溫潤，無刺眼的賊光','底款字體尚算工整，但字跡略顯模糊'],
+    realClue:'彩料沉穩內斂，具有民國瓷特有的柔和光澤，顏色深入釉面而非浮於表層',
+    fakeClue:'彩料色調過於鮮艷浮躁，看起來像現代化工顏料，釉面反光也太強' },
   { id:'cer_qing_bowl', name:'青花山水碗', cat:'瓷器', diff:3, base:3200, fakeRate:0.45, rare:'rare',
     desc:'疑似清中期青花碗，青花發色深沉，底款字跡不清晰。',
-    locs:['secondhand','warehouse','rural'], conds:['品相完好','有細小沙眼','底足略有磨損'] },
+    locs:['secondhand','warehouse','rural'], conds:['品相完好','有細小沙眼','底足略有磨損'],
+    obs:['胎體輕薄均勻，叩擊聲清脆悅耳，是細瓷的特徵','青花發色深沉，有自然的暈散感，非一筆塗抹','山水紋飾構圖大氣，用筆老練，顯示繪製者技術嫻熟','底足切削整齊，但足端稍顯磨損，符合使用痕跡'],
+    realClue:'鈷料入骨，青花色澤從深到淺有自然過渡，底款字體有典型清代官窯風格',
+    fakeClue:'青花色調單一，缺少深淺層次，暈散感似乎是用特殊工藝仿製，底款字體排列生硬' },
   { id:'cer_song_celadon', name:'疑似宋代青瓷盞', cat:'瓷器', diff:5, base:18000, fakeRate:0.75, rare:'legendary',
     desc:'開片自然，釉色如湖水般深邃，器型古拙，年代待確認。',
-    locs:['estate','preview'], conds:['品相完好'] },
+    locs:['estate','preview'], conds:['品相完好'],
+    obs:['器型小巧古拙，口沿薄如蛋殼，弧度自然優美','釉色呈天青色，深邃內斂，光線下略帶乳濁感','開片紋路延伸自然，裂紋深入胎骨，非表面施壓所致','底部支釘痕跡清晰，疑似宋代窯口的支燒方式'],
+    realClue:'胎質細膩堅硬，叩之聲如玉石，釉與胎的結合處有自然收縮，開片年代感十足',
+    fakeClue:'釉色雖美但過於均勻，開片分布太規律，底部支釘痕大小一致，宋瓷應有更多隨機性' },
   { id:'cer_fake_plate', name:'仿古彩繪盤', cat:'瓷器', diff:1, base:40, fakeRate:1.0, rare:'common',
     desc:'彩繪精美，疑似清代官窯，但做工有些奇怪。',
-    locs:['flea'], conds:['品相完好'] },
+    locs:['flea'], conds:['品相完好'],
+    obs:['盤面彩繪工整，龍鳳圖案規矩，色彩鮮亮','底款印有「大清乾隆年製」，字體清晰工整','釉面光亮如鏡，觸感光滑，無任何老化痕跡','胎體較重，扣之聲音沉悶'],
+    realClue:'無',
+    fakeClue:'底款太過清晰規整，真正的老瓷款識字體因手工繪製而各有差異；釉面太亮，毫無老瓷的寶光' },
   { id:'cer_ming_style', name:'明式青花梅瓶', cat:'瓷器', diff:4, base:9500, fakeRate:0.6, rare:'rare',
     desc:'瓶身修長，青花紋飾為典型明代風格，底款模糊。',
-    locs:['warehouse','rural','estate'], conds:['品相尚可','有舊裂修復痕跡'] },
+    locs:['warehouse','rural','estate'], conds:['品相尚可','有舊裂修復痕跡'],
+    obs:['梅瓶肩部飽滿，腹部修長，比例符合明代審美','青花紋飾以纏枝蓮為主，筆觸粗獷有力，具明代豪放風格','釉面有輕微橘皮紋，是老窯瓷的自然收縮特徵','底部有模糊款識，似乎是官窯標記，但難以辨認'],
+    realClue:'青花用料為蘇麻離青，有自然的鐵鏽斑，這是明早中期進口鈷料的典型特徵，難以仿製',
+    fakeClue:'青花色調過於穩定均勻，明代瓷器因窯溫不穩定應有深淺變化；橘皮紋看似人工製造' },
 
   // 書畫
   { id:'paint_folk_print', name:'民俗木版年畫', cat:'書畫', diff:1, base:180, fakeRate:0.1, rare:'common',
     desc:'傳統民俗題材，色彩雖褪但輪廓清晰，民間氣息濃厚。',
-    locs:['flea','secondhand'], conds:['略有破損','保存尚可'] },
+    locs:['flea','secondhand'], conds:['略有破損','保存尚可'],
+    obs:['紙張泛黃，邊緣有輕微脆化，顯示確有年代','版畫線條粗獷有力，色彩雖褪但原色仍可辨認','題材為傳統吉祥圖案，符合民間年畫風格','摺痕自然，顯示曾被摺疊保存過'],
+    realClue:'紙張纖維在顯微下可見手工製紙特徵，墨色深入紙面，非印刷墨水所能達到的效果',
+    fakeClue:'紙張老化程度不均，有些地方太黃太脆，疑似人工做舊' },
   { id:'paint_republic_scroll', name:'民國山水捲軸', cat:'書畫', diff:3, base:1800, fakeRate:0.45, rare:'uncommon',
     desc:'山水長卷，構圖大氣，落款字跡不清，疑似民國畫家作品。',
-    locs:['secondhand','warehouse','rural'], conds:['保存尚可','有輕微水漬','略有蟲蛀'] },
+    locs:['secondhand','warehouse','rural'], conds:['保存尚可','有輕微水漬','略有蟲蛀'],
+    obs:['絹本設色，絹絲細膩，保存相對完好','山水構圖採用傳統近景遠景布局，皴法嫻熟','落款字跡模糊，印章僅能看出大概輪廓','畫面左下角有輕微水漬，但不影響主體'],
+    realClue:'墨色入絹，層次豐富，提按頓挫均有力度，顯示功力深厚；絹絲老化均勻自然',
+    fakeClue:'墨色浮於絹面，缺少滲透感；皴法雖像但氣韻不足，似乎是臨摹而非創作' },
   { id:'paint_calligraphy', name:'古代書法手卷', cat:'書畫', diff:4, base:7500, fakeRate:0.6, rare:'rare',
     desc:'行書流暢，氣韻生動，款印模糊，真偽難辨。',
-    locs:['estate','preview','rural'], conds:['保存尚可','有些許污漬'] },
+    locs:['estate','preview','rural'], conds:['保存尚可','有些許污漬'],
+    obs:['紙質細膩，應為宣紙，泛黃程度顯示有相當年代','行書筆法流暢，提按轉折自然，絕非生手所書','各字間氣脈相連，整體章法和諧','款印模糊，僅能隱約辨出姓氏，無法確認作者'],
+    realClue:'墨色入紙深淺有致，枯濕濃淡俱佳，筆力透紙，紙背依稀可見墨跡',
+    fakeClue:'墨跡雖流暢但缺少骨力，筆速過於均勻，真正的大師作品應有更多節奏變化；紙張疑似人工做舊' },
   { id:'paint_reproduction', name:'古畫複製品', cat:'書畫', diff:1, base:25, fakeRate:1.0, rare:'common',
     desc:'裝裱精美，看似古畫，仔細看似乎有些不對勁。',
-    locs:['flea'], conds:['品相完好'] },
+    locs:['flea'], conds:['品相完好'],
+    obs:['裝裱精緻，天地桿材質良好','畫面色彩豐富，人物細節清晰','仔細觀察，線條邊緣有輕微網點','紙張觸感略顯均勻，不像手工紙的質感'],
+    realClue:'無',
+    fakeClue:'放大觀察可見細密網點，這是印刷複製的明確特徵；線條邊緣過於整齊，墨色無深淺層次' },
 
   // 玉器
   { id:'jade_folk', name:'民間玉飾', cat:'玉器', diff:2, base:380, fakeRate:0.3, rare:'common',
     desc:'玉質一般，造型簡單，難以判斷具體年代。',
-    locs:['flea','secondhand'], conds:['品相尚可','有磨損痕跡'] },
+    locs:['flea','secondhand'], conds:['品相尚可','有磨損痕跡'],
+    obs:['器形簡單，為常見的雲紋佩樣式','玉色偏青灰，質地尚可，微微透光','表面磨損均勻，顯示有長期佩戴痕跡','鑽孔工整，但孔壁較光滑'],
+    realClue:'玉質密度適中，沁色分布自然，老玉特有的蠟質光澤明顯，非新玉拋光效果',
+    fakeClue:'鑽孔孔壁太光滑，現代電鑽加工才有此效果；玉質光澤感不夠溫潤，反光帶有玻璃感' },
   { id:'jade_qing_pendant', name:'清代白玉佩', cat:'玉器', diff:3, base:4200, fakeRate:0.5, rare:'rare',
     desc:'白玉質地細膩，雕工精湛，為清代典型器型，沁色自然。',
-    locs:['secondhand','rural','estate'], conds:['品相完好','有輕微沁色'] },
+    locs:['secondhand','rural','estate'], conds:['品相完好','有輕微沁色'],
+    obs:['白玉質地細膩，羊脂感明顯，迎光透視可見絲狀棉絮紋','雕工精細，紋飾為清代典型的龍鳳呈祥，刀法流暢','沁色呈淡黃褐色，集中在邊角與刻槽處','器身打磨光滑，拋光均勻，寶光含蓄'],
+    realClue:'沁色深入玉骨，非表面浸染，迎光可見沁色漸變；玉質密度感和溫潤度符合和田玉特徵',
+    fakeClue:'沁色分布太集中，像是局部染色；雕工雖精但下刀角度過於現代，缺乏手工鐵砣的微妙偏差' },
   { id:'jade_han_bi', name:'疑似漢代玉璧', cat:'玉器', diff:5, base:25000, fakeRate:0.85, rare:'legendary',
     desc:'器型規整，沁色豐富，若為真品當為難得珍品。',
-    locs:['estate','preview'], conds:['品相尚可'] },
+    locs:['estate','preview'], conds:['品相尚可'],
+    obs:['圓形玉璧，中有圓孔，比例符合漢代禮器規制','玉色青灰，沁色豐富，紅、黃、黑各色沁跡交錯','表面有受沁後凸起的「玉皮」，質感粗糙','穀紋清晰規整，排列有序，加工痕跡古拙'],
+    realClue:'穀紋下刀角度與深淺呈現砣機加工特徵，且有明顯的止刀痕；沁色與玉質融為一體，非後天侵染',
+    fakeClue:'沁色雖豐富但分層太整齊，真正的地下沁色應更隨機；穀紋深度過於均勻，疑似現代工具所製' },
   { id:'jade_glass_fake', name:'翠綠玉墜', cat:'玉器', diff:1, base:15, fakeRate:1.0, rare:'common',
     desc:'色澤通透，溫潤如玉，賣家聲稱是上好翡翠。',
-    locs:['flea'], conds:['品相完好'] },
+    locs:['flea'], conds:['品相完好'],
+    obs:['顏色均勻翠綠，色澤通透','表面光滑，拋光極好','觸碰後感覺略微偏輕','從側面看光線折射有些奇怪'],
+    realClue:'無',
+    fakeClue:'重量明顯偏輕，玻璃密度遠低於翡翠；側面觀察有氣泡痕跡，是玻璃製品的典型特徵；翡翠應有纖維交織結構，此件完全透明' },
 
   // 銅器
   { id:'bronze_incense', name:'銅製香爐', cat:'銅器', diff:2, base:550, fakeRate:0.15, rare:'common',
     desc:'民間使用的銅香爐，包漿厚重，造型古樸。',
-    locs:['flea','secondhand','rural'], conds:['包漿自然','有使用痕跡'] },
+    locs:['flea','secondhand','rural'], conds:['包漿自然','有使用痕跡'],
+    obs:['三足圓腹，口沿外撇，器型端正古樸','包漿厚重均勻，呈深棕色，有歲月積澱感','內壁有歷年香灰殘留，底部有使用磨損','銅質紋理清晰，鑄造工整'],
+    realClue:'包漿深入銅質，非表面塗層，刮開一角可見銅色鮮亮，包漿與銅的對比自然',
+    fakeClue:'包漿分布太均勻，真正的老銅器因使用習慣，手握處包漿更厚；底部磨損過於刻意' },
   { id:'bronze_han_mirror', name:'古代銅鏡', cat:'銅器', diff:4, base:6500, fakeRate:0.55, rare:'rare',
     desc:'銅鏡背面紋飾清晰，鈕製完整，疑似漢唐之物。',
-    locs:['warehouse','rural','estate'], conds:['銅鏽自然','有輕微磕損'] },
+    locs:['warehouse','rural','estate'], conds:['銅鏽自然','有輕微磕損'],
+    obs:['圓形銅鏡，背面有浮雕紋飾，以四神獸為主題','中央圓鈕保存完整，鈕座為連弧紋','銅鏽呈綠色，附著紮實，有分層感','鏡面雖已失去反光能力，但銅質緻密厚重'],
+    realClue:'銅鏽分層明顯，底層為紅銅鏽，上層為綠銅鏽，此為千年以上氧化的典型特徵；紋飾線條邊緣有自然磨損',
+    fakeClue:'銅鏽顏色雖綠但附著不牢，用指甲輕刮即有脫落；紋飾線條邊緣太銳利，老鏡應有自然磨圓' },
   { id:'bronze_ancient_jue', name:'青銅爵形器', cat:'銅器', diff:5, base:35000, fakeRate:0.9, rare:'legendary',
     desc:'三足立，雙柱直，器型雄渾，若為商周真品則價值連城。',
-    locs:['estate','preview'], conds:['有修復痕跡','品相完好'] },
+    locs:['estate','preview'], conds:['有修復痕跡','品相完好'],
+    obs:['流、鋬、柱、腹、足五要素齊全，器型符合爵的規制','通體青銅鏽，深綠近藍，有地下出土特徵','器身有獸面紋浮雕，線條古拙有力','流口與鋬柄處有修復痕跡，但整體保存尚可'],
+    realClue:'青銅鏽與器體融為一體，鏽層下銅質腐蝕程度均勻，獸面紋的眼部細節保留了商代特有的方折風格',
+    fakeClue:'鏽色雖深但質地偏脆，真正地下出土的青銅鏽應更堅硬；獸面紋線條過於清晰，疑似翻模複製' },
 
   // 錢幣
   { id:'coin_qing', name:'清代制錢一批', cat:'錢幣', diff:1, base:90, fakeRate:0.05, rare:'common',
     desc:'清朝流通銅錢約十枚，字跡清晰，保存尚可。',
-    locs:['flea','secondhand'], conds:['保存尚可'] },
+    locs:['flea','secondhand'], conds:['保存尚可'],
+    obs:['方孔圓錢，錢文「乾隆通寶」，字跡清晰','銅質厚重，重量合乎清代制錢規格','邊緣有自然磨損，顯示曾流通使用','銅色呈深褐，包漿均勻'],
+    realClue:'錢文筆畫轉折處有流銅現象，是鑄造工藝的自然痕跡；磨損程度與字跡深度一致',
+    fakeClue:'字跡雖清晰但筆畫邊緣過於整齊，清代手工翻沙鑄造應留有更多不規則邊緣' },
   { id:'coin_yuan', name:'袁大頭銀元', cat:'錢幣', diff:2, base:1400, fakeRate:0.35, rare:'uncommon',
     desc:'民國袁世凱頭像銀元，品相不錯，重量足稱。',
-    locs:['flea','secondhand','rural'], conds:['品相良好','有輕微磨損','有戳記'] },
+    locs:['flea','secondhand','rural'], conds:['品相良好','有輕微磨損','有戳記'],
+    obs:['正面為袁世凱頭像，五年版，神情端正','背面為嘉禾圖案，幣值「壹圓」字樣清晰','重量約26.7克，與標準重量接近','幣面有輕微流通磨損，邊齒基本完整'],
+    realClue:'銀幣密度感十足，手感沉甸甸的；幣面光澤為老銀特有的柔和色調，敲擊聲清亮悠長',
+    fakeClue:'重量偏輕，可能為銅芯鍍銀；邊齒不夠均勻，疑似翻模鑄造；敲擊聲悶短' },
   { id:'coin_song', name:'宋代年號錢', cat:'錢幣', diff:3, base:1800, fakeRate:0.2, rare:'uncommon',
     desc:'宋代年號錢數枚，字跡清晰，年號可辨。',
-    locs:['warehouse','rural'], conds:['保存尚可'] },
+    locs:['warehouse','rural'], conds:['保存尚可'],
+    obs:['方孔錢，錢文為宋代年號，隸書書寫流暢','銅色呈青銅色，有綠鏽附著','字跡筆畫有宋代錢文的典型特徵','幣緣有自然磨損'],
+    realClue:'字口深峻，筆畫轉折處稜角分明，係當時工藝精良之作；鏽色與幣面融合，非後加',
+    fakeClue:'鏽色附著鬆散，字口的鏽與幣面鏽顏色略有差異；字體筆畫雖像但缺乏老錢特有的神韻' },
 
   // 家具
   { id:'furn_old_chair', name:'老式木椅', cat:'家具', diff:1, base:280, fakeRate:0.0, rare:'common',
     desc:'民國時期老式木椅，結構完整，略有磨損。',
-    locs:['flea','secondhand','rural'], conds:['結構完整','略有磨損'] },
+    locs:['flea','secondhand','rural'], conds:['結構完整','略有磨損'],
+    obs:['榫卯結構，無釘子，整體穩固','木材呈深棕色，表面有自然包漿','座面有使用磨損，四腿底部有不均勻磨損','雕花簡單，線條流暢'],
+    realClue:'榫頭與卯眼吻合自然，木材收縮後仍穩固，說明確有年代；木紋老化一致',
+    fakeClue:'無（此件幾乎不存在偽品）' },
   { id:'furn_qing_cabinet', name:'清代梳妝台', cat:'家具', diff:3, base:5500, fakeRate:0.25, rare:'rare',
     desc:'硬木梳妝台，雕花精美，疑似清中晚期製品。',
-    locs:['rural','estate'], conds:['品相尚可','有輕微磕損'] },
+    locs:['rural','estate'], conds:['品相尚可','有輕微磕損'],
+    obs:['材質為硬木，木紋緊密，顏色深沉','整體包漿均勻，光澤溫潤，非現代漆料','雕花為蝙蝠祥雲紋，刀工流暢，立體感強','抽屜榫卯嚴密，開合順暢，無現代五金'],
+    realClue:'木材截面年輪細密，說明生長緩慢的老料；木材收縮紋路清晰，榫卯處可見自然的鬆緊變化',
+    fakeClue:'包漿雖均勻但深度不夠，雕花刀法雖精但下刀角度過於一致，疑似機器輔助' },
   { id:'furn_ming_chair', name:'明式官帽椅', cat:'家具', diff:4, base:14000, fakeRate:0.45, rare:'legendary',
     desc:'典型明式造型，比例優美，木質細膩，年代有待鑑定。',
-    locs:['estate','preview'], conds:['品相完好','有修復痕跡'] },
+    locs:['estate','preview'], conds:['品相完好','有修復痕跡'],
+    obs:['搭腦、靠背、扶手、腿足比例優美，為明式四出頭官帽椅的典型樣式','木質細膩，紋理清晰，應為黃花梨或紫檀類硬木','榫卯結構精密，嚴絲合縫，技藝高超','靠背板有輕微修復，但整體包漿連貫'],
+    realClue:'黃花梨的鬼臉紋清晰可見，且木香隱約可聞；榫卯收縮自然，椅背厚薄不均是手工刨削的痕跡',
+    fakeClue:'木材雖像黃花梨但鬼臉紋分布太均勻，包漿顏色略顯浮躁；搭腦轉折弧度過於規整，疑似機器仿製' },
 
   // 雜項
   { id:'misc_book', name:'線裝古籍', cat:'雜項', diff:2, base:450, fakeRate:0.15, rare:'uncommon',
     desc:'線裝書一冊，紙張泛黃，內容不明，年代難辨。',
-    locs:['flea','secondhand','warehouse'], conds:['保存尚可','有蟲蛀痕跡'] },
+    locs:['flea','secondhand','warehouse'], conds:['保存尚可','有蟲蛀痕跡'],
+    obs:['宣紙線裝，裝幀形式為傳統蝴蝶裝','紙張泛黃，有輕微脆化，邊緣破損','蟲蛀孔洞分布不均，顯示確有長期存放','字跡為毛筆手書，字體工整'],
+    realClue:'紙張纖維在光下呈不規則交織狀，符合手工竹紙特徵；墨色入紙深淺自然，有磨損後的褪色',
+    fakeClue:'紙張老化太均勻，各頁黃化程度幾乎相同，真正老書各頁會有差異；蟲蛀孔洞形狀太規整' },
   { id:'misc_junk', name:'年代不明雜物', cat:'雜項', diff:1, base:25, fakeRate:0.0, rare:'common',
     desc:'說不清來路的舊物件，也許有意思也許只是廢品。',
-    locs:['flea'], conds:['品相一般'] },
+    locs:['flea'], conds:['品相一般'],
+    obs:['外觀普通，材質難以判斷','表面有積灰，顯示長期未被翻動','造型無特別之處，功能不明','整體而言，看不出有什麼特別的收藏價值'],
+    realClue:'無特別之處',
+    fakeClue:'無特別之處' },
 ];
+
+// ── SVG images per category ──────────────────────────────────────
+const CATEGORY_SVGS = {
+  '瓷器': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <defs><radialGradient id="vg" cx="40%" cy="35%"><stop offset="0%" stop-color="#f5f0e0"/><stop offset="100%" stop-color="#d8cfa8"/></radialGradient></defs>
+    <path d="M38,14 C34,14 31,18 29,27 L25,48 C21,65 19,80 25,96 C31,108 59,110 65,96 C71,80 69,65 65,48 L61,27 C59,18 56,14 52,14 Z" fill="url(#vg)" stroke="#9a8858" stroke-width="1.2"/>
+    <rect x="34" y="7" width="22" height="9" rx="3" fill="#ede8d5" stroke="#9a8858" stroke-width="1.2"/>
+    <ellipse cx="45" cy="7" rx="12" ry="3.5" fill="#e0d8c0" stroke="#9a8858" stroke-width="1"/>
+    <ellipse cx="45" cy="68" rx="16" ry="13" fill="none" stroke="#2856a0" stroke-width="1.8" opacity="0.7"/>
+    <path d="M34,60 Q45,52 56,60" fill="none" stroke="#2856a0" stroke-width="1.3" opacity="0.7"/>
+    <path d="M33,76 Q45,84 57,76" fill="none" stroke="#2856a0" stroke-width="1.3" opacity="0.7"/>
+    <path d="M29,50 Q45,44 61,50" fill="none" stroke="#2856a0" stroke-width="0.8" opacity="0.5"/>
+    <ellipse cx="45" cy="103" rx="20" ry="4" fill="#c8b880" opacity="0.3"/>
+  </svg>`,
+
+  '書畫': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <rect x="12" y="8" width="66" height="7" rx="3.5" fill="#5a3515" stroke="#8a5525" stroke-width="1"/>
+    <rect x="19" y="15" width="52" height="86" fill="#f2e6c0" stroke="#c0a858" stroke-width="1"/>
+    <rect x="19" y="15" width="52" height="86" fill="url(#pg)" opacity="0.3"/>
+    <path d="M27,72 L35,52 L42,63 L50,42 L58,58 L63,72 Z" fill="#508050" stroke="#386038" stroke-width="0.8" opacity="0.8"/>
+    <path d="M27,52 Q36,46 45,50 Q54,46 63,52" fill="none" stroke="#7090c0" stroke-width="0.8" opacity="0.6"/>
+    <circle cx="38" cy="38" rx="4" ry="6" fill="none" stroke="#908060" stroke-width="1.5" opacity="0.5"/>
+    <line x1="30" y1="25" x2="30" y2="36" stroke="#504030" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="37" y1="22" x2="37" y2="34" stroke="#504030" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="44" y1="24" x2="44" y2="35" stroke="#504030" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="12" y="101" width="66" height="7" rx="3.5" fill="#5a3515" stroke="#8a5525" stroke-width="1"/>
+    <line x1="12" y1="11.5" x2="78" y2="11.5" stroke="#7a4520" stroke-width="0.5"/>
+    <line x1="12" y1="104.5" x2="78" y2="104.5" stroke="#7a4520" stroke-width="0.5"/>
+  </svg>`,
+
+  '玉器': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <defs><radialGradient id="jg" cx="45%" cy="40%"><stop offset="0%" stop-color="#d8f0e0"/><stop offset="60%" stop-color="#a8d8b8"/><stop offset="100%" stop-color="#70a878"/></radialGradient></defs>
+    <ellipse cx="45" cy="60" rx="30" ry="30" fill="url(#jg)" stroke="#6a9870" stroke-width="1.5"/>
+    <ellipse cx="45" cy="60" rx="12" ry="12" fill="#0d0803" stroke="#6a9870" stroke-width="1"/>
+    <ellipse cx="45" cy="60" rx="30" ry="30" fill="none" stroke="#a8c8a8" stroke-width="0.6" opacity="0.5"/>
+    <path d="M26,44 Q30,34 40,30" fill="none" stroke="#c8e8c8" stroke-width="1" opacity="0.6"/>
+    <path d="M64,44 Q60,34 50,30" fill="none" stroke="#c8e8c8" stroke-width="1" opacity="0.6"/>
+    <path d="M20,62 Q18,72 24,80" fill="none" stroke="#c8e8c8" stroke-width="0.8" opacity="0.4"/>
+    <path d="M70,62 Q72,72 66,80" fill="none" stroke="#c8e8c8" stroke-width="0.8" opacity="0.4"/>
+    <line x1="45" y1="18" x2="45" y2="28" stroke="#8ab090" stroke-width="1.5"/>
+    <circle cx="45" cy="15" r="3.5" fill="#a8c8a8" stroke="#6a9870" stroke-width="1"/>
+    <ellipse cx="45" cy="60" rx="22" ry="22" fill="none" stroke="#90b898" stroke-width="0.5" opacity="0.4" stroke-dasharray="3,3"/>
+  </svg>`,
+
+  '銅器': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <defs><linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4a6830"/><stop offset="40%" stop-color="#6a9840"/><stop offset="100%" stop-color="#4a6830"/></linearGradient></defs>
+    <ellipse cx="45" cy="22" rx="20" ry="5" fill="#5a7838" stroke="#3a5820" stroke-width="1.2"/>
+    <path d="M25,22 L20,75 Q20,86 45,88 Q70,86 70,75 L65,22 Z" fill="url(#bg2)" stroke="#3a5820" stroke-width="1.2"/>
+    <ellipse cx="45" cy="88" rx="25" ry="6" fill="#4a6830" stroke="#3a5820" stroke-width="1"/>
+    <line x1="36" y1="88" x2="34" y2="108" stroke="#3a5820" stroke-width="3" stroke-linecap="round"/>
+    <line x1="45" y1="90" x2="45" y2="112" stroke="#3a5820" stroke-width="3" stroke-linecap="round"/>
+    <line x1="54" y1="88" x2="56" y2="108" stroke="#3a5820" stroke-width="3" stroke-linecap="round"/>
+    <path d="M28,40 Q45,32 62,40 Q45,48 28,40" fill="none" stroke="#8ab858" stroke-width="1.2" opacity="0.7"/>
+    <path d="M26,58 Q45,50 64,58 Q45,66 26,58" fill="none" stroke="#8ab858" stroke-width="1.2" opacity="0.7"/>
+    <path d="M27,74 Q45,68 63,74" fill="none" stroke="#8ab858" stroke-width="0.8" opacity="0.5"/>
+    <rect x="14" y="18" width="9" height="10" rx="2" fill="#6a8840" stroke="#3a5820" stroke-width="1"/>
+    <rect x="67" y="18" width="9" height="10" rx="2" fill="#6a8840" stroke="#3a5820" stroke-width="1"/>
+  </svg>`,
+
+  '錢幣': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <ellipse cx="45" cy="75" rx="28" ry="6" fill="#6a5520" opacity="0.4"/>
+    <g transform="translate(0,-12)">
+      <ellipse cx="45" cy="78" rx="26" ry="5" fill="#8a7030" stroke="#5a4818" stroke-width="0.8"/>
+      <ellipse cx="45" cy="74" rx="26" ry="26" fill="#b89040" stroke="#7a5c18" stroke-width="1.2"/>
+      <ellipse cx="45" cy="74" rx="10" ry="10" fill="#1a1008" stroke="#7a5c18" stroke-width="1"/>
+      <ellipse cx="45" cy="74" rx="26" ry="26" fill="none" stroke="#d0a848" stroke-width="0.5" opacity="0.5"/>
+      <path d="M38,66 L38,82 M35,74 L55,74" stroke="#c8a030" stroke-width="1.5" opacity="0.6"/>
+    </g>
+    <g transform="translate(-5,-28)">
+      <ellipse cx="45" cy="78" rx="26" ry="5" fill="#8a7030" stroke="#5a4818" stroke-width="0.8"/>
+      <ellipse cx="45" cy="74" rx="26" ry="26" fill="#b08838" stroke="#7a5c18" stroke-width="1.2"/>
+      <ellipse cx="45" cy="74" rx="10" ry="10" fill="#1a1008" stroke="#7a5c18" stroke-width="1"/>
+      <path d="M39,67 L39,81 M36,74 L54,74" stroke="#c8a030" stroke-width="1.5" opacity="0.5"/>
+    </g>
+    <g transform="translate(5,-44)">
+      <ellipse cx="45" cy="74" rx="26" ry="26" fill="#a88030" stroke="#7a5c18" stroke-width="1.2"/>
+      <ellipse cx="45" cy="74" rx="10" ry="10" fill="#1a1008" stroke="#7a5c18" stroke-width="1"/>
+      <path d="M39,67 L39,81 M36,74 L54,74" stroke="#c8a030" stroke-width="1.5" opacity="0.4"/>
+    </g>
+  </svg>`,
+
+  '家具': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <defs><linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5a3010"/><stop offset="50%" stop-color="#7a4818"/><stop offset="100%" stop-color="#5a3010"/></linearGradient></defs>
+    <path d="M28,8 Q45,4 62,8 L60,12 Q45,8 30,12 Z" fill="#6a3c14" stroke="#4a2808" stroke-width="0.8"/>
+    <rect x="31" y="12" width="28" height="52" rx="2" fill="url(#wg)" stroke="#4a2808" stroke-width="1"/>
+    <rect x="35" y="18" width="20" height="38" rx="1" fill="none" stroke="#9a6830" stroke-width="0.8" opacity="0.6"/>
+    <path d="M35,37 Q45,32 55,37 Q45,42 35,37" fill="none" stroke="#9a6830" stroke-width="0.7" opacity="0.5"/>
+    <rect x="25" y="64" width="40" height="8" rx="2" fill="#6a3c14" stroke="#4a2808" stroke-width="1"/>
+    <rect x="27" y="70" width="8" height="42" rx="2" fill="url(#wg)" stroke="#4a2808" stroke-width="1"/>
+    <rect x="55" y="70" width="8" height="42" rx="2" fill="url(#wg)" stroke="#4a2808" stroke-width="1"/>
+    <rect x="27" y="104" width="8" height="6" rx="1" fill="#4a2808"/>
+    <rect x="55" y="104" width="8" height="6" rx="1" fill="#4a2808"/>
+  </svg>`,
+
+  '雜項': () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120">
+    <g transform="rotate(-8,45,70)">
+      <rect x="18" y="48" width="54" height="60" rx="2" fill="#c8a058" stroke="#8a6030" stroke-width="1.2"/>
+      <rect x="18" y="48" width="54" height="60" rx="2" fill="#e8c880" stroke="#8a6030" stroke-width="1.2"/>
+      <line x1="18" y1="62" x2="72" y2="62" stroke="#8a6030" stroke-width="0.6"/>
+      <line x1="18" y1="74" x2="72" y2="74" stroke="#8a6030" stroke-width="0.6"/>
+      <line x1="18" y1="86" x2="72" y2="86" stroke="#8a6030" stroke-width="0.6"/>
+      <line x1="18" y1="98" x2="72" y2="98" stroke="#8a6030" stroke-width="0.6"/>
+      <rect x="16" y="46" width="4" height="64" rx="1" fill="#7a5020" stroke="#5a3810" stroke-width="0.8"/>
+    </g>
+    <g transform="rotate(5,45,60)">
+      <rect x="20" y="30" width="50" height="62" rx="2" fill="#d8b068" stroke="#8a6030" stroke-width="1.2"/>
+      <rect x="20" y="30" width="50" height="62" rx="2" fill="#f0d898" stroke="#8a6030" stroke-width="1.2"/>
+      <line x1="20" y1="44" x2="70" y2="44" stroke="#9a7040" stroke-width="0.7"/>
+      <line x1="20" y1="56" x2="70" y2="56" stroke="#9a7040" stroke-width="0.7"/>
+      <line x1="20" y1="68" x2="70" y2="68" stroke="#9a7040" stroke-width="0.7"/>
+      <line x1="20" y1="80" x2="70" y2="80" stroke="#9a7040" stroke-width="0.7"/>
+      <line x1="20" y1="38" x2="70" y2="38" stroke="#9a7040" stroke-width="0.4" opacity="0.5"/>
+      <rect x="18" y="28" width="4" height="66" rx="1" fill="#8a5828" stroke="#5a3810" stroke-width="0.8"/>
+    </g>
+  </svg>`,
+};
 
 const LOCATIONS = [
   { id:'flea', name:'跳蚤市場', icon:'🏪',
@@ -1337,7 +1579,7 @@ function generateLocationItems(locId) {
 // ═══════════════════════════════════════════════════════════════
 
 function appraiseItem(uid) {
-  if (G.ap <= 0) { toast('行動點不足！先結束今天或稍作規劃。'); return; }
+  if (G.ap <= 0) { toast('行動點不足！請先結束今天。'); return; }
 
   const item = G.inventory.find(x => x.uid === uid);
   if (!item) return;
@@ -1347,42 +1589,53 @@ function appraiseItem(uid) {
   const threshold = item.diff * 15;
   const roughThreshold = item.diff * 7;
 
-  let estVal, fakeDetected, note;
+  let estVal, fakeDetected, skillTier;
 
   if (eff >= threshold) {
-    // Accurate
-    const err = rand(-0.08, 0.12);
-    estVal = Math.round(item.trueVal * (1 + err));
+    skillTier = 'accurate';
+    estVal = Math.round(item.trueVal * (1 + rand(-0.08, 0.12)));
     fakeDetected = item.isFake;
-    note = '鑑定結果清晰，判斷有把握。';
   } else if (eff >= roughThreshold) {
-    // Rough
-    const err = rand(-0.35, 0.45);
-    estVal = Math.round(item.trueVal * (1 + err));
-    const fakeChance = 0.55 + (eff - roughThreshold) / (threshold - roughThreshold) * 0.35;
-    fakeDetected = item.isFake ? (Math.random() < fakeChance) : (Math.random() < 0.15);
-    note = '大致判斷，但仍有一定誤差。';
+    skillTier = 'rough';
+    estVal = Math.round(item.trueVal * (1 + rand(-0.35, 0.45)));
+    const acc = 0.55 + (eff - roughThreshold) / (threshold - roughThreshold) * 0.35;
+    fakeDetected = item.isFake ? (Math.random() < acc) : (Math.random() < 0.15);
   } else {
-    // Inaccurate
-    const wildMult = rand(0.1, 4.0);
-    estVal = Math.round(item.trueVal * wildMult);
-    estVal = Math.max(20, estVal);
+    skillTier = 'poor';
+    estVal = Math.max(20, Math.round(item.trueVal * rand(0.1, 4.0)));
     fakeDetected = Math.random() < 0.3;
-    note = '鑑定力不足，結果僅供參考。';
+  }
+
+  // Build narrative observation text
+  const tpl = ITEMS.find(t => t.id === item.templateId);
+  let obsLines = [];
+  if (tpl && tpl.obs) {
+    const shuffled = [...tpl.obs].sort(() => Math.random() - 0.5);
+    obsLines = shuffled.slice(0, skillTier === 'poor' ? 2 : skillTier === 'rough' ? 3 : 4);
+  }
+
+  let clueText = '';
+  if (skillTier === 'accurate' && tpl) {
+    clueText = fakeDetected ? tpl.fakeClue : tpl.realClue;
+  } else if (skillTier === 'rough' && tpl) {
+    // Might show wrong clue
+    clueText = (Math.random() < 0.7)
+      ? (fakeDetected ? tpl.fakeClue : tpl.realClue)
+      : (fakeDetected ? tpl.realClue : tpl.fakeClue);
   }
 
   item.appraised = true;
   item.estVal = estVal;
   item.fakeDetected = fakeDetected;
+  item.obsLines = obsLines;
+  item.clueText = clueText;
+  item.skillTier = skillTier;
 
   G.ap -= 1;
 
-  const resultText = fakeDetected
-    ? `【贗品】估值 ${fmt(estVal)}（此為假貨市場價）`
-    : `【真品】估值 ${fmt(estVal)}`;
-
+  const resultText = fakeDetected ? `疑似贗品，估值 ${fmt(estVal)}` : `疑似真品，估值 ${fmt(estVal)}`;
   addLog(`鑑定「${item.name}」— ${resultText}`, fakeDetected ? 'danger' : 'success');
-  toast(`${note}\n${resultText}`);
+  toast(resultText);
   renderAll();
 }
 
@@ -1665,12 +1918,10 @@ function renderExplore() {
 
   const locCards = LOCATIONS.map(loc => {
     const locked = G.reputation < (loc.unlock.rep || 0) || G.connections < (loc.unlock.con || 0);
-    const visited = G.visitedToday.includes(loc.id);
     let cls = 'location-card';
     if (locked) cls += ' locked';
-    if (visited) cls += ' visited';
 
-    const onclick = locked || visited ? '' : `onclick="visitLocation('${loc.id}')"`;
+    const onclick = locked ? '' : `onclick="visitLocation('${loc.id}')"`;
 
     return `
       <div class="${cls}" ${onclick}>
@@ -1685,28 +1936,18 @@ function renderExplore() {
   return `
     <div class="section-header">
       <div class="section-title">選擇進貨地點</div>
-      <span style="font-size:0.72rem;color:var(--text-dim)">今日剩餘行動點：${G.ap}</span>
+      <span style="font-size:0.72rem;color:var(--text-dim)">隨時可逛，不限次數</span>
     </div>
     <div class="location-grid">${locCards}</div>
-    <div style="font-size:0.72rem;color:var(--text-dim);margin-top:8px">
-      ※ 探索地點消耗 1 行動點，每處每天只能探索一次
-    </div>
   `;
 }
 
 function visitLocation(locId) {
-  if (G.ap <= 0) { toast('行動點不足！'); return; }
-  if (G.visitedToday.includes(locId)) { toast('今天已經探索過這裡了。'); return; }
-
-  G.ap -= 1;
-  G.visitedToday.push(locId);
-
   if (!G.locationItems[locId]) {
     G.locationItems[locId] = generateLocationItems(locId);
+    const loc = LOCATIONS.find(l => l.id === locId);
+    addLog(`前往「${loc.name}」，找到 ${G.locationItems[locId].length} 件物品`, 'info');
   }
-
-  const loc = LOCATIONS.find(l => l.id === locId);
-  addLog(`前往「${loc.name}」探索，找到 ${G.locationItems[locId].length} 件物品`, 'info');
 
   G.currentView = { type: 'shop', id: locId };
   renderTabContent();
@@ -1728,11 +1969,14 @@ function renderShop(locId) {
     `;
   }
 
-  const cards = items.map(item => `
+  const cards = items.map(item => {
+    const svgFn = CATEGORY_SVGS[item.cat];
+    const imgHtml = svgFn ? `<div class="item-img-wrap ${rarityClass(item.rare)}">${svgFn()}<span class="rarity-pip ${rarityClass(item.rare)}">${rarityLabel(item.rare)}</span></div>` : '';
+    return `
     <div class="shop-item-card">
-      <div style="display:flex;align-items:center;justify-content:space-between">
+      ${imgHtml}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
         <span class="item-category-badge cat-${item.cat}">${item.cat}</span>
-        <span class="${rarityClass(item.rare)}" style="font-size:0.65rem">${rarityLabel(item.rare)}</span>
       </div>
       <div class="item-name">${item.name}</div>
       <div class="item-condition">狀態：${item.cond}</div>
@@ -1743,7 +1987,7 @@ function renderShop(locId) {
           onclick="buyItem(${item.uid}, '${locId}')">購入</button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   return `
     <div class="shop-header">
@@ -1771,37 +2015,47 @@ function renderInventory() {
   const cards = G.inventory.map(item => {
     const canAppraise = !item.appraised && G.ap > 0;
     const diffText = item.diff <= 2 ? '簡易' : item.diff <= 3 ? '普通' : item.diff <= 4 ? '困難' : '極難';
+    const svgFn = CATEGORY_SVGS[item.cat];
+    const imgHtml = svgFn ? `<div class="item-img-wrap ${rarityClass(item.rare)}" style="height:110px"><div style="width:80px;height:100px">${svgFn()}</div><span class="rarity-pip ${rarityClass(item.rare)}">${rarityLabel(item.rare)}</span></div>` : '';
 
     let appraisalHtml = '';
     if (item.appraised) {
-      const isFakeResult = item.fakeDetected;
+      const isFake = item.fakeDetected;
+      const tierLabel = item.skillTier === 'accurate' ? '精準鑑定' : item.skillTier === 'rough' ? '大致判斷' : '模糊印象';
+      const obsText = (item.obsLines || []).map(o => `• ${o}`).join('<br>');
+      const verdictClass = isFake ? 'fake' : (item.skillTier === 'poor' ? 'uncertain' : 'real');
+      const verdictIcon = isFake ? '⚠' : (item.skillTier === 'poor' ? '？' : '✓');
+      const verdictText = isFake
+        ? `此件疑似贗品。估值約 ${fmt(item.estVal)}。`
+        : item.skillTier === 'poor'
+          ? `判斷不夠確定。粗估約 ${fmt(item.estVal)}，誤差可能較大。`
+          : `此件疑似真品。估值約 ${fmt(item.estVal)}。`;
+
       appraisalHtml = `
-        <div class="appraisal-result ${isFakeResult ? 'is-fake' : ''}">
-          ${isFakeResult
-            ? `<span class="fake-label">⚠ 疑似贗品</span>`
-            : `<span class="real-label">✓ 疑似真品</span>`}
-          <br>估值：<span class="est-value">${fmt(item.estVal)}</span>
-        </div>
+        <div style="font-size:0.65rem;color:var(--text-dim);letter-spacing:1px;margin-top:4px">── ${tierLabel} ──</div>
+        <div class="obs-block">${obsText || '觀察中…'}</div>
+        ${item.clueText ? `<div class="obs-block" style="margin-top:4px;border-color:${isFake?'var(--red-dark)':'var(--gold-dark)'}">${item.clueText}</div>` : ''}
+        <div class="obs-verdict ${verdictClass}">${verdictIcon} ${verdictText}</div>
       `;
     }
 
     return `
       <div class="inv-card ${item.appraised ? (item.fakeDetected ? 'fake-detected' : 'appraised') : ''}">
-        <div style="display:flex;align-items:center;justify-content:space-between">
+        ${imgHtml}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
           <span class="item-category-badge cat-${item.cat}">${item.cat}</span>
-          <span class="${rarityClass(item.rare)}" style="font-size:0.65rem">${rarityLabel(item.rare)}</span>
         </div>
         <div class="item-name">${item.name}</div>
         <div class="item-condition">狀態：${item.cond}</div>
         <div class="item-desc" style="font-size:0.7rem;color:var(--text-dim)">${item.desc}</div>
-        <div class="buy-price-tag">購入價：${fmt(item.buyPrice)} · 來源：${item.locName}</div>
+        <div class="buy-price-tag">購入：${fmt(item.buyPrice)} · ${item.locName}</div>
         ${appraisalHtml}
         ${!item.appraised ? `
           <div class="item-actions">
             <button class="btn-appraise" ${!canAppraise ? 'disabled' : ''}
               onclick="appraiseItem(${item.uid})">
-              🔎 鑑定 <span class="ap-cost">(1AP)</span>
-              <span style="font-size:0.62rem;display:block;color:#506070">難度：${diffText} · 有效鑑定力：${eff}</span>
+              🔎 開始鑑定 <span class="ap-cost">(1AP)</span>
+              <span style="font-size:0.62rem;display:block;color:#506070;margin-top:2px">難度：${diffText} · 你的鑑定力：${eff}</span>
             </button>
           </div>
         ` : ''}
