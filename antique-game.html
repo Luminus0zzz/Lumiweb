@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古玩尋珍 — 古董鑑定轉售遊戲</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0803;
+  --bg-panel: #1c1006;
+  --bg-card: #261508;
+  --bg-hover: #321d0a;
+  --border: #5c320f;
+  --border-light: #8a5a28;
+  --gold: #c9a44a;
+  --gold-light: #f0cc6a;
+  --gold-dark: #7a5e18;
+  --text: #e0cc99;
+  --text-dim: #7a6030;
+  --text-bright: #fff5dd;
+  --red: #c0392b;
+  --red-dark: #8a1a10;
+  --green: #2ca860;
+  --green-dark: #1a6038;
+  --blue: #2980b9;
+  --purple: #8e44ad;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif TC', 'STSong', 'SimSun', 'Microsoft JhengHei', serif;
+  min-height: 100vh;
+  user-select: none;
+}
+
+/* ── Header ── */
+#header {
+  background: linear-gradient(180deg, #1e1008 0%, #150c04 100%);
+  border-bottom: 2px solid var(--gold-dark);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#header h1 {
+  font-size: 1.4rem;
+  color: var(--gold-light);
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(201,164,74,0.4);
+}
+
+#header-stats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.hstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.hstat-label {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.hstat-value {
+  font-size: 1.1rem;
+  color: var(--gold-light);
+  font-weight: bold;
+}
+
+.hstat-value.money { color: #f0c040; }
+.hstat-value.day { color: #c0e0ff; }
+.hstat-value.ap { color: #a0e8a0; }
+
+/* ── Layout ── */
+#layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  gap: 0;
+  min-height: calc(100vh - 57px);
+}
+
+/* ── Left Sidebar ── */
+#sidebar-left {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.side-section {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.side-section-title {
+  background: linear-gradient(90deg, var(--border), transparent);
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-row {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(92,50,15,0.3);
+}
+
+.stat-row:last-child { border-bottom: none; }
+
+.stat-name {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.stat-val-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-val {
+  font-size: 0.9rem;
+  color: var(--text-bright);
+  min-width: 30px;
+  text-align: right;
+}
+
+.stat-bar-bg {
+  width: 60px;
+  height: 5px;
+  background: rgba(92,50,15,0.5);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.tool-item {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--text);
+  border-bottom: 1px solid rgba(92,50,15,0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-item:last-child { border-bottom: none; }
+.tool-icon { font-size: 1rem; }
+
+.no-tools {
+  padding: 10px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ── Main Content ── */
+#main {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* Tabs */
+#tabs {
+  display: flex;
+  background: var(--bg-panel);
+  border-bottom: 2px solid var(--border);
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  letter-spacing: 2px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+  color: var(--gold-light);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+}
+
+.tab-badge {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.6rem;
+  border-radius: 8px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+#tab-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ── Tab: Explore ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.location-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.location-card:hover:not(.locked):not(.visited) {
+  border-color: var(--gold-dark);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.location-card.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.location-card.visited {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.location-card.visited::after {
+  content: '已探索';
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  background: rgba(0,0,0,0.5);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.location-card.locked::after {
+  content: '🔒';
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 0.9rem;
+}
+
+.loc-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.loc-name { font-size: 0.9rem; color: var(--text-bright); margin-bottom: 4px; }
+.loc-desc { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 8px; }
+.loc-unlock { font-size: 0.65rem; color: var(--red); }
+
+/* Shop items */
+.shop-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.shop-back-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.shop-back-btn:hover { border-color: var(--gold-dark); color: var(--text); }
+
+.shop-title { font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.shop-item-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item-category-badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+
+.cat-瓷器 { background: rgba(41,128,185,0.25); color: #5dade2; border: 1px solid rgba(41,128,185,0.4); }
+.cat-書畫 { background: rgba(142,68,173,0.25); color: #bb8fce; border: 1px solid rgba(142,68,173,0.4); }
+.cat-玉器 { background: rgba(26,188,156,0.25); color: #5dbeae; border: 1px solid rgba(26,188,156,0.4); }
+.cat-銅器 { background: rgba(211,84,0,0.25); color: #e59866; border: 1px solid rgba(211,84,0,0.4); }
+.cat-錢幣 { background: rgba(201,164,74,0.25); color: var(--gold); border: 1px solid rgba(201,164,74,0.4); }
+.cat-家具 { background: rgba(101,64,14,0.4); color: #c4914a; border: 1px solid rgba(139,69,19,0.5); }
+.cat-雜項 { background: rgba(80,80,80,0.25); color: #aaa; border: 1px solid rgba(120,120,120,0.4); }
+
+.item-name { font-size: 0.92rem; color: var(--text-bright); }
+.item-condition { font-size: 0.7rem; color: var(--text-dim); }
+.item-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; flex: 1; }
+
+.item-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.item-price {
+  font-size: 0.9rem;
+  color: #f0c040;
+}
+
+.item-price::before { content: '¥ '; font-size: 0.7rem; }
+
+.btn-buy {
+  background: linear-gradient(180deg, #5c3010, #3a1c08);
+  border: 1px solid var(--gold-dark);
+  color: var(--gold-light);
+  padding: 5px 14px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-buy:hover {
+  background: linear-gradient(180deg, #7a4018, #5a2a10);
+  border-color: var(--gold);
+}
+
+.btn-buy:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Tab: Inventory ── */
+.inv-empty {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 60px 20px;
+  font-size: 0.85rem;
+  line-height: 2;
+}
+
+.inv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.inv-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.inv-card.appraised { border-color: var(--gold-dark); }
+.inv-card.fake-detected { border-color: var(--red-dark); }
+
+.appraisal-result {
+  background: rgba(201,164,74,0.08);
+  border: 1px solid rgba(201,164,74,0.2);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.appraisal-result.is-fake {
+  background: rgba(192,57,43,0.1);
+  border-color: rgba(192,57,43,0.3);
+}
+
+.est-value { color: var(--gold); font-size: 0.88rem; }
+.fake-label { color: var(--red); font-weight: bold; }
+.real-label { color: var(--green); }
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-appraise {
+  flex: 1;
+  background: linear-gradient(180deg, #1a2a50, #0f1830);
+  border: 1px solid #2a4080;
+  color: #80b0ff;
+  padding: 6px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-appraise:hover { background: linear-gradient(180deg, #2a3a70, #1a2840); border-color: #4060c0; }
+.btn-appraise:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ap-cost { font-size: 0.62rem; color: #608080; margin-left: 3px; }
+
+.buy-price-tag {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+/* ── Tab: Sell ── */
+.venue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.venue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.venue-card:hover:not(.locked):not(.no-items) {
+  border-color: var(--green-dark);
+  background: var(--bg-hover);
+}
+
+.venue-card.locked { opacity: 0.4; cursor: not-allowed; }
+.venue-card.locked::after { content: '🔒'; position: absolute; top: 8px; right: 8px; }
+.venue-card.no-items { opacity: 0.5; cursor: not-allowed; }
+
+.venue-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.venue-name { font-size: 0.9rem; color: var(--text-bright); margin-bottom: 4px; }
+.venue-desc { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 6px; }
+.venue-multiplier { font-size: 0.72rem; color: var(--green); }
+.venue-unlock { font-size: 0.65rem; color: var(--red); }
+
+/* Sell View */
+.sell-venue-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sell-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.sell-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sell-offer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(40,120,60,0.1);
+  border: 1px solid rgba(40,120,60,0.3);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.sell-offer.uncertain {
+  background: rgba(120,100,20,0.1);
+  border-color: rgba(150,120,20,0.3);
+}
+
+.offer-label { font-size: 0.7rem; color: var(--text-dim); }
+.offer-price { font-size: 1rem; color: var(--green); }
+.offer-price::before { content: '¥ '; font-size: 0.72rem; }
+.offer-price.uncertain-price { color: var(--gold); }
+
+.btn-sell {
+  background: linear-gradient(180deg, #1a5020, #0f3010);
+  border: 1px solid var(--green-dark);
+  color: #80e0a0;
+  padding: 7px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-sell:hover { background: linear-gradient(180deg, #255828, #163818); }
+
+/* ── Tab: Upgrade ── */
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.upgrade-section-title {
+  font-size: 0.78rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  grid-column: 1 / -1;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.train-card, .tool-shop-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.train-icon { font-size: 1.5rem; }
+.train-name { font-size: 0.9rem; color: var(--text-bright); }
+.train-desc { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+
+.train-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.btn-train {
+  background: linear-gradient(180deg, #2a1a60, #1a1040);
+  border: 1px solid #4a3080;
+  color: #c0a8ff;
+  padding: 7px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-train:hover { background: linear-gradient(180deg, #3a2880, #201858); }
+.btn-train:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.tool-shop-card.owned {
+  border-color: var(--gold-dark);
+  opacity: 0.7;
+}
+
+.tool-shop-icon { font-size: 1.5rem; }
+.tool-shop-name { font-size: 0.9rem; color: var(--text-bright); }
+.tool-shop-desc { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+
+.btn-buy-tool {
+  background: linear-gradient(180deg, #5c3010, #3a1c08);
+  border: 1px solid var(--gold-dark);
+  color: var(--gold-light);
+  padding: 7px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-buy-tool:hover { background: linear-gradient(180deg, #7a4018, #5a2a10); }
+.btn-buy-tool:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.owned-badge {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--gold-dark);
+  padding: 6px;
+}
+
+/* ── Right Sidebar: Log ── */
+#sidebar-right {
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.log-header {
+  padding: 12px 14px;
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+#log-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#log-list::-webkit-scrollbar { width: 4px; }
+#log-list::-webkit-scrollbar-track { background: transparent; }
+#log-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.log-entry {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  padding: 6px 8px;
+  border-radius: 3px;
+  border-left: 2px solid;
+}
+
+.log-entry.info { border-color: var(--border); color: var(--text-dim); background: rgba(92,50,15,0.1); }
+.log-entry.success { border-color: var(--green-dark); color: #80d0a0; background: rgba(40,120,60,0.1); }
+.log-entry.warn { border-color: #8a6010; color: #d0a040; background: rgba(120,80,10,0.1); }
+.log-entry.danger { border-color: var(--red-dark); color: #e08070; background: rgba(150,30,20,0.1); }
+.log-entry.day { border-color: var(--gold-dark); color: var(--gold); background: rgba(201,164,74,0.08); font-weight: bold; }
+
+.log-day-tag {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* End Day Button */
+#end-day-wrap {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+
+#btn-end-day {
+  width: 100%;
+  background: linear-gradient(180deg, #3a2008, #201008);
+  border: 1px solid var(--gold-dark);
+  color: var(--gold);
+  padding: 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: inherit;
+  letter-spacing: 2px;
+  transition: all 0.2s;
+}
+
+#btn-end-day:hover {
+  background: linear-gradient(180deg, #5a3010, #381808);
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+/* ── Tooltip / Notification ── */
+#toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(30,15,5,0.95);
+  border: 1px solid var(--gold-dark);
+  color: var(--gold-light);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  z-index: 999;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  max-width: 360px;
+  text-align: center;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Modal ── */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-overlay.show { display: flex; }
+
+#modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+}
+
+.modal-title {
+  font-size: 1rem;
+  color: var(--gold-light);
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+.modal-body {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+.btn-modal-ok {
+  background: linear-gradient(180deg, #5c3010, #3a1c08);
+  border: 1px solid var(--gold-dark);
+  color: var(--gold-light);
+  padding: 7px 18px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+.btn-modal-cancel {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 7px 18px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+/* Rarity colors */
+.rarity-common { color: var(--text-dim); }
+.rarity-uncommon { color: #5dade2; }
+.rarity-rare { color: #bb8fce; }
+.rarity-legendary { color: var(--gold-light); text-shadow: 0 0 8px rgba(240,200,70,0.5); }
+
+/* Scrollbar */
+#tab-content::-webkit-scrollbar { width: 5px; }
+#tab-content::-webkit-scrollbar-track { background: transparent; }
+#tab-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* AP dots */
+.ap-dots { display: flex; gap: 4px; align-items: center; }
+.ap-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #80e0a0;
+  box-shadow: 0 0 6px rgba(80,200,100,0.5);
+  transition: all 0.3s;
+}
+.ap-dot.used {
+  background: #2a3a2a;
+  box-shadow: none;
+}
+
+/* Event banner */
+.event-banner {
+  background: linear-gradient(135deg, rgba(142,68,173,0.15), rgba(41,128,185,0.15));
+  border: 1px solid rgba(142,68,173,0.4);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.event-banner-title { font-size: 0.72rem; color: #c8a0e8; letter-spacing: 2px; margin-bottom: 6px; }
+.event-banner-text { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  #layout { grid-template-columns: 1fr; }
+  #sidebar-left, #sidebar-right { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>古玩尋珍</h1>
+  <div id="header-stats">
+    <div class="hstat">
+      <span class="hstat-label">資金</span>
+      <span class="hstat-value money" id="h-money">¥500</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-label">第幾天</span>
+      <span class="hstat-value day" id="h-day">第 1 天</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-label">行動點</span>
+      <div class="ap-dots" id="h-ap"></div>
+    </div>
+  </div>
+</div>
+
+<div id="layout">
+
+  <!-- Left Sidebar -->
+  <div id="sidebar-left">
+    <div class="side-section">
+      <div class="side-section-title">能力值</div>
+      <div class="stat-row">
+        <span class="stat-name">鑑定力</span>
+        <div class="stat-val-wrap">
+          <span class="stat-val" id="stat-appraisal">5</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-appraisal" style="width:5%"></div></div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">聲　望</span>
+        <div class="stat-val-wrap">
+          <span class="stat-val" id="stat-reputation">5</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-reputation" style="width:5%"></div></div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">人　脈</span>
+        <div class="stat-val-wrap">
+          <span class="stat-val" id="stat-connections">5</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-connections" style="width:5%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-section">
+      <div class="side-section-title">已持有道具</div>
+      <div id="tools-list"><div class="no-tools">尚無道具<br>前往「升級」購買</div></div>
+    </div>
+
+    <div class="side-section">
+      <div class="side-section-title">本日進度</div>
+      <div class="stat-row">
+        <span class="stat-name">庫存件數</span>
+        <span class="stat-val" id="stat-inv-count">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">今日收益</span>
+        <span class="stat-val" id="stat-today-profit" style="color:#2ca860">¥0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">累積收益</span>
+        <span class="stat-val" id="stat-total-profit">¥0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div id="tabs">
+      <button class="tab-btn active" onclick="switchTab('explore')" id="tab-explore">探　索</button>
+      <button class="tab-btn" onclick="switchTab('inventory')" id="tab-inventory">庫　存 <span class="tab-badge" id="inv-badge" style="display:none">0</span></button>
+      <button class="tab-btn" onclick="switchTab('sell')" id="tab-sell">販　售</button>
+      <button class="tab-btn" onclick="switchTab('upgrade')" id="tab-upgrade">升　級</button>
+    </div>
+    <div id="tab-content">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Right Sidebar: Log -->
+  <div id="sidebar-right">
+    <div class="log-header">日　誌</div>
+    <div id="log-list"></div>
+    <div id="end-day-wrap">
+      <button id="btn-end-day" onclick="endDay()">結束今日 →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// GAME DATA
+// ═══════════════════════════════════════════════════════════════
+
+const ITEMS = [
+  // 瓷器
+  { id:'cer_folk_bowl', name:'民間陶碗', cat:'瓷器', diff:1, base:120, fakeRate:0.05, rare:'common',
+    desc:'日常使用的粗陶碗，年代難以確認，表面有明顯使用痕跡。',
+    locs:['flea','secondhand'], conds:['品相尚可','有輕微磕碰','略有磨損'] },
+  { id:'cer_republic_vase', name:'民國粉彩花瓶', cat:'瓷器', diff:2, base:850, fakeRate:0.35, rare:'uncommon',
+    desc:'民國時期粉彩瓷瓶，花鳥圖案細膩，底款模糊。',
+    locs:['flea','secondhand','warehouse'], conds:['品相完好','有輕微瑕疵','口沿略有磕損'] },
+  { id:'cer_qing_bowl', name:'青花山水碗', cat:'瓷器', diff:3, base:3200, fakeRate:0.45, rare:'rare',
+    desc:'疑似清中期青花碗，青花發色深沉，底款字跡不清晰。',
+    locs:['secondhand','warehouse','rural'], conds:['品相完好','有細小沙眼','底足略有磨損'] },
+  { id:'cer_song_celadon', name:'疑似宋代青瓷盞', cat:'瓷器', diff:5, base:18000, fakeRate:0.75, rare:'legendary',
+    desc:'開片自然，釉色如湖水般深邃，器型古拙，年代待確認。',
+    locs:['estate','preview'], conds:['品相完好'] },
+  { id:'cer_fake_plate', name:'仿古彩繪盤', cat:'瓷器', diff:1, base:40, fakeRate:1.0, rare:'common',
+    desc:'彩繪精美，疑似清代官窯，但做工有些奇怪。',
+    locs:['flea'], conds:['品相完好'] },
+  { id:'cer_ming_style', name:'明式青花梅瓶', cat:'瓷器', diff:4, base:9500, fakeRate:0.6, rare:'rare',
+    desc:'瓶身修長，青花紋飾為典型明代風格，底款模糊。',
+    locs:['warehouse','rural','estate'], conds:['品相尚可','有舊裂修復痕跡'] },
+
+  // 書畫
+  { id:'paint_folk_print', name:'民俗木版年畫', cat:'書畫', diff:1, base:180, fakeRate:0.1, rare:'common',
+    desc:'傳統民俗題材，色彩雖褪但輪廓清晰，民間氣息濃厚。',
+    locs:['flea','secondhand'], conds:['略有破損','保存尚可'] },
+  { id:'paint_republic_scroll', name:'民國山水捲軸', cat:'書畫', diff:3, base:1800, fakeRate:0.45, rare:'uncommon',
+    desc:'山水長卷，構圖大氣，落款字跡不清，疑似民國畫家作品。',
+    locs:['secondhand','warehouse','rural'], conds:['保存尚可','有輕微水漬','略有蟲蛀'] },
+  { id:'paint_calligraphy', name:'古代書法手卷', cat:'書畫', diff:4, base:7500, fakeRate:0.6, rare:'rare',
+    desc:'行書流暢，氣韻生動，款印模糊，真偽難辨。',
+    locs:['estate','preview','rural'], conds:['保存尚可','有些許污漬'] },
+  { id:'paint_reproduction', name:'古畫複製品', cat:'書畫', diff:1, base:25, fakeRate:1.0, rare:'common',
+    desc:'裝裱精美，看似古畫，仔細看似乎有些不對勁。',
+    locs:['flea'], conds:['品相完好'] },
+
+  // 玉器
+  { id:'jade_folk', name:'民間玉飾', cat:'玉器', diff:2, base:380, fakeRate:0.3, rare:'common',
+    desc:'玉質一般，造型簡單，難以判斷具體年代。',
+    locs:['flea','secondhand'], conds:['品相尚可','有磨損痕跡'] },
+  { id:'jade_qing_pendant', name:'清代白玉佩', cat:'玉器', diff:3, base:4200, fakeRate:0.5, rare:'rare',
+    desc:'白玉質地細膩，雕工精湛，為清代典型器型，沁色自然。',
+    locs:['secondhand','rural','estate'], conds:['品相完好','有輕微沁色'] },
+  { id:'jade_han_bi', name:'疑似漢代玉璧', cat:'玉器', diff:5, base:25000, fakeRate:0.85, rare:'legendary',
+    desc:'器型規整，沁色豐富，若為真品當為難得珍品。',
+    locs:['estate','preview'], conds:['品相尚可'] },
+  { id:'jade_glass_fake', name:'翠綠玉墜', cat:'玉器', diff:1, base:15, fakeRate:1.0, rare:'common',
+    desc:'色澤通透，溫潤如玉，賣家聲稱是上好翡翠。',
+    locs:['flea'], conds:['品相完好'] },
+
+  // 銅器
+  { id:'bronze_incense', name:'銅製香爐', cat:'銅器', diff:2, base:550, fakeRate:0.15, rare:'common',
+    desc:'民間使用的銅香爐，包漿厚重，造型古樸。',
+    locs:['flea','secondhand','rural'], conds:['包漿自然','有使用痕跡'] },
+  { id:'bronze_han_mirror', name:'古代銅鏡', cat:'銅器', diff:4, base:6500, fakeRate:0.55, rare:'rare',
+    desc:'銅鏡背面紋飾清晰，鈕製完整，疑似漢唐之物。',
+    locs:['warehouse','rural','estate'], conds:['銅鏽自然','有輕微磕損'] },
+  { id:'bronze_ancient_jue', name:'青銅爵形器', cat:'銅器', diff:5, base:35000, fakeRate:0.9, rare:'legendary',
+    desc:'三足立，雙柱直，器型雄渾，若為商周真品則價值連城。',
+    locs:['estate','preview'], conds:['有修復痕跡','品相完好'] },
+
+  // 錢幣
+  { id:'coin_qing', name:'清代制錢一批', cat:'錢幣', diff:1, base:90, fakeRate:0.05, rare:'common',
+    desc:'清朝流通銅錢約十枚，字跡清晰，保存尚可。',
+    locs:['flea','secondhand'], conds:['保存尚可'] },
+  { id:'coin_yuan', name:'袁大頭銀元', cat:'錢幣', diff:2, base:1400, fakeRate:0.35, rare:'uncommon',
+    desc:'民國袁世凱頭像銀元，品相不錯，重量足稱。',
+    locs:['flea','secondhand','rural'], conds:['品相良好','有輕微磨損','有戳記'] },
+  { id:'coin_song', name:'宋代年號錢', cat:'錢幣', diff:3, base:1800, fakeRate:0.2, rare:'uncommon',
+    desc:'宋代年號錢數枚，字跡清晰，年號可辨。',
+    locs:['warehouse','rural'], conds:['保存尚可'] },
+
+  // 家具
+  { id:'furn_old_chair', name:'老式木椅', cat:'家具', diff:1, base:280, fakeRate:0.0, rare:'common',
+    desc:'民國時期老式木椅，結構完整，略有磨損。',
+    locs:['flea','secondhand','rural'], conds:['結構完整','略有磨損'] },
+  { id:'furn_qing_cabinet', name:'清代梳妝台', cat:'家具', diff:3, base:5500, fakeRate:0.25, rare:'rare',
+    desc:'硬木梳妝台，雕花精美，疑似清中晚期製品。',
+    locs:['rural','estate'], conds:['品相尚可','有輕微磕損'] },
+  { id:'furn_ming_chair', name:'明式官帽椅', cat:'家具', diff:4, base:14000, fakeRate:0.45, rare:'legendary',
+    desc:'典型明式造型，比例優美，木質細膩，年代有待鑑定。',
+    locs:['estate','preview'], conds:['品相完好','有修復痕跡'] },
+
+  // 雜項
+  { id:'misc_book', name:'線裝古籍', cat:'雜項', diff:2, base:450, fakeRate:0.15, rare:'uncommon',
+    desc:'線裝書一冊，紙張泛黃，內容不明，年代難辨。',
+    locs:['flea','secondhand','warehouse'], conds:['保存尚可','有蟲蛀痕跡'] },
+  { id:'misc_junk', name:'年代不明雜物', cat:'雜項', diff:1, base:25, fakeRate:0.0, rare:'common',
+    desc:'說不清來路的舊物件，也許有意思也許只是廢品。',
+    locs:['flea'], conds:['品相一般'] },
+];
+
+const LOCATIONS = [
+  { id:'flea', name:'跳蚤市場', icon:'🏪',
+    unlock:{rep:0,con:0},
+    desc:'什麼都有，真偽混雜。新手入門首選，進貨成本低。',
+    count:[3,5], priceRange:[0.25,0.55], fakeBoost:0.1,
+    rarityW:[0.75,0.22,0.03,0] },
+  { id:'secondhand', name:'舊貨行', icon:'🏠',
+    unlock:{rep:20,con:0},
+    desc:'比跳蚤市場規範，貨源較為穩定，偶有意外驚喜。',
+    unlockDesc:'需聲望 20',
+    count:[3,4], priceRange:[0.35,0.65], fakeBoost:0.05,
+    rarityW:[0.55,0.35,0.10,0] },
+  { id:'warehouse', name:'廢舊倉庫', icon:'🏭',
+    unlock:{rep:0,con:15},
+    desc:'朋友介紹的倉庫清倉，貨源混雜，低價高風險。',
+    unlockDesc:'需人脈 15',
+    count:[4,6], priceRange:[0.2,0.5], fakeBoost:0.15,
+    rarityW:[0.45,0.38,0.17,0] },
+  { id:'rural', name:'鄉下農家', icon:'🌾',
+    unlock:{rep:0,con:30},
+    desc:'老農家收藏的傳家物件，偽作少，珍品多，價格低。',
+    unlockDesc:'需人脈 30',
+    count:[2,4], priceRange:[0.15,0.45], fakeBoost:-0.05,
+    rarityW:[0.25,0.45,0.26,0.04] },
+  { id:'preview', name:'拍賣預展', icon:'🎭',
+    unlock:{rep:40,con:0},
+    desc:'大型拍賣會的預覽展，品質有保障，但價格偏高。',
+    unlockDesc:'需聲望 40',
+    count:[3,5], priceRange:[0.55,0.85], fakeBoost:-0.15,
+    rarityW:[0.10,0.38,0.37,0.15] },
+  { id:'estate', name:'富商遺產拍賣', icon:'🏰',
+    unlock:{rep:35,con:50},
+    desc:'大戶人家遺產清倉，珍品雲集，進場門檻高。',
+    unlockDesc:'需聲望 35 + 人脈 50',
+    count:[3,5], priceRange:[0.45,0.78], fakeBoost:-0.1,
+    rarityW:[0.05,0.22,0.48,0.25] },
+];
+
+const VENUES = [
+  { id:'pawn', name:'當鋪', icon:'⚖️',
+    unlock:{rep:0},
+    desc:'什麼都收，出價固定偏低，但保證成交。',
+    multiplier:0.48, guaranteed:true, maxVal:99999 },
+  { id:'stall', name:'路邊擺攤', icon:'🛒',
+    unlock:{rep:0},
+    desc:'自己擺攤，價格自訂，但只有路人能買，大件難出手。',
+    multiplier:0.68, canSet:true, maxVal:2500 },
+  { id:'online', name:'網路販賣', icon:'💻',
+    unlock:{rep:15},
+    desc:'觸及更多買家，成交率高，適合中低價位物件。',
+    unlockDesc:'需聲望 15',
+    multiplier:0.82, canSet:true, maxVal:12000 },
+  { id:'antique_shop', name:'古董店收購', icon:'🏺',
+    unlock:{rep:25},
+    desc:'老闆識貨，出價公道，對珍品有興趣。',
+    unlockDesc:'需聲望 25',
+    multiplier:0.78, guaranteed:false, maxVal:30000 },
+  { id:'auction', name:'拍賣行', icon:'🔨',
+    unlock:{rep:45},
+    desc:'競價方式，好貨可能超過預期，但偶有流拍風險。',
+    unlockDesc:'需聲望 45',
+    multiplier:1.05, isAuction:true, maxVal:99999 },
+  { id:'collector', name:'私人收藏家', icon:'👑',
+    unlock:{rep:30,con:40},
+    desc:'藏家對特定品類出價極高，需要人脈介紹。',
+    unlockDesc:'需聲望 30 + 人脈 40',
+    multiplier:1.28, premium:true, maxVal:99999 },
+];
+
+const TOOLS = [
+  { id:'magnifier', name:'放大鏡', icon:'🔍', cost:380, bonus:10,
+    desc:'可放大觀察細節，有效辨別款識與工藝，鑑定力 +10' },
+  { id:'uv_light', name:'紫外線燈', icon:'🔦', cost:1200, bonus:15,
+    desc:'照射下可見修復痕跡與材質特徵，有效辨別贗品，鑑定力 +15' },
+  { id:'ref_books', name:'古玩圖鑑全集', icon:'📚', cost:850, bonus:12,
+    desc:'收錄各朝代典型器物圖錄，大幅提升鑑別知識，鑑定力 +12' },
+  { id:'density', name:'材質檢測儀', icon:'⚗️', cost:2200, bonus:20,
+    desc:'精確測量材質密度與成分，玉器銅器辨偽利器，鑑定力 +20' },
+  { id:'ai_soft', name:'AI鑑定系統', icon:'🖥️', cost:4500, bonus:25,
+    desc:'最先進的AI輔助鑑定軟體，綜合多維度分析，鑑定力 +25' },
+];
+
+const TRAINING = [
+  { id:'study', name:'研讀古玩文獻', icon:'📖', stat:'appraisal',
+    desc:'閱讀歷代古玩研究資料，系統提升鑑定能力',
+    baseCost:150, costGrow:40, baseGain:6, apCost:2 },
+  { id:'network', name:'業界交際應酬', icon:'🤝', stat:'connections',
+    desc:'積極拓展業界人脈，廣交古玩圈朋友',
+    baseCost:180, costGrow:50, baseGain:5, apCost:2 },
+  { id:'marketing', name:'建立個人口碑', icon:'📣', stat:'reputation',
+    desc:'透過成功案例積累口碑，建立業界聲望',
+    baseCost:160, costGrow:45, baseGain:5, apCost:2 },
+];
+
+const EVENTS = [
+  { weight:5, text:'今天市場特別熱鬧，有更多商家出攤。', effect:() => { G.eventExtraItems = 2; } },
+  { weight:4, text:'業界傳言最近贗品氾濫，要特別小心。', type:'warn', effect:() => { G.eventFakeBoost = 0.15; } },
+  { weight:3, text:'有個藏家今天特別想買瓷器，瓷器賣出價格更高。', type:'info', effect:() => { G.eventBonusCat = '瓷器'; G.eventBonusMult = 1.3; } },
+  { weight:3, text:'書畫市場今天行情看漲，書畫類物件可以賣得更好。', type:'info', effect:() => { G.eventBonusCat = '書畫'; G.eventBonusMult = 1.3; } },
+  { weight:3, text:'一批新入行的買家帶來大量資金，各類物件都好賣。', type:'success', effect:() => { G.eventGlobalMult = 1.15; } },
+  { weight:2, text:'今日靈感來了，鑑定更加準確（本日鑑定力額外 +10）。', type:'success', effect:() => { G.eventAppraisalBonus = 10; } },
+  { weight:2, text:'老朋友介紹了一個好貨源，今日進貨可能遇到稀罕物。', type:'success', effect:() => { G.eventRareBoost = true; } },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════════════════════════════
+
+const G = {
+  money: 500,
+  day: 1,
+  ap: 4,
+  maxAp: 4,
+
+  appraisal: 5,
+  reputation: 5,
+  connections: 5,
+
+  inventory: [],   // { uid, templateId, name, cat, trueVal, isFake, cond, appraised, estVal, fakeDetected, buyPrice, locName, day }
+  tools: [],       // tool ids
+
+  nextUid: 1,
+  visitedToday: [],
+  soldToday: false,
+  currentTab: 'explore',
+  currentView: null,  // null=list, or {type:'shop'|'sell', id:string}
+
+  todayProfit: 0,
+  totalProfit: 0,
+  totalBought: 0,
+  totalSold: 0,
+
+  // Daily events
+  eventExtraItems: 0,
+  eventFakeBoost: 0,
+  eventBonusCat: null,
+  eventBonusMult: 1,
+  eventGlobalMult: 1,
+  eventAppraisalBonus: 0,
+  eventRareBoost: false,
+
+  log: [],
+  locationItems: {},  // locId -> items[]
+  dayStartMoney: 500,
+};
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function fmt(n) { return '¥' + Math.round(n).toLocaleString(); }
+
+function effectiveAppraisal() {
+  let base = G.appraisal;
+  G.tools.forEach(tid => {
+    const t = TOOLS.find(x => x.id === tid);
+    if (t) base += t.bonus;
+  });
+  return base + G.eventAppraisalBonus;
+}
+
+function weightedRandom(weights) {
+  const total = weights.reduce((a,b) => a+b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < weights.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return i;
+  }
+  return weights.length - 1;
+}
+
+function rarityLabel(r) {
+  const m = {common:'普通',uncommon:'較稀少',rare:'稀有',legendary:'傳奇'};
+  return m[r] || r;
+}
+
+function rarityClass(r) { return 'rarity-' + r; }
+
+// ═══════════════════════════════════════════════════════════════
+// LOGGING
+// ═══════════════════════════════════════════════════════════════
+
+function addLog(text, type='info') {
+  G.log.unshift({ text, type, day: G.day });
+  renderLog();
+}
+
+function renderLog() {
+  const el = document.getElementById('log-list');
+  if (!el) return;
+  el.innerHTML = G.log.slice(0, 60).map(e => `
+    <div class="log-entry ${e.type}">
+      <span class="log-day-tag">第${e.day}天</span>
+      ${e.text}
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ITEM GENERATION
+// ═══════════════════════════════════════════════════════════════
+
+function generateLocationItems(locId) {
+  const loc = LOCATIONS.find(l => l.id === locId);
+  const count = randInt(loc.count[0], loc.count[1]) + G.eventExtraItems;
+  const items = [];
+  const rarities = ['common','uncommon','rare','legendary'];
+
+  const locTemplates = ITEMS.filter(t => t.locs.includes(locId));
+  if (!locTemplates.length) return [];
+
+  let weights = [...loc.rarityW];
+  if (G.eventRareBoost) { weights[2] += 0.1; weights[3] += 0.05; weights[0] -= 0.15; }
+
+  for (let i = 0; i < count; i++) {
+    const rIdx = weightedRandom(weights);
+    const targetRare = rarities[rIdx];
+    const pool = locTemplates.filter(t => t.rare === targetRare);
+    const tpl = pick(pool.length ? pool : locTemplates);
+
+    const isFake = Math.random() < Math.min(0.95, tpl.fakeRate + loc.fakeBoost + G.eventFakeBoost);
+    const valMult = isFake ? rand(0.02, 0.08) : rand(0.85, 1.25);
+    const trueVal = Math.round(tpl.base * valMult);
+
+    const displayVal = isFake ? Math.round(tpl.base * rand(0.5, 1.1)) : trueVal;
+    const askMult = rand(loc.priceRange[0], loc.priceRange[1]);
+    const askPrice = Math.round(displayVal * askMult);
+
+    const cond = pick(tpl.conds);
+
+    items.push({
+      uid: G.nextUid++,
+      templateId: tpl.id,
+      name: tpl.name,
+      cat: tpl.cat,
+      desc: tpl.desc,
+      rare: tpl.rare,
+      diff: tpl.diff,
+      trueVal,
+      isFake,
+      cond,
+      askPrice,
+      appraised: false,
+      estVal: null,
+      fakeDetected: null,
+      buyPrice: askPrice,
+      locName: loc.name,
+      locId,
+    });
+  }
+  return items;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APPRAISAL
+// ═══════════════════════════════════════════════════════════════
+
+function appraiseItem(uid) {
+  if (G.ap <= 0) { toast('行動點不足！先結束今天或稍作規劃。'); return; }
+
+  const item = G.inventory.find(x => x.uid === uid);
+  if (!item) return;
+  if (item.appraised) { toast('這件已經鑑定過了。'); return; }
+
+  const eff = effectiveAppraisal();
+  const threshold = item.diff * 15;
+  const roughThreshold = item.diff * 7;
+
+  let estVal, fakeDetected, note;
+
+  if (eff >= threshold) {
+    // Accurate
+    const err = rand(-0.08, 0.12);
+    estVal = Math.round(item.trueVal * (1 + err));
+    fakeDetected = item.isFake;
+    note = '鑑定結果清晰，判斷有把握。';
+  } else if (eff >= roughThreshold) {
+    // Rough
+    const err = rand(-0.35, 0.45);
+    estVal = Math.round(item.trueVal * (1 + err));
+    const fakeChance = 0.55 + (eff - roughThreshold) / (threshold - roughThreshold) * 0.35;
+    fakeDetected = item.isFake ? (Math.random() < fakeChance) : (Math.random() < 0.15);
+    note = '大致判斷，但仍有一定誤差。';
+  } else {
+    // Inaccurate
+    const wildMult = rand(0.1, 4.0);
+    estVal = Math.round(item.trueVal * wildMult);
+    estVal = Math.max(20, estVal);
+    fakeDetected = Math.random() < 0.3;
+    note = '鑑定力不足，結果僅供參考。';
+  }
+
+  item.appraised = true;
+  item.estVal = estVal;
+  item.fakeDetected = fakeDetected;
+
+  G.ap -= 1;
+
+  const resultText = fakeDetected
+    ? `【贗品】估值 ${fmt(estVal)}（此為假貨市場價）`
+    : `【真品】估值 ${fmt(estVal)}`;
+
+  addLog(`鑑定「${item.name}」— ${resultText}`, fakeDetected ? 'danger' : 'success');
+  toast(`${note}\n${resultText}`);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUYING
+// ═══════════════════════════════════════════════════════════════
+
+function buyItem(uid, locId) {
+  const locItems = G.locationItems[locId];
+  if (!locItems) return;
+  const item = locItems.find(x => x.uid === uid);
+  if (!item) return;
+
+  if (G.money < item.askPrice) {
+    toast('資金不足，無法購買！'); return;
+  }
+
+  G.money -= item.askPrice;
+  item.buyPrice = item.askPrice;
+  G.inventory.push({ ...item });
+
+  // Remove from shop
+  const idx = locItems.indexOf(item);
+  locItems.splice(idx, 1);
+
+  G.totalBought++;
+  addLog(`在${item.locName}購入「${item.name}」，花費 ${fmt(item.askPrice)}`, 'info');
+  toast(`購入「${item.name}」`);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SELLING
+// ═══════════════════════════════════════════════════════════════
+
+function getSellOffer(item, venue) {
+  if (item.trueVal > venue.maxVal) return null;
+
+  let base = item.trueVal;
+  let mult = venue.multiplier;
+
+  // Event bonus
+  if (G.eventBonusCat && item.cat === G.eventBonusCat) mult *= G.eventBonusMult;
+  mult *= G.eventGlobalMult;
+
+  if (venue.isAuction) {
+    const luck = rand(0.7, 1.5);
+    mult *= luck;
+  }
+
+  let offer = Math.round(base * mult);
+
+  // Fakes fetch much less unless detected
+  if (item.isFake) {
+    offer = Math.round(offer * rand(0.3, 0.7)); // Buyers eventually find out it's fake
+    // But if venue is pawn/stall, they pay face value of what they think it is
+    if (venue.id === 'pawn' || venue.id === 'stall') {
+      offer = Math.round(item.trueVal * mult);
+    }
+  }
+
+  return Math.max(10, offer);
+}
+
+function sellItem(uid, venueId) {
+  const venue = VENUES.find(v => v.id === venueId);
+  if (!venue) return;
+
+  const item = G.inventory.find(x => x.uid === uid);
+  if (!item) return;
+
+  const offer = getSellOffer(item, venue);
+  if (offer === null) {
+    toast('此管道無法接受這件物品。'); return;
+  }
+
+  const profit = offer - item.buyPrice;
+  G.money += offer;
+  G.todayProfit += profit;
+  G.totalProfit += profit;
+  G.totalSold++;
+  G.reputation = Math.min(100, G.reputation + (item.rare === 'rare' ? 2 : item.rare === 'legendary' ? 4 : 0));
+
+  const idx = G.inventory.indexOf(item);
+  G.inventory.splice(idx, 1);
+
+  const profitText = profit >= 0 ? `獲利 ${fmt(profit)}` : `虧損 ${fmt(-profit)}`;
+  addLog(`以 ${fmt(offer)} 賣出「${item.name}」（${venue.name}），${profitText}`,
+    profit >= 0 ? 'success' : 'danger');
+
+  if (profit > 500) G.reputation = Math.min(100, G.reputation + 1);
+  toast(`成交！${fmt(offer)}`);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TRAINING
+// ═══════════════════════════════════════════════════════════════
+
+function train(trainingId) {
+  const tr = TRAINING.find(t => t.id === trainingId);
+  if (!tr) return;
+
+  const statVal = G[tr.stat === 'appraisal' ? 'appraisal' : tr.stat];
+  const cost = tr.baseCost + Math.floor(statVal * tr.costGrow * 0.5);
+  const gain = Math.max(1, tr.baseGain - Math.floor(statVal * 0.04));
+
+  if (G.ap < tr.apCost) { toast(`需要 ${tr.apCost} 點行動力`); return; }
+  if (G.money < cost) { toast(`資金不足，需要 ${fmt(cost)}`); return; }
+
+  G.money -= cost;
+  G.ap -= tr.apCost;
+
+  const statKey = tr.stat === 'appraisal' ? 'appraisal' : tr.stat;
+  G[statKey] = Math.min(100, G[statKey] + gain);
+
+  addLog(`訓練「${tr.name}」，${statKey === 'appraisal' ? '鑑定力' : statKey === 'connections' ? '人脈' : '聲望'} +${gain}`, 'info');
+  toast(`${tr.name} 完成！+${gain}`);
+  renderAll();
+}
+
+function buyTool(toolId) {
+  if (G.tools.includes(toolId)) { toast('已持有此道具'); return; }
+  const tool = TOOLS.find(t => t.id === toolId);
+  if (!tool) return;
+  if (G.money < tool.cost) { toast('資金不足'); return; }
+
+  G.money -= tool.cost;
+  G.tools.push(toolId);
+
+  addLog(`購入道具「${tool.name}」，鑑定力額外 +${tool.bonus}`, 'success');
+  toast(`獲得「${tool.name}」！鑑定力大幅提升`);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DAY END
+// ═══════════════════════════════════════════════════════════════
+
+function endDay() {
+  G.day++;
+  G.ap = G.maxAp;
+  G.visitedToday = [];
+  G.soldToday = false;
+  G.locationItems = {};
+  G.currentView = null;
+  G.dayStartMoney = G.money;
+  G.todayProfit = 0;
+
+  // Reset daily events
+  G.eventExtraItems = 0;
+  G.eventFakeBoost = 0;
+  G.eventBonusCat = null;
+  G.eventBonusMult = 1;
+  G.eventGlobalMult = 1;
+  G.eventAppraisalBonus = 0;
+  G.eventRareBoost = false;
+
+  // Trigger random event (30% chance)
+  let eventText = null;
+  if (Math.random() < 0.3) {
+    const totalW = EVENTS.reduce((a,e) => a+e.weight, 0);
+    let r = Math.random() * totalW;
+    for (const ev of EVENTS) {
+      r -= ev.weight;
+      if (r <= 0) { ev.effect(); eventText = ev.text; break; }
+    }
+  }
+
+  addLog(`═══ 第 ${G.day} 天開始 ═══`, 'day');
+  if (eventText) addLog('【今日事件】' + eventText, 'warn');
+
+  switchTab('explore');
+  renderAll();
+
+  if (eventText) {
+    setTimeout(() => showModal('今日事件', eventText), 300);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+
+function renderAll() {
+  renderHeader();
+  renderSidebar();
+  renderTabContent();
+  renderLog();
+}
+
+function renderHeader() {
+  document.getElementById('h-money').textContent = fmt(G.money);
+  document.getElementById('h-day').textContent = `第 ${G.day} 天`;
+
+  const apEl = document.getElementById('h-ap');
+  let html = '';
+  for (let i = 0; i < G.maxAp; i++) {
+    html += `<div class="ap-dot ${i >= G.ap ? 'used' : ''}"></div>`;
+  }
+  apEl.innerHTML = html;
+}
+
+function renderSidebar() {
+  // Stats
+  ['appraisal','reputation','connections'].forEach(k => {
+    const valEl = document.getElementById(`stat-${k}`);
+    const barEl = document.getElementById(`bar-${k}`);
+    if (valEl) valEl.textContent = G[k];
+    if (barEl) barEl.style.width = G[k] + '%';
+  });
+
+  // Tools
+  const tl = document.getElementById('tools-list');
+  if (tl) {
+    if (!G.tools.length) {
+      tl.innerHTML = '<div class="no-tools">尚無道具<br>前往「升級」購買</div>';
+    } else {
+      tl.innerHTML = G.tools.map(tid => {
+        const t = TOOLS.find(x => x.id === tid);
+        return t ? `<div class="tool-item"><span class="tool-icon">${t.icon}</span>${t.name} <span style="color:var(--green);font-size:0.68rem">+${t.bonus}</span></div>` : '';
+      }).join('');
+    }
+  }
+
+  // Counts
+  const invCount = document.getElementById('stat-inv-count');
+  if (invCount) invCount.textContent = G.inventory.length;
+
+  const todayProfit = document.getElementById('stat-today-profit');
+  if (todayProfit) {
+    todayProfit.textContent = fmt(G.todayProfit);
+    todayProfit.style.color = G.todayProfit >= 0 ? '#2ca860' : '#c0392b';
+  }
+
+  const totalProfit = document.getElementById('stat-total-profit');
+  if (totalProfit) {
+    totalProfit.textContent = fmt(G.totalProfit);
+    totalProfit.style.color = G.totalProfit >= 0 ? 'var(--text)' : '#c0392b';
+  }
+
+  // Inv badge
+  const badge = document.getElementById('inv-badge');
+  if (badge) {
+    if (G.inventory.length > 0) {
+      badge.textContent = G.inventory.length;
+      badge.style.display = 'inline';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function switchTab(tab) {
+  G.currentTab = tab;
+  G.currentView = null;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab)?.classList.add('active');
+  renderTabContent();
+}
+
+function renderTabContent() {
+  const el = document.getElementById('tab-content');
+  if (!el) return;
+
+  switch (G.currentTab) {
+    case 'explore': el.innerHTML = renderExplore(); break;
+    case 'inventory': el.innerHTML = renderInventory(); break;
+    case 'sell': el.innerHTML = renderSell(); break;
+    case 'upgrade': el.innerHTML = renderUpgrade(); break;
+  }
+}
+
+// ─── Tab: Explore ───────────────────────────────────────────────
+
+function renderExplore() {
+  if (G.currentView && G.currentView.type === 'shop') {
+    return renderShop(G.currentView.id);
+  }
+
+  const locCards = LOCATIONS.map(loc => {
+    const locked = G.reputation < (loc.unlock.rep || 0) || G.connections < (loc.unlock.con || 0);
+    const visited = G.visitedToday.includes(loc.id);
+    let cls = 'location-card';
+    if (locked) cls += ' locked';
+    if (visited) cls += ' visited';
+
+    const onclick = locked || visited ? '' : `onclick="visitLocation('${loc.id}')"`;
+
+    return `
+      <div class="${cls}" ${onclick}>
+        <div class="loc-icon">${loc.icon}</div>
+        <div class="loc-name">${loc.name}</div>
+        <div class="loc-desc">${loc.desc}</div>
+        ${locked ? `<div class="loc-unlock">${loc.unlockDesc || ''}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="section-header">
+      <div class="section-title">選擇進貨地點</div>
+      <span style="font-size:0.72rem;color:var(--text-dim)">今日剩餘行動點：${G.ap}</span>
+    </div>
+    <div class="location-grid">${locCards}</div>
+    <div style="font-size:0.72rem;color:var(--text-dim);margin-top:8px">
+      ※ 探索地點消耗 1 行動點，每處每天只能探索一次
+    </div>
+  `;
+}
+
+function visitLocation(locId) {
+  if (G.ap <= 0) { toast('行動點不足！'); return; }
+  if (G.visitedToday.includes(locId)) { toast('今天已經探索過這裡了。'); return; }
+
+  G.ap -= 1;
+  G.visitedToday.push(locId);
+
+  if (!G.locationItems[locId]) {
+    G.locationItems[locId] = generateLocationItems(locId);
+  }
+
+  const loc = LOCATIONS.find(l => l.id === locId);
+  addLog(`前往「${loc.name}」探索，找到 ${G.locationItems[locId].length} 件物品`, 'info');
+
+  G.currentView = { type: 'shop', id: locId };
+  renderTabContent();
+  renderHeader();
+  renderSidebar();
+}
+
+function renderShop(locId) {
+  const loc = LOCATIONS.find(l => l.id === locId);
+  const items = G.locationItems[locId] || [];
+
+  if (!items.length) {
+    return `
+      <div class="shop-header">
+        <button class="shop-back-btn" onclick="backToLocations()">← 返回</button>
+        <div class="shop-title">${loc.icon} ${loc.name}</div>
+      </div>
+      <div class="inv-empty">今日已無可購物品<br>明天再來看看吧</div>
+    `;
+  }
+
+  const cards = items.map(item => `
+    <div class="shop-item-card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="item-category-badge cat-${item.cat}">${item.cat}</span>
+        <span class="${rarityClass(item.rare)}" style="font-size:0.65rem">${rarityLabel(item.rare)}</span>
+      </div>
+      <div class="item-name">${item.name}</div>
+      <div class="item-condition">狀態：${item.cond}</div>
+      <div class="item-desc">${item.desc}</div>
+      <div class="item-price-row">
+        <span class="item-price">${Math.round(item.askPrice).toLocaleString()}</span>
+        <button class="btn-buy" ${G.money < item.askPrice ? 'disabled' : ''}
+          onclick="buyItem(${item.uid}, '${locId}')">購入</button>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="shop-header">
+      <button class="shop-back-btn" onclick="backToLocations()">← 返回</button>
+      <div class="shop-title">${loc.icon} ${loc.name}</div>
+      <span style="font-size:0.72rem;color:var(--text-dim)">共 ${items.length} 件</span>
+    </div>
+    <div class="item-grid">${cards}</div>
+  `;
+}
+
+function backToLocations() {
+  G.currentView = null;
+  renderTabContent();
+}
+
+// ─── Tab: Inventory ─────────────────────────────────────────────
+
+function renderInventory() {
+  if (!G.inventory.length) {
+    return `<div class="inv-empty">庫存為空<br><br>前往「探索」進貨吧！</div>`;
+  }
+
+  const eff = effectiveAppraisal();
+  const cards = G.inventory.map(item => {
+    const canAppraise = !item.appraised && G.ap > 0;
+    const diffText = item.diff <= 2 ? '簡易' : item.diff <= 3 ? '普通' : item.diff <= 4 ? '困難' : '極難';
+
+    let appraisalHtml = '';
+    if (item.appraised) {
+      const isFakeResult = item.fakeDetected;
+      appraisalHtml = `
+        <div class="appraisal-result ${isFakeResult ? 'is-fake' : ''}">
+          ${isFakeResult
+            ? `<span class="fake-label">⚠ 疑似贗品</span>`
+            : `<span class="real-label">✓ 疑似真品</span>`}
+          <br>估值：<span class="est-value">${fmt(item.estVal)}</span>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="inv-card ${item.appraised ? (item.fakeDetected ? 'fake-detected' : 'appraised') : ''}">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="item-category-badge cat-${item.cat}">${item.cat}</span>
+          <span class="${rarityClass(item.rare)}" style="font-size:0.65rem">${rarityLabel(item.rare)}</span>
+        </div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-condition">狀態：${item.cond}</div>
+        <div class="item-desc" style="font-size:0.7rem;color:var(--text-dim)">${item.desc}</div>
+        <div class="buy-price-tag">購入價：${fmt(item.buyPrice)} · 來源：${item.locName}</div>
+        ${appraisalHtml}
+        ${!item.appraised ? `
+          <div class="item-actions">
+            <button class="btn-appraise" ${!canAppraise ? 'disabled' : ''}
+              onclick="appraiseItem(${item.uid})">
+              🔎 鑑定 <span class="ap-cost">(1AP)</span>
+              <span style="font-size:0.62rem;display:block;color:#506070">難度：${diffText} · 有效鑑定力：${eff}</span>
+            </button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="section-header">
+      <div class="section-title">我的庫存</div>
+      <span style="font-size:0.72rem;color:var(--text-dim)">${G.inventory.length} 件 · 有效鑑定力 ${eff}</span>
+    </div>
+    <div class="inv-grid">${cards}</div>
+  `;
+}
+
+// ─── Tab: Sell ──────────────────────────────────────────────────
+
+function renderSell() {
+  if (G.currentView && G.currentView.type === 'sell') {
+    return renderSellVenue(G.currentView.id);
+  }
+
+  if (!G.inventory.length) {
+    return `<div class="inv-empty">庫存為空<br><br>先去「探索」進一些貨吧！</div>`;
+  }
+
+  const venueCards = VENUES.map(v => {
+    const locked = G.reputation < (v.unlock.rep || 0) || G.connections < (v.unlock.con || 0);
+    const hasItems = G.inventory.some(i => i.trueVal <= v.maxVal);
+    let cls = 'venue-card';
+    if (locked) cls += ' locked';
+    if (!hasItems && !locked) cls += ' no-items';
+
+    const multPct = Math.round(v.multiplier * 100);
+    let multDesc = v.isAuction ? `平均出價約真值 ${multPct}%（有波動）`
+      : v.premium ? `出價約真值 ${multPct}%（特定品類更高）`
+      : `出價約真值 ${multPct}%`;
+
+    const onclick = locked || !hasItems ? '' : `onclick="openSellVenue('${v.id}')"`;
+
+    return `
+      <div class="${cls}" ${onclick}>
+        <div class="venue-icon">${v.icon}</div>
+        <div class="venue-name">${v.name}</div>
+        <div class="venue-desc">${v.desc}</div>
+        ${locked ? `<div class="venue-unlock">${v.unlockDesc || ''}</div>`
+          : `<div class="venue-multiplier">${multDesc}</div>`}
+        ${!locked && !hasItems ? `<div style="font-size:0.65rem;color:var(--text-dim)">無可出售物品</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="section-header">
+      <div class="section-title">選擇販售管道</div>
+    </div>
+    <div class="venue-grid">${venueCards}</div>
+  `;
+}
+
+function openSellVenue(venueId) {
+  G.currentView = { type: 'sell', id: venueId };
+  renderTabContent();
+}
+
+function renderSellVenue(venueId) {
+  const venue = VENUES.find(v => v.id === venueId);
+  const sellableItems = G.inventory.filter(i => i.trueVal <= venue.maxVal);
+
+  if (!sellableItems.length) {
+    return `
+      <div class="sell-venue-header">
+        <button class="shop-back-btn" onclick="backToVenues()">← 返回</button>
+        <div class="shop-title">${venue.icon} ${venue.name}</div>
+      </div>
+      <div class="inv-empty">沒有可在此販售的物品</div>
+    `;
+  }
+
+  const eventNote = G.eventBonusCat
+    ? `<div class="event-banner"><div class="event-banner-title">今日特別行情</div><div class="event-banner-text">「${G.eventBonusCat}」類物品今日出價 ×${G.eventBonusMult}！</div></div>`
+    : G.eventGlobalMult > 1 ? `<div class="event-banner"><div class="event-banner-title">今日特別行情</div><div class="event-banner-text">所有物品出價 ×${G.eventGlobalMult}！</div></div>` : '';
+
+  const cards = sellableItems.map(item => {
+    const offer = getSellOffer(item, venue);
+    const isUncertain = !item.appraised;
+    const profit = offer - item.buyPrice;
+
+    let offerHtml;
+    if (isUncertain) {
+      offerHtml = `
+        <div class="sell-offer uncertain">
+          <span class="offer-label">預估出價（未鑑定）</span>
+          <span class="offer-price uncertain-price">${Math.round(offer).toLocaleString()}</span>
+        </div>
+      `;
+    } else {
+      offerHtml = `
+        <div class="sell-offer">
+          <div>
+            <span class="offer-label">出價</span><br>
+            <span style="font-size:0.68rem;color:${profit>=0?'#2ca860':'#c0392b'}">
+              ${profit >= 0 ? '獲利' : '虧損'} ${fmt(Math.abs(profit))}
+            </span>
+          </div>
+          <span class="offer-price">${Math.round(offer).toLocaleString()}</span>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="sell-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="item-category-badge cat-${item.cat}">${item.cat}</span>
+          ${item.appraised
+            ? (item.fakeDetected ? `<span style="font-size:0.65rem;color:var(--red)">疑似贗品</span>` : `<span style="font-size:0.65rem;color:var(--green)">疑似真品</span>`)
+            : `<span style="font-size:0.65rem;color:var(--text-dim)">未鑑定</span>`}
+        </div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-condition" style="font-size:0.68rem">購入：${fmt(item.buyPrice)}</div>
+        ${offerHtml}
+        <button class="btn-sell" onclick="sellItem(${item.uid}, '${venueId}')">
+          確認出售
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="sell-venue-header">
+      <button class="shop-back-btn" onclick="backToVenues()">← 返回</button>
+      <div class="shop-title">${venue.icon} ${venue.name}</div>
+      <span style="font-size:0.72rem;color:var(--text-dim)">${sellableItems.length} 件可售</span>
+    </div>
+    ${eventNote}
+    <div class="sell-grid">${cards}</div>
+  `;
+}
+
+function backToVenues() {
+  G.currentView = null;
+  renderTabContent();
+}
+
+// ─── Tab: Upgrade ───────────────────────────────────────────────
+
+function renderUpgrade() {
+  const trainCards = TRAINING.map(tr => {
+    const statVal = G[tr.stat === 'appraisal' ? 'appraisal' : tr.stat];
+    const cost = tr.baseCost + Math.floor(statVal * tr.costGrow * 0.5);
+    const gain = Math.max(1, tr.baseGain - Math.floor(statVal * 0.04));
+    const canAfford = G.money >= cost && G.ap >= tr.apCost;
+    const statName = tr.stat === 'appraisal' ? '鑑定力' : tr.stat === 'connections' ? '人脈' : '聲望';
+
+    return `
+      <div class="train-card">
+        <div class="train-icon">${tr.icon}</div>
+        <div class="train-name">${tr.name}</div>
+        <div class="train-desc">${tr.desc}</div>
+        <div class="train-info">
+          <span>${statName} 當前：${statVal}</span>
+          <span>預計 +${gain}</span>
+        </div>
+        <button class="btn-train" ${!canAfford ? 'disabled' : ''} onclick="train('${tr.id}')">
+          花費 ${fmt(cost)} · ${tr.apCost}AP 訓練
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  const toolCards = TOOLS.map(tool => {
+    const owned = G.tools.includes(tool.id);
+    const canAfford = G.money >= tool.cost;
+    return `
+      <div class="tool-shop-card ${owned ? 'owned' : ''}">
+        <div class="tool-shop-icon">${tool.icon}</div>
+        <div class="tool-shop-name">${tool.name}</div>
+        <div class="tool-shop-desc">${tool.desc}</div>
+        ${owned
+          ? `<div class="owned-badge">✓ 已持有</div>`
+          : `<button class="btn-buy-tool" ${!canAfford ? 'disabled' : ''} onclick="buyTool('${tool.id}')">
+              購買 ${fmt(tool.cost)}
+             </button>`}
+      </div>
+    `;
+  }).join('');
+
+  const unlocksHTML = (() => {
+    const unlocks = [
+      { type:'地點', name:'舊貨行', req:'聲望 20', met: G.reputation >= 20 },
+      { type:'地點', name:'廢舊倉庫', req:'人脈 15', met: G.connections >= 15 },
+      { type:'地點', name:'鄉下農家', req:'人脈 30', met: G.connections >= 30 },
+      { type:'地點', name:'拍賣預展', req:'聲望 40', met: G.reputation >= 40 },
+      { type:'地點', name:'富商遺產', req:'聲望 35 + 人脈 50', met: G.reputation >= 35 && G.connections >= 50 },
+      { type:'管道', name:'網路販賣', req:'聲望 15', met: G.reputation >= 15 },
+      { type:'管道', name:'古董店收購', req:'聲望 25', met: G.reputation >= 25 },
+      { type:'管道', name:'拍賣行', req:'聲望 45', met: G.reputation >= 45 },
+      { type:'管道', name:'私人收藏家', req:'聲望 30 + 人脈 40', met: G.reputation >= 30 && G.connections >= 40 },
+    ];
+
+    return unlocks.map(u => `
+      <div style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid rgba(92,50,15,0.2);font-size:0.72rem">
+        <span style="color:var(--text-dim)">[${u.type}] ${u.name}</span>
+        <span style="${u.met ? 'color:var(--green)' : 'color:var(--text-dim)'}">${u.met ? '✓ 已解鎖' : u.req}</span>
+      </div>
+    `).join('');
+  })();
+
+  return `
+    <div class="upgrade-grid">
+      <div class="upgrade-section-title">技能訓練（每次消耗 2 行動點）</div>
+      ${trainCards}
+    </div>
+
+    <div style="margin-bottom:8px;font-size:0.78rem;color:var(--gold);letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+      鑑定道具購買
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px">
+      ${toolCards}
+    </div>
+
+    <div style="margin-bottom:8px;font-size:0.78rem;color:var(--gold);letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+      解鎖進度
+    </div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      ${unlocksHTML}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════════
+
+let toastTimer = null;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function showModal(title, body, onConfirm) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  const actEl = document.getElementById('modal-actions');
+  if (onConfirm) {
+    actEl.innerHTML = `
+      <button class="btn-modal-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-modal-ok" onclick="(${onConfirm.toString()})();closeModal()">確認</button>
+    `;
+  } else {
+    actEl.innerHTML = `<button class="btn-modal-ok" onclick="closeModal()">了解</button>`;
+  }
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+function init() {
+  addLog('═══ 第 1 天開始 ═══', 'day');
+  addLog('你懷揣著多年積蓄，踏上了古玩尋珍之路。', 'info');
+  addLog('先去跳蚤市場看看，碰碰運氣吧。', 'info');
+  renderAll();
+}
+
+init();
+</script>
+</body>
+</html>
