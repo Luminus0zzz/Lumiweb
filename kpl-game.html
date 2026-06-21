@@ -14,224 +14,180 @@
 body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei',sans-serif;min-height:100vh;line-height:1.6;}
 button{cursor:pointer;border:none;outline:none;font-family:inherit;}
 
-/* ── SCREENS ── */
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
 
-/* ── TITLE SCREEN ── */
-#s-title{
-  flex-direction:column;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at center,#0d1629 0%,#0a0c12 70%);
-  text-align:center;padding:40px;
-}
+/* ── TITLE ── */
+#s-title{flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at center,#0d1629 0%,#0a0c12 70%);text-align:center;padding:40px;}
 #s-title h1{font-size:2.6rem;font-weight:900;letter-spacing:4px;
   background:linear-gradient(135deg,#f0a500,#e8d000,#f0a500);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;margin-bottom:.4rem;}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.4rem;}
 #s-title .sub{color:var(--sub);font-size:.95rem;margin-bottom:3rem;}
-.btn-main{
-  background:linear-gradient(135deg,#f0a500,#c88000);
-  color:#0a0c12;font-size:1.1rem;font-weight:700;
-  padding:14px 50px;border-radius:30px;
-  box-shadow:0 0 20px rgba(240,165,0,.4);
-  transition:transform .2s,box-shadow .2s;
-}
+.btn-main{background:linear-gradient(135deg,#f0a500,#c88000);color:#0a0c12;font-size:1.1rem;font-weight:700;
+  padding:14px 50px;border-radius:30px;box-shadow:0 0 20px rgba(240,165,0,.4);transition:transform .2s,box-shadow .2s;}
 .btn-main:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(240,165,0,.6);}
-.badge{display:inline-block;margin-top:2rem;padding:6px 16px;
-  border:1px solid var(--border);border-radius:20px;
-  color:var(--sub);font-size:.8rem;}
+.badge{display:inline-block;margin-top:2rem;padding:6px 16px;border:1px solid var(--border);border-radius:20px;color:var(--sub);font-size:.8rem;}
 
-/* ── CREATE SCREEN ── */
-#s-create{
-  flex-direction:column;align-items:center;justify-content:center;
-  padding:30px 20px;
-}
-.create-box{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;padding:36px 40px;width:100%;max-width:520px;
-}
-.create-box h2{font-size:1.5rem;font-weight:800;margin-bottom:24px;
-  color:var(--accent);}
+/* ── CREATE ── */
+#s-create{flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;}
+.create-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px 40px;width:100%;max-width:520px;}
+.create-box h2{font-size:1.5rem;font-weight:800;margin-bottom:24px;color:var(--accent);}
 .form-row{margin-bottom:18px;}
 .form-row label{display:block;font-size:.85rem;color:var(--sub);margin-bottom:6px;}
-.form-row input,.form-row select,.form-row textarea{
-  width:100%;background:#0d1020;border:1px solid var(--border);
-  color:var(--text);padding:10px 14px;border-radius:8px;
-  font-size:.95rem;font-family:inherit;
-}
-.form-row input:focus,.form-row select:focus{
-  outline:none;border-color:var(--accent);
-}
-.form-row textarea{resize:vertical;height:80px;}
+.form-row input,.form-row select{width:100%;background:#0d1020;border:1px solid var(--border);
+  color:var(--text);padding:10px 14px;border-radius:8px;font-size:.95rem;font-family:inherit;}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--accent);}
 .form-row select option{background:#0d1020;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .career-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;}
-.career-btn{
-  background:#0d1020;border:1px solid var(--border);
-  color:var(--sub);padding:10px 6px;border-radius:8px;
-  font-size:.82rem;text-align:center;transition:all .2s;
-}
+.career-btn{background:#0d1020;border:1px solid var(--border);color:var(--sub);padding:10px 6px;
+  border-radius:8px;font-size:.82rem;text-align:center;transition:all .2s;}
 .career-btn:hover{border-color:var(--accent2);color:var(--text);}
-.career-btn.sel{border-color:var(--accent);color:var(--accent);
-  background:rgba(240,165,0,.08);}
+.career-btn.sel{border-color:var(--accent);color:var(--accent);background:rgba(240,165,0,.08);}
 .pos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:4px;}
-.pos-btn{
-  background:#0d1020;border:1px solid var(--border);
-  color:var(--sub);padding:8px 4px;border-radius:6px;
-  font-size:.8rem;transition:all .2s;
-}
+.pos-btn{background:#0d1020;border:1px solid var(--border);color:var(--sub);padding:8px 4px;
+  border-radius:6px;font-size:.8rem;transition:all .2s;}
 .pos-btn:hover{border-color:var(--accent2);color:var(--text);}
-.pos-btn.sel{border-color:var(--accent);color:var(--accent);
-  background:rgba(240,165,0,.08);}
+.pos-btn.sel{border-color:var(--accent);color:var(--accent);background:rgba(240,165,0,.08);}
 .create-hint{font-size:.78rem;color:var(--sub);margin-top:4px;}
 
-/* ── GAME SCREEN ── */
-#s-game{flex-direction:row;}
-/* Left Panel */
-#left-panel{
-  width:280px;min-width:260px;background:var(--panel);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:20px 18px;
-  overflow-y:auto;
-}
-.player-card{text-align:center;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
-.player-avatar{
-  width:72px;height:72px;border-radius:50%;margin:0 auto 10px;
+/* ── GAME ── */
+#s-game{flex-direction:row;align-items:stretch;}
+#left-panel{width:276px;min-width:256px;background:var(--panel);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:18px 16px;overflow-y:auto;}
+.player-card{text-align:center;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.player-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 8px;
   background:linear-gradient(135deg,var(--accent2),var(--accent));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;font-weight:900;color:#fff;
-}
-.player-name{font-size:1.1rem;font-weight:700;}
-.player-id{font-size:.82rem;color:var(--sub);}
-.player-stage{
-  display:inline-block;margin-top:6px;padding:3px 12px;
-  border-radius:12px;font-size:.75rem;font-weight:700;
-  background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);
-  color:var(--accent);
-}
-.section-label{font-size:.72rem;text-transform:uppercase;
-  letter-spacing:2px;color:var(--sub);margin-bottom:10px;}
-.stat-row{margin-bottom:10px;}
-.stat-header{display:flex;justify-content:space-between;
-  font-size:.82rem;margin-bottom:4px;}
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#fff;}
+.player-name{font-size:1rem;font-weight:700;}
+.player-id{font-size:.78rem;color:var(--sub);}
+.player-stage{display:inline-block;margin-top:5px;padding:2px 10px;border-radius:10px;
+  font-size:.7rem;font-weight:700;background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);color:var(--accent);}
+.section-label{font-size:.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--sub);margin-bottom:7px;margin-top:10px;}
+.stat-row{margin-bottom:7px;}
+.stat-header{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px;}
 .stat-name{color:var(--sub);}
 .stat-val{font-weight:700;}
-.stat-bar-track{height:6px;background:var(--bar);border-radius:3px;overflow:hidden;}
-.stat-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
-.stat-delta{font-size:.7rem;font-weight:700;opacity:0;transition:opacity .3s;}
+.stat-delta{font-size:.68rem;font-weight:700;opacity:0;transition:opacity .3s;}
 .stat-delta.pos{color:var(--green);}
 .stat-delta.neg{color:var(--red);}
 .stat-delta.show{opacity:1;}
-.fan-box{
-  background:#0d1020;border:1px solid var(--border);
-  border-radius:8px;padding:10px 14px;margin-top:6px;
-}
-.fan-count{font-size:1.3rem;font-weight:800;color:var(--accent);}
-.fan-tier{font-size:.75rem;color:var(--sub);}
-.progress-box{margin-top:14px;}
-.progress-label{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:6px;}
-.progress-track{height:8px;background:var(--bar);border-radius:4px;overflow:hidden;}
-.progress-fill{
-  height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));
-  border-radius:4px;transition:width .8s ease;
-}
-.turn-info{margin-top:14px;font-size:.82rem;color:var(--sub);}
+.stat-bar-track{height:5px;background:var(--bar);border-radius:3px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+/* money */
+.money-box{background:#0d1020;border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-top:4px;}
+.money-amount{font-size:1.15rem;font-weight:800;color:var(--green);}
+.money-row{font-size:.72rem;color:var(--sub);margin-top:2px;}
+.money-team{font-size:.74rem;color:var(--accent2);margin-top:3px;font-weight:600;}
+.transfer-indicator{display:inline-block;padding:1px 7px;border-radius:8px;font-size:.62rem;font-weight:700;
+  background:rgba(240,165,0,.2);border:1px solid rgba(240,165,0,.4);color:var(--accent);
+  animation:blink 1.5s infinite;margin-left:5px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.4;}}
+/* fans */
+.fan-box{background:#0d1020;border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-top:8px;}
+.fan-count{font-size:1.15rem;font-weight:800;color:var(--accent);}
+.fan-tier{font-size:.7rem;color:var(--sub);}
+/* progress */
+.progress-box{margin-top:10px;}
+.progress-label{display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:4px;}
+.progress-track{height:6px;background:var(--bar);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .8s ease;}
+.turn-info{margin-top:9px;font-size:.76rem;color:var(--sub);}
 .turn-info span{color:var(--text);font-weight:700;}
-/* Right Panel */
-#right-panel{
-  flex:1;display:flex;flex-direction:column;overflow:hidden;
+
+/* ── RIGHT PANEL ── */
+#right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+#event-area{flex:1;overflow-y:auto;padding:26px 30px;display:flex;flex-direction:column;}
+
+/* single-card animations */
+@keyframes pageIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.event-card,.match-card,.transfer-card,.salary-card,.stage-card{
+  animation:pageIn .35s ease;max-width:740px;width:100%;
 }
-#event-area{
-  flex:1;overflow-y:auto;padding:28px 32px;
-}
-.event-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:24px 26px;margin-bottom:20px;
-  animation:fadeIn .4s ease;
-}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.event-stage-tag{
-  display:inline-block;padding:3px 10px;border-radius:10px;
-  font-size:.72rem;font-weight:700;margin-bottom:12px;
-  background:rgba(58,123,213,.15);border:1px solid rgba(58,123,213,.3);
-  color:var(--accent2);
-}
-.event-title{font-size:1.2rem;font-weight:800;margin-bottom:12px;}
-.event-text{font-size:.92rem;color:#b0bcd8;line-height:1.9;}
-.choices{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
-.choice-btn{
-  background:#0d1020;border:1px solid var(--border);
-  color:var(--text);padding:12px 18px;border-radius:10px;
-  font-size:.9rem;text-align:left;transition:all .2s;
-}
-.choice-btn:hover:not(:disabled){
-  border-color:var(--accent2);
-  background:rgba(58,123,213,.08);
-}
-.choice-btn.chosen{
-  border-color:var(--accent);
-  background:rgba(240,165,0,.08);
-}
+
+.event-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 24px;}
+.event-stage-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.68rem;font-weight:700;
+  margin-bottom:10px;background:rgba(58,123,213,.15);border:1px solid rgba(58,123,213,.3);color:var(--accent2);}
+.event-title{font-size:1.12rem;font-weight:800;margin-bottom:10px;}
+.event-text{font-size:.9rem;color:#b0bcd8;line-height:1.9;}
+.choices{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
+.choice-btn{background:#0d1020;border:1px solid var(--border);color:var(--text);padding:11px 16px;
+  border-radius:10px;font-size:.88rem;text-align:left;transition:all .2s;}
+.choice-btn:hover:not(:disabled){border-color:var(--accent2);background:rgba(58,123,213,.08);}
+.choice-btn.chosen{border-color:var(--accent);background:rgba(240,165,0,.08);}
 .choice-btn:disabled{opacity:.6;}
-.result-box{
-  background:rgba(58,123,213,.06);border:1px solid rgba(58,123,213,.2);
-  border-radius:10px;padding:16px 18px;margin-top:16px;
-  font-size:.88rem;line-height:1.8;color:#c0ccec;
-  animation:fadeIn .3s ease;
-}
-.delta-line{margin-top:10px;font-size:.82rem;}
+.result-box{background:rgba(58,123,213,.06);border:1px solid rgba(58,123,213,.2);border-radius:10px;
+  padding:13px 15px;margin-top:13px;font-size:.87rem;line-height:1.8;color:#c0ccec;animation:pageIn .3s ease;}
+.delta-line{margin-top:8px;font-size:.78rem;display:flex;flex-wrap:wrap;gap:6px;}
 .d-pos{color:var(--green);}
 .d-neg{color:var(--red);}
 .d-neu{color:var(--sub);}
-.btn-next{
-  margin-top:16px;
-  background:linear-gradient(135deg,#3a7bd5,#2a5aa0);
-  color:#fff;padding:11px 28px;border-radius:8px;font-size:.9rem;font-weight:700;
-  transition:transform .2s,box-shadow .2s;
-}
-.btn-next:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(58,123,213,.4);}
-.match-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:22px 26px;margin-bottom:20px;
-  animation:fadeIn .4s ease;
-}
-.match-tag{
-  display:inline-block;padding:3px 10px;border-radius:10px;
-  font-size:.72rem;font-weight:700;margin-bottom:12px;
-  background:rgba(224,58,58,.12);border:1px solid rgba(224,58,58,.3);
-  color:var(--red);
-}
-.match-result{font-size:1.4rem;font-weight:900;margin:10px 0;}
+.d-money{color:#ffd700;}
+.btn-next{margin-top:13px;background:linear-gradient(135deg,#3a7bd5,#2a5aa0);color:#fff;
+  padding:10px 24px;border-radius:8px;font-size:.88rem;font-weight:700;transition:transform .2s,box-shadow .2s;}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(58,123,213,.4);}
+
+/* match card */
+.match-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 24px;}
+.match-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.68rem;font-weight:700;
+  margin-bottom:10px;background:rgba(224,58,58,.12);border:1px solid rgba(224,58,58,.3);color:var(--red);}
+.match-result{font-size:1.4rem;font-weight:900;margin:8px 0;}
 .win{color:var(--green);}
 .loss{color:var(--red);}
+.match-detail{color:var(--sub);font-size:.86rem;margin-bottom:4px;}
 
-/* Event log */
-#log-area{
-  height:140px;border-top:1px solid var(--border);
-  overflow-y:auto;padding:12px 24px;background:#0d1020;
-}
-.log-entry{font-size:.78rem;color:var(--sub);padding:2px 0;border-bottom:1px solid rgba(30,36,51,.5);}
+/* transfer window */
+.transfer-card{background:var(--panel);border:2px solid rgba(240,165,0,.4);border-radius:14px;
+  padding:22px 24px;box-shadow:0 0 28px rgba(240,165,0,.12);}
+.transfer-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.68rem;font-weight:700;
+  margin-bottom:10px;background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.4);color:var(--accent);}
+.offers-list{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.offer-item{background:#0d1020;border:1px solid var(--border);border-radius:10px;padding:13px 15px;transition:border-color .2s;}
+.offer-item:hover{border-color:rgba(240,165,0,.4);}
+.offer-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.offer-name{font-size:.95rem;font-weight:800;}
+.offer-tier{display:inline-block;padding:1px 7px;border-radius:6px;font-size:.65rem;font-weight:700;}
+.tier-S{background:rgba(240,165,0,.2);color:var(--accent);}
+.tier-A{background:rgba(58,123,213,.2);color:var(--accent2);}
+.tier-B{background:rgba(106,116,144,.2);color:var(--sub);}
+.offer-desc{font-size:.78rem;color:var(--sub);margin-bottom:8px;}
+.offer-stats{display:flex;flex-wrap:wrap;gap:8px;font-size:.78rem;margin-bottom:10px;}
+.offer-salary-val{color:var(--green);font-weight:700;}
+.btn-offer{background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.4);color:var(--accent);
+  padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:700;transition:all .2s;}
+.btn-offer:hover{background:rgba(240,165,0,.18);}
+.btn-decline{background:#0d1020;border:1px solid var(--border);color:var(--sub);
+  padding:10px 20px;border-radius:8px;font-size:.84rem;margin-top:12px;transition:all .2s;width:100%;}
+.btn-decline:hover{border-color:var(--red);color:var(--red);}
+
+/* salary card */
+.salary-card{background:var(--panel);border:1px solid rgba(58,213,100,.25);border-radius:14px;padding:22px 24px;}
+.salary-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.68rem;font-weight:700;
+  margin-bottom:10px;background:rgba(58,213,100,.1);border:1px solid rgba(58,213,100,.3);color:var(--green);}
+
+/* stage transition */
+.stage-card{background:var(--panel);border:2px solid var(--accent);border-radius:14px;padding:22px 24px;
+  box-shadow:0 0 20px rgba(240,165,0,.14);}
+
+/* log area */
+#log-area{height:110px;border-top:1px solid var(--border);overflow-y:auto;padding:9px 18px;background:#0d1020;flex-shrink:0;}
+.log-entry{font-size:.72rem;color:var(--sub);padding:1px 0;border-bottom:1px solid rgba(30,36,51,.4);}
 .log-entry:last-child{border:none;}
-.log-turn{color:var(--accent2);font-weight:700;margin-right:6px;}
+.log-turn{color:var(--accent2);font-weight:700;margin-right:5px;}
 
-/* END SCREEN */
-#s-end{
-  flex-direction:column;align-items:center;justify-content:center;
-  padding:40px 20px;text-align:center;
-  background:radial-gradient(ellipse at center,#0d1629 0%,#0a0c12 70%);
-}
-.end-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:40px;max-width:540px;width:100%;}
+/* ── END ── */
+#s-end{flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;
+  background:radial-gradient(ellipse at center,#0d1629 0%,#0a0c12 70%);}
+.end-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:560px;width:100%;}
 .end-title{font-size:1.8rem;font-weight:900;color:var(--accent);margin-bottom:8px;}
-.end-sub{color:var(--sub);margin-bottom:24px;}
-.end-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
-.end-stat-item{background:#0d1020;border:1px solid var(--border);border-radius:10px;padding:14px;}
-.end-stat-label{font-size:.75rem;color:var(--sub);}
-.end-stat-val{font-size:1.3rem;font-weight:800;color:var(--accent);}
-.end-comment{
-  background:rgba(240,165,0,.06);border:1px solid rgba(240,165,0,.2);
-  border-radius:10px;padding:16px;font-size:.9rem;color:#c0b870;margin-bottom:20px;
-  line-height:1.8;
-}
+.end-sub{color:var(--sub);margin-bottom:22px;}
+.end-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.end-stat-item{background:#0d1020;border:1px solid var(--border);border-radius:10px;padding:12px;}
+.end-stat-label{font-size:.73rem;color:var(--sub);}
+.end-stat-val{font-size:1.15rem;font-weight:800;color:var(--accent);}
+.end-comment{background:rgba(240,165,0,.06);border:1px solid rgba(240,165,0,.2);border-radius:10px;
+  padding:14px;font-size:.88rem;color:#c0b870;margin-bottom:20px;line-height:1.8;}
 </style>
 </head>
 <body>
@@ -241,7 +197,7 @@ button{cursor:pointer;border:none;outline:none;font-family:inherit;}
   <h1>王者榮耀<br>職業選手人生模擬器</h1>
   <p class="sub">從路人王到KPL頂峰，你的電競生涯由你書寫</p>
   <button class="btn-main" onclick="goCreate()">開始遊戲</button>
-  <div class="badge">純文字 · 無需API · 多結局</div>
+  <div class="badge">純文字 · 無需API · 金錢/轉會系統 · 多結局</div>
 </div>
 
 <!-- CREATE -->
@@ -309,7 +265,6 @@ button{cursor:pointer;border:none;outline:none;font-family:inherit;}
 
 <!-- GAME -->
 <div id="s-game" class="screen">
-  <!-- Left Panel -->
   <div id="left-panel">
     <div class="player-card">
       <div class="player-avatar" id="avatar-letter">A</div>
@@ -319,10 +274,16 @@ button{cursor:pointer;border:none;outline:none;font-family:inherit;}
     </div>
 
     <div class="section-label">核心數值</div>
-    <div id="stats-panel">
-      <!-- generated -->
+    <div id="stats-panel"></div>
+
+    <div class="section-label">財務狀況</div>
+    <div class="money-box">
+      <div class="money-amount" id="money-amount">¥0</div>
+      <div class="money-row" id="money-salary">月薪：¥0 / 回合</div>
+      <div class="money-team" id="money-team"></div>
     </div>
 
+    <div class="section-label">粉絲</div>
     <div class="fan-box">
       <div class="fan-count" id="fan-count">0</div>
       <div class="fan-tier" id="fan-tier">無名選手</div>
@@ -334,22 +295,16 @@ button{cursor:pointer;border:none;outline:none;font-family:inherit;}
         <span id="prog-pct">0%</span>
       </div>
       <div class="progress-track"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
-      <div class="progress-label" style="margin-top:4px;">
-        <span style="color:var(--sub);font-size:.72rem;">距晉升</span>
-        <span id="stage-to" style="color:var(--accent2);font-size:.72rem;">青訓期</span>
+      <div class="progress-label" style="margin-top:3px;">
+        <span style="color:var(--sub);font-size:.7rem;">距晉升</span>
+        <span id="stage-to" style="color:var(--accent2);font-size:.7rem;">青訓期</span>
       </div>
     </div>
 
-    <div class="turn-info">
-      第 <span id="turn-num">1</span> 回合 &nbsp;|&nbsp;
-      疲勞 <span id="fatigue-num">20</span>
-    </div>
-    <div class="turn-info" style="margin-top:4px;">
-      體能狀態：<span id="health-state">正常</span>
-    </div>
+    <div class="turn-info">第 <span id="turn-num">1</span> 回合 &nbsp;|&nbsp; 疲勞 <span id="fatigue-num">20</span></div>
+    <div class="turn-info" style="margin-top:3px;">狀態：<span id="health-state">正常</span></div>
   </div>
 
-  <!-- Right Panel -->
   <div id="right-panel">
     <div id="event-area"></div>
     <div id="log-area"></div>
@@ -369,17 +324,16 @@ button{cursor:pointer;border:none;outline:none;font-family:inherit;}
 
 <script>
 // ══════════════════════════════════════════════
-// STAGE DATA
+// CONSTANTS
 // ══════════════════════════════════════════════
 const STAGES = [
-  { name:'路人期',   next:'青訓/試訓期' },
-  { name:'青訓/試訓',next:'KGL聯賽' },
-  { name:'KGL聯賽', next:'KPL正賽' },
-  { name:'KPL正賽', next:'知名選手' },
-  { name:'知名選手', next:'生涯巔峰' },
-  { name:'生涯巔峰', next:'' },
+  { name:'路人期',    next:'青訓/試訓期' },
+  { name:'青訓/試訓', next:'KGL聯賽' },
+  { name:'KGL聯賽',  next:'KPL正賽' },
+  { name:'KPL正賽',  next:'知名選手' },
+  { name:'知名選手',  next:'生涯巔峰' },
+  { name:'生涯巔峰',  next:'' },
 ];
-
 const STAT_CFG = [
   { key:'op', label:'操作水平', color:'#3a7bd5' },
   { key:'aw', label:'意識大局', color:'#8b5cf6' },
@@ -387,6 +341,27 @@ const STAT_CFG = [
   { key:'mt', label:'心理素質', color:'#d97706' },
   { key:'cm', label:'個人魅力', color:'#db2777' },
 ];
+const STAGE_SALARIES = [0, 3000, 8000, 30000, 100000, 250000];
+const STAGE_EXPENSES = [0, 0,    3000, 10000, 20000,  40000];
+
+const TEAMS = {
+  S:[
+    { name:'天狼星電競',  desc:'KPL頂級豪門，歷史三冠王' },
+    { name:'龍魂戰隊',   desc:'王者榮耀歷史最強戰隊之一' },
+    { name:'神盾電競',   desc:'近年崛起的新銳豪門戰隊' },
+  ],
+  A:[
+    { name:'焰火戰隊',   desc:'穩定的KPL老牌球隊' },
+    { name:'星辰電競',   desc:'以技術流打法著稱的球隊' },
+    { name:'雷霆戰隊',   desc:'作風強悍的攻擊型球隊' },
+    { name:'極光電競',   desc:'近年快速崛起的黑馬球隊' },
+  ],
+  B:[
+    { name:'鐵血意志',   desc:'靠頑強防守立足KPL的戰隊' },
+    { name:'流星戰隊',   desc:'從KGL升格的新晉球隊' },
+    { name:'海浪電競',   desc:'有潛力但缺乏大賽經驗的隊伍' },
+  ],
+};
 
 // ══════════════════════════════════════════════
 // GAME STATE
@@ -395,36 +370,40 @@ let G = null;
 
 function initG(char, career){
   const presets = {
-    '天才少年': { op:72, aw:55, tf:45, mt:50, cm:48, fatigue:15, fans:50 },
-    '努力型':   { op:58, aw:60, tf:62, mt:65, cm:52, fatigue:20, fans:20 },
-    '直播出道': { op:55, aw:50, tf:48, mt:58, cm:78, fatigue:22, fans:300 },
+    '天才少年':  { op:72, aw:55, tf:45, mt:50, cm:48, fatigue:15, fans:50 },
+    '努力型':    { op:58, aw:60, tf:62, mt:65, cm:52, fatigue:20, fans:20 },
+    '直播出道':  { op:55, aw:50, tf:48, mt:58, cm:78, fatigue:22, fans:300 },
     '線下賽出身':{ op:62, aw:68, tf:70, mt:60, cm:50, fatigue:18, fans:80 },
-    '半路轉職': { op:48, aw:45, tf:55, mt:70, cm:55, fatigue:25, fans:10 },
-    '電競世家': { op:65, aw:62, tf:55, mt:45, cm:65, fatigue:18, fans:120 },
+    '半路轉職':  { op:48, aw:45, tf:55, mt:70, cm:55, fatigue:25, fans:10 },
+    '電競世家':  { op:65, aw:62, tf:55, mt:45, cm:65, fatigue:18, fans:120 },
   };
   const caps = {
-    '天才少年': { op:98, aw:85, tf:75, mt:78, cm:80 },
-    '努力型':   { op:88, aw:88, tf:90, mt:92, cm:80 },
-    '直播出道': { op:82, aw:78, tf:78, mt:80, cm:98 },
+    '天才少年':  { op:98, aw:85, tf:75, mt:78, cm:80 },
+    '努力型':    { op:88, aw:88, tf:90, mt:92, cm:80 },
+    '直播出道':  { op:82, aw:78, tf:78, mt:80, cm:98 },
     '線下賽出身':{ op:90, aw:92, tf:95, mt:85, cm:78 },
-    '半路轉職': { op:95, aw:92, tf:88, mt:95, cm:85 },
-    '電競世家': { op:92, aw:90, tf:82, mt:75, cm:90 },
+    '半路轉職':  { op:95, aw:92, tf:88, mt:95, cm:85 },
+    '電競世家':  { op:92, aw:90, tf:82, mt:75, cm:90 },
   };
   const base = presets[career] || presets['努力型'];
-  const cap  = caps[career]  || caps['努力型'];
+  const cap  = caps[career]   || caps['努力型'];
   G = {
-    stage: 0, turn: 0, progress: 0,
-    seenOnce: new Set(), flags: {},
+    stage:0, turn:0, progress:0,
+    seenOnce:new Set(), flags:{},
     char, career,
-    stats: { op: base.op, aw: base.aw, tf: base.tf, mt: base.mt, cm: base.cm },
+    stats:{ op:base.op, aw:base.aw, tf:base.tf, mt:base.mt, cm:base.cm },
     cap,
-    fans: base.fans,
-    fatigue: base.fatigue,
-    health: 'fine',
-    teamRel: 50, coachRel: 50, pubRisk: 10,
-    team: '',
-    matchWins: 0, matchLosses: 0,
-    history: [],
+    fans:base.fans,
+    fatigue:base.fatigue,
+    health:'fine',
+    teamRel:50, coachRel:50, pubRisk:10,
+    currentTeam:'',
+    matchWins:0, matchLosses:0,
+    money:0,
+    salary:0,
+    totalEarned:0,
+    transferCooldown:12,
+    history:[],
   };
 }
 
@@ -433,14 +412,14 @@ function initG(char, career){
 // ══════════════════════════════════════════════
 const EVENTS = [
 
-  // ── Stage 0: 路人期 ──
+  // ─── Stage 0: 路人期 ───
   {
     id:'e0_rival', stages:[0], once:false, weight:8, milestone:false,
     title:'遇到對手',
-    text:(g)=>`在排位賽中，你遇到了同段位的高手「${g.flags.rivalName || '虛空之刃'}」。他的操作讓你印象深刻，賽後他主動加了好友，說想一起上分。`,
+    text:(g)=>`在排位賽中你遇到了同段位高手「${g.flags.rivalName||'虛空之刃'}」，他的操作讓你印象深刻，賽後他主動加了好友，說想一起上分。`,
     choices:[
-      { text:'接受並約好一起研究', effect:{ cm:2, teamRel:4, progress:14, fans:15 }, result:'你們成了互相磨刀石，技術和默契都有所提升。' },
-      { text:'接受但只打遊戲不聊天', effect:{ op:3, progress:10 }, result:'你在對局中學到了不少，但沒有建立起深厚的關係。' },
+      { text:'接受並約好一起研究打法', effect:{ cm:2, teamRel:4, progress:14, fans:15 }, result:'你們成了互相磨刀石，技術和默契都有提升。' },
+      { text:'接受但只打遊戲不聊天', effect:{ op:3, progress:10 }, result:'你在對局中學到了不少，但沒建立深厚關係。' },
       { text:'婉拒，繼續單排衝分', effect:{ op:2, mt:1, progress:8 }, result:'你堅持自己的節奏，獨立解決問題的能力更強了。' },
     ]
   },
@@ -449,17 +428,17 @@ const EVENTS = [
     title:'嘗試直播',
     text:(g)=>`一個朋友建議你開個直播，說你的操作值得被更多人看到。你有些猶豫，怕影響訓練。`,
     choices:[
-      { text:'開了！全力衝人氣', effect:{ cm:8, fans:200, fatigue:12, op:-2, progress:5 }, result:'直播效果不錯，粉絲漲了一波，但訓練時間被壓縮，技術稍有生疏。' },
-      { text:'偶爾直播，主要還是練技術', effect:{ cm:3, fans:60, fatigue:4, progress:8 }, result:'小直播積累了些人氣，也沒耽誤訓練，平衡得不錯。' },
+      { text:'開了！全力衝人氣', effect:{ cm:8, fans:200, fatigue:12, op:-2, money:800, progress:5 }, result:'直播效果不錯，粉絲漲了一波，也有些打賞收入，但技術稍有生疏。' },
+      { text:'偶爾直播，主要還是練技術', effect:{ cm:3, fans:60, fatigue:4, money:200, progress:8 }, result:'小直播積累了些人氣，平衡得不錯。' },
       { text:'不開，專注訓練', effect:{ op:3, mt:2, progress:10, fatigue:-3 }, result:'你謝絕了誘惑，日夜苦練，技術明顯精進。' },
     ]
   },
   {
     id:'e0_family', stages:[0], once:true, weight:5, milestone:false,
     title:'家人的反對',
-    text:(g)=>`媽媽發現你每天長時間打遊戲，急了，說你在浪費時間，要你去準備考試。你嘗試解釋電競是一個職業，但她搖了搖頭。`,
+    text:(g)=>`媽媽發現你每天長時間打遊戲，急了，說你在浪費時間，要你準備考試。你嘗試解釋電競是一個職業，但她搖了搖頭。`,
     choices:[
-      { text:'拿出職業選手收入數據說服她', effect:{ cm:3, mt:4, coachRel:0, progress:12 }, result:'你準備了充分的材料，媽媽半信半疑，但給了你三個月時間證明自己。' },
+      { text:'拿出職業選手收入數據說服她', effect:{ cm:3, mt:4, progress:12 }, result:'你準備了充分材料，媽媽半信半疑，但給了你三個月時間證明自己。' },
       { text:'先暫時妥協，偷偷繼續練', effect:{ mt:-5, fatigue:10, progress:6 }, result:'你表面答應，但心理壓力倍增，訓練效率大打折扣。' },
       { text:'找到一個電競前輩幫你說話', effect:{ teamRel:5, progress:15, fans:20 }, result:'前輩的背書讓媽媽態度軟化，你也因此結識了業內人士。' },
     ]
@@ -467,11 +446,21 @@ const EVENTS = [
   {
     id:'e0_amateur', stages:[0], once:false, weight:7, milestone:false,
     title:'網絡比賽報名',
-    text:(g)=>`你看到一個民間電競聯賽的報名，冠軍有小額獎金，更重要的是——有職業隊的分析師會觀看決賽。`,
+    text:(g)=>`你看到一個民間電競聯賽的報名，冠軍有小額獎金，更重要的是——有職業隊分析師會觀看決賽。`,
     choices:[
-      { text:'單人報名，挑戰一下', effect:{ mt:3, op:3, progress:16, fans:40 }, result:'你一路殺進四強，雖然沒拿冠軍，但穩定的發揮被幾位觀賽人士注意到了。' },
-      { text:'組隊報名，找路人一起', effect:{ tf:5, teamRel:5, progress:18, fans:60 }, result:'臨時組隊磨合還不錯，你們打進決賽，收穫了一些業內關注。' },
+      { text:'單人報名，挑戰一下', effect:{ mt:3, op:3, money:500, progress:16, fans:40 }, result:'你殺進四強，穩定發揮被幾位觀賽人士注意，也拿了些獎金。' },
+      { text:'組隊報名，找路人一起', effect:{ tf:5, teamRel:5, money:800, progress:18, fans:60 }, result:'臨時組隊磨合不錯，你們打進決賽，收穫了業內關注和獎金。' },
       { text:'不參加，繼續刷排位更高效', effect:{ op:4, progress:10 }, result:'你選擇了更扎實的路，排位快速提升。' },
+    ]
+  },
+  {
+    id:'e0_coaching', stages:[0], once:false, weight:5, milestone:false,
+    title:'代練外快',
+    text:(g)=>`有人在遊戲裡找到你，說想付錢讓你帶他打排位。按你目前的段位，一局大概能收 ¥50 到 ¥100。`,
+    choices:[
+      { text:'接了，補貼生活費', effect:{ money:1200, fatigue:6, op:-1, progress:5 }, result:'你接了幾單代練，小賺了一筆，但訓練時間少了些。' },
+      { text:'接了一單，主要是觀察高段位打法', effect:{ money:200, aw:2, progress:7 }, result:'你把代練當成學習方式，收穫了意外的見解。' },
+      { text:'拒絕，避免影響心態', effect:{ mt:2, op:2, progress:9 }, result:'你不被雜事分心，專心訓練，效率更高了。' },
     ]
   },
   {
@@ -487,20 +476,20 @@ const EVENTS = [
   {
     id:'e0_city_tourney', stages:[0], once:true, weight:4, milestone:false,
     title:'城市電競節',
-    text:(g)=>`當地舉辦了一個電競文化節，設有王者榮耀的線下表演賽，現場有幾百名觀眾。主辦方通過社群找到你邀請你參加。`,
+    text:(g)=>`當地舉辦了電競文化節，設有王者榮耀線下表演賽，現場幾百名觀眾，主辦方通過社群找到你邀請你參加。`,
     choices:[
-      { text:'去！這是難得的線下經驗', effect:{ cm:6, mt:4, fans:100, progress:14 }, result:'線下舞台的感覺完全不同，你應對緊張的能力提升了，還認識了幾位業內人士。' },
-      { text:'去，但全程低調觀察', effect:{ aw:4, cm:2, fans:30, progress:10 }, result:'你在場邊仔細觀察其他選手，學到了很多臨場應對的技巧。' },
+      { text:'去！這是難得的線下經驗', effect:{ cm:6, mt:4, fans:100, money:1000, progress:14 }, result:'線下舞台感覺完全不同，你還認識了幾位業內人士並拿到出場費。' },
+      { text:'去，但全程低調觀察', effect:{ aw:4, cm:2, fans:30, progress:10 }, result:'你仔細觀察其他選手，學到了很多臨場應對技巧。' },
       { text:'不去，線下太耗時間', effect:{ op:2, progress:8 }, result:'你堅守訓練計劃，在家繼續刷分。' },
     ]
   },
   {
     id:'e0_ranked_high', stages:[0], once:false, weight:9, milestone:false,
     title:'段位突破',
-    text:(g)=>`你今天的狀態特別好，一口氣連贏五場，段位突破到了你從未到達過的位置。對手越來越強，你卻越打越興奮。`,
+    text:(g)=>`你今天狀態特別好，一口氣連贏五場，段位突破到你從未到達過的位置。對手越來越強，你卻越打越興奮。`,
     choices:[
       { text:'乘勝追擊，繼續上分', effect:{ op:4, aw:3, fatigue:8, progress:15 }, result:'你繼續保持高強度，技術穩步提升，段位也節節攀升。' },
-      { text:'錄屏分析自己的表現', effect:{ aw:5, mt:2, progress:12 }, result:'你在視頻中發現了一些自己沒意識到的習慣，針對性改善效果明顯。' },
+      { text:'錄屏分析自己的表現', effect:{ aw:5, mt:2, progress:12 }, result:'你在視頻中發現了些自己沒意識到的習慣，針對性改善效果明顯。' },
       { text:'分享到社群引起圍觀', effect:{ cm:4, fans:80, progress:10 }, result:'你的高光集錦在社群引發討論，不少人開始關注你。' },
     ]
   },
@@ -510,19 +499,29 @@ const EVENTS = [
     text:(g)=>`一個月的努力沒有白費。你的排位戰績被一支二線戰隊的教練注意到，他私信你：「有興趣來參加我們的試訓嗎？」這一刻，你感覺夢想近在咫尺。`,
     choices:[
       { text:'立刻答應，這是機會', effect:{ mt:5, progress:20, fans:30 }, result:'你鄭重地回覆了邀請。電競職業生涯的大門，即將向你打開。', advance:true },
-      { text:'先了解隊伍情況再決定', effect:{ aw:3, mt:3, progress:20 }, result:'你做了功課，瞭解這支戰隊的情況後，帶著充分準備去試訓。', advance:true },
+      { text:'先了解隊伍情況再決定', effect:{ aw:3, mt:3, progress:20 }, result:'你做了功課，帶著充分準備去試訓。', advance:true },
     ]
   },
 
-  // ── Stage 1: 青訓/試訓 ──
+  // ─── Stage 1: 青訓/試訓 ───
   {
     id:'e1_first_day', stages:[1], once:true, weight:8, milestone:false,
     title:'訓練第一天',
-    text:(g)=>`青訓基地比你想像的要艱苦。一天要打十二個小時的訓練賽，教練記錄你每一場的數據。宿舍裡擠著六個人，你的隊友大多沉默寡言。`,
+    text:(g)=>`青訓基地比你想像的要艱苦。一天打十二個小時訓練賽，教練記錄你每一場的數據。宿舍裡擠著六個人，隊友大多沉默寡言。`,
     choices:[
       { text:'主動和隊友打招呼融入環境', effect:{ cm:4, teamRel:10, tf:3, progress:12 }, result:'你的主動換來了幾個真誠的笑容，訓練氛圍也輕鬆了些。' },
       { text:'專注訓練，用數據說話', effect:{ op:4, aw:3, coachRel:5, progress:12 }, result:'教練對你的專注度印象深刻，第一天的數據也交出了不錯的成績。' },
       { text:'默默觀察環境和對手的習慣', effect:{ aw:5, progress:10 }, result:'你在觀察中掌握了每個隊友的特點，為以後的配合打下基礎。' },
+    ]
+  },
+  {
+    id:'e1_payday', stages:[1], once:true, weight:7, milestone:false,
+    title:'第一份職業薪水',
+    text:(g)=>`月底，你收到了 ${fmtMoney(3000)} 的職業訓練薪資。這是你第一筆用電競技術換來的錢，意義非凡。`,
+    choices:[
+      { text:'先寄一部分回家給父母', effect:{ money:-1500, mt:6, cm:3, progress:10 }, result:'父母收到後打電話說很驕傲，你的心態穩了很多。' },
+      { text:'買頂級鍵盤滑鼠提升手感', effect:{ money:-2500, op:4, progress:10 }, result:'新設備帶來了明顯提升，手感和反應都更快了。' },
+      { text:'全部存起來，未來還有很多要用', effect:{ mt:4, progress:8 }, result:'你養成了良好的理財習慣，心態更平穩。' },
     ]
   },
   {
@@ -584,13 +583,23 @@ const EVENTS = [
     ]
   },
 
-  // ── Stage 2: KGL / 二隊 ──
+  // ─── Stage 2: KGL ───
+  {
+    id:'e2_signing_bonus', stages:[2], once:true, weight:6, milestone:false,
+    title:'正式合約與簽約金',
+    text:(g)=>`戰隊給你提供了一份正式合約，並附有一筆 ¥30,000 的簽約獎金。這代表你正式成為職業選手。`,
+    choices:[
+      { text:'直接簽，這是肯定', effect:{ money:30000, mt:5, progress:12 }, result:'你正式成為職業選手，簽約金也讓你的生活條件改善不少。' },
+      { text:'和家人商量後再決定', effect:{ money:30000, mt:3, cm:3, progress:10 }, result:'家人的支持讓你更有底氣，合約順利簽署。' },
+      { text:'找人幫你審閱合約細節', effect:{ money:28000, mt:4, progress:11, aw:2 }, result:'你的謹慎省去了幾個不公平條款，小賺了個教訓。' },
+    ]
+  },
   {
     id:'e2_first_match', stages:[2], once:true, weight:8, milestone:false,
     title:'職業首秀',
     text:(g)=>`這是你人生第一場正式聯賽。對面是熟悉的隊伍，但舞台的燈光、觀眾的呼聲、導播的鏡頭——一切都和訓練賽不同。你的手在輕輕顫抖。`,
     choices:[
-      { text:'深呼吸，把注意力集中在英雄技能上', effect:{ mt:5, op:3, progress:15, fans:150 }, result:'你克服了緊張，打出了一場穩健的表現，解說給了你正面評價。' },
+      { text:'深呼吸，把注意力集中在英雄技能上', effect:{ mt:5, op:3, progress:15, fans:150 }, result:'你克服了緊張，打出了穩健的表現，解說給了你正面評價。' },
       { text:'緊張過頭，前期失誤連連', effect:{ mt:-3, op:-1, progress:8, fans:40 }, result:'你犯了新人常見的錯誤，但及時調整，後期稍有挽回。' },
       { text:'反而更興奮，進入了「無意識流暢」狀態', effect:{ op:6, mt:4, aw:3, progress:18, fans:250 }, result:'你發揮超常，這場比賽成了你早期最令人印象深刻的表演之一。' },
     ]
@@ -610,7 +619,7 @@ const EVENTS = [
     title:'腕部警告',
     text:(g)=>`隊醫在例行檢查後告訴你：你的右手腕有輕微的腱鞘炎跡象，如果繼續高強度訓練而不處理，可能造成永久性損傷。`,
     choices:[
-      { text:'立即接受治療，同時降低強度', effect:{ health:'fine', fatigue:-15, op:-1, progress:8 }, result:'你及時處理，腕部問題得到控制，長遠健康得到保障。', setFlag:{ key:'wrist_treated', val:true } },
+      { text:'立即接受治療（花費 ¥5,000）', effect:{ health:'fine', fatigue:-15, money:-5000, progress:8 }, result:'你及時處理，腕部問題得到控制，長遠健康得到保障。', setFlag:{ key:'wrist_treated', val:true } },
       { text:'繼續拼，等聯賽結束再說', effect:{ health:'injured', fatigue:5, op:2, progress:12 }, result:'你忍著不適繼續打，短期成績還不錯，但風險越來越高。' },
     ]
   },
@@ -643,15 +652,24 @@ const EVENTS = [
     ]
   },
 
-  // ── Stage 3: KPL正賽 ──
+  // ─── Stage 3: KPL正賽 ───
   {
     id:'e3_kpl_debut', stages:[3], once:true, weight:8, milestone:false,
     title:'KPL首秀',
     text:(g)=>`KPL舞台的震撼是無法用語言形容的。賽館坐滿了觀眾，解說台前坐著全國最頂級的評論員。你在等待上場的後台深呼吸，耳機里傳來隊友的聲音。`,
     choices:[
       { text:'把這裡當成最大的訓練賽，穩住發揮', effect:{ mt:5, op:4, progress:16, fans:500 }, result:'你打出了超出預期的表現，解說說：「這個新人不一般！」' },
-      { text:'享受這個時刻，盡情釋放', effect:{ cm:5, op:3, fans:800, mt:3, progress:14 }, result:'你的表情和打法都充滿了活力，現場的氣氛被你帶動。' },
+      { text:'享受這個時刻，盡情釋放', effect:{ cm:5, op:3, fans:800, mt:3, progress:14 }, result:'你的表情和打法都充滿了活力，現場氣氛被你帶動。' },
       { text:'還是太緊張，第一場沒發揮出來', effect:{ mt:-2, fans:100, progress:8 }, result:'職業老兵說：新人上KPL都這樣，給你時間。' },
+    ]
+  },
+  {
+    id:'e3_fan_support', stages:[3], once:false, weight:5, milestone:false,
+    title:'粉絲應援物資',
+    text:(g)=>`你的粉絲後援會準備了一批應援物資，還在直播間打賞了一大筆錢。粉絲頭目說：「哥哥你要好好比賽！」`,
+    choices:[
+      { text:'公開致謝，在社群分享這份感動', effect:{ money:5000, cm:6, fans:400, pubRisk:3, progress:8 }, result:'粉絲的熱情感動了更多人，你的社群影響力再度提升。' },
+      { text:'私下感謝，把重心放在比賽上', effect:{ money:5000, mt:4, progress:10 }, result:'你的低調回應讓老粉絲更喜歡你，黏性更高了。' },
     ]
   },
   {
@@ -661,7 +679,7 @@ const EVENTS = [
     choices:[
       { text:'發一條感謝粉絲的微博', effect:{ cm:8, fans:2000, pubRisk:5, progress:10 }, result:'你的回應真誠而有趣，粉絲量繼續暴漲。' },
       { text:'不太在意，繼續低頭練習', effect:{ op:3, mt:3, progress:8 }, result:'你的沉穩形象反而讓一些人更欣賞你。' },
-      { text:'趁熱打鐵開了第一個直播', effect:{ fans:3000, cm:6, fatigue:8, pubRisk:8, progress:8 }, result:'直播間衝進來了幾萬人，你的人氣一夜暴漲，但也招來了不少黑子。' },
+      { text:'趁熱打鐵開了第一個直播', effect:{ fans:3000, cm:6, money:15000, fatigue:8, pubRisk:8, progress:8 }, result:'直播間衝進幾萬人，一夜暴漲，打賞豐厚，但也招來了不少黑子。' },
     ]
   },
   {
@@ -669,7 +687,7 @@ const EVENTS = [
     title:'黑粉風波',
     text:(g)=>`你在上一場比賽失誤後，微博下湧現了大量惡意評論，甚至有人人肉搜索你的個人信息。你的心情跌入谷底。`,
     choices:[
-      { text:'無視惡意，只看正面評論', effect:{ mt:4, progress:8, pubRisk:-3 }, result:'你選擇了不和解，專注自身，心理素質又提升了一個層級。' },
+      { text:'無視惡意，只看正面評論', effect:{ mt:4, progress:8, pubRisk:-3 }, result:'你選擇不和解，專注自身，心理素質又提升了一個層級。' },
       { text:'發微博回應，解釋當場的判斷', effect:{ cm:3, pubRisk:5, fans:200, progress:6 }, result:'回應引發了更多討論，有人支持有人繼續攻擊，輿論仍在波動。' },
       { text:'找助理幫忙清理評論，自己不看', effect:{ fatigue:-5, mt:2, progress:8 }, result:'你把精力留在了比賽上，心理壓力有所減輕。' },
     ]
@@ -695,6 +713,16 @@ const EVENTS = [
     ]
   },
   {
+    id:'e3_medical', stages:[3], once:false, weight:3, milestone:false,
+    title:'賽季後身體檢查',
+    text:(g)=>`密集賽季結束後，你接受了全面的身體檢查，醫生建議進行預防性保養治療，費用大約 ¥8,000。`,
+    choices:[
+      { text:'接受全套治療', effect:{ money:-8000, health:'fine', fatigue:-15, progress:8 }, result:'全套保養讓你狀態回到最佳，磨損的身體得到了充分修復。' },
+      { text:'只做基本治療，省點錢', effect:{ money:-3000, fatigue:-8, progress:6 }, result:'基本治療緩解了疲勞，但一些問題沒有根治。' },
+      { text:'暫時跳過，把錢存著', effect:{ fatigue:5, health:'warning', progress:5 }, result:'你省了錢，但身體的小問題繼續積累。' },
+    ]
+  },
+  {
     id:'e3_team_conflict', stages:[3], once:false, weight:4, milestone:false,
     title:'內部分裂',
     text:(g)=>`隊伍因為戰術方向問題出現了明顯的內部分裂，一部分人支持進攻打法，另一部分堅持穩健思路，氣氛很緊繃。`,
@@ -715,15 +743,25 @@ const EVENTS = [
     ]
   },
 
-  // ── Stage 4: 知名選手 ──
+  // ─── Stage 4: 知名選手 ───
   {
     id:'e4_endorsement', stages:[4], once:false, weight:6, milestone:false,
     title:'代言邀請',
-    text:(g)=>`一個電競外設品牌找到你談代言，合同金額不低，但協議要求你每週在社群曝光三次，這會佔用一些訓練時間。`,
+    text:(g)=>`一個電競外設品牌找到你談代言，合同金額不低，還有 ¥50,000 的簽約金，但協議要求你每週在社群曝光三次。`,
     choices:[
-      { text:'簽約，商業化是職業選手的一部分', effect:{ cm:6, fans:1000, fatigue:8, pubRisk:6, progress:12 }, result:'你的商業價值開始展現，但管理社群帳號確實佔用了不少精力。' },
-      { text:'談判降低曝光要求再簽', effect:{ cm:4, fans:500, fatigue:3, progress:12 }, result:'你保護了訓練時間，同時也得到了商業機會，談判能力獲得了好評。' },
+      { text:'簽約，商業化是職業選手的一部分', effect:{ cm:6, fans:1000, money:50000, fatigue:8, pubRisk:6, progress:12 }, result:'你的商業價值開始展現，但管理社群帳號確實佔用了不少精力。' },
+      { text:'談判降低曝光要求再簽', effect:{ cm:4, fans:500, money:40000, fatigue:3, progress:12 }, result:'你保護了訓練時間，同時也得到了商業機會，談判能力獲得好評。' },
       { text:'婉拒，現在不是分心的時候', effect:{ op:3, coachRel:4, progress:10 }, result:'教練很欣賞你的選擇，說你的優先順序是對的。' },
+    ]
+  },
+  {
+    id:'e4_sponsor_payment', stages:[4], once:false, weight:5, milestone:false,
+    title:'代言合約結款',
+    text:(g)=>`上個賽季簽訂的代言合約到期結算，品牌根據你的曝光數據進行了獎勵結款，金額相當可觀。`,
+    choices:[
+      { text:'談續約，要求更高的分成', effect:{ money:80000, cm:4, progress:10 }, result:'品牌對你的市場表現很滿意，新合約條件更優厚。' },
+      { text:'收款後另找更大的品牌', effect:{ money:60000, cm:6, fans:500, progress:10 }, result:'你換了更大的合作夥伴，未來的商業收益可觀。' },
+      { text:'直接存下來，理財先行', effect:{ money:80000, mt:3, progress:8 }, result:'你把所有代言收入都存了起來，財務安全感很強。' },
     ]
   },
   {
@@ -731,8 +769,8 @@ const EVENTS = [
     title:'視力告警',
     text:(g)=>`眼科檢查結果出來了：你的視力下降明顯，醫生建議必須減少屏幕時間。作為一個職業選手，這幾乎是個無解的難題。`,
     choices:[
-      { text:'嚴格遵醫囑，調整訓練計劃', effect:{ health:'fine', fatigue:-10, op:-2, progress:8 }, result:'你配合治療，視力穩定下來，長遠競技生涯得到保障。' },
-      { text:'配了護目鏡繼續高強度訓練', effect:{ op:2, health:'warning', fatigue:5, progress:12 }, result:'你仍在高強度訓練，但健康隱患沒有消除。' },
+      { text:'嚴格遵醫囑，調整訓練計劃（¥12,000）', effect:{ health:'fine', money:-12000, fatigue:-10, op:-2, progress:8 }, result:'你配合治療，視力穩定下來，長遠競技生涯得到保障。' },
+      { text:'配了護目鏡繼續高強度訓練（¥3,000）', effect:{ op:2, money:-3000, health:'warning', fatigue:5, progress:12 }, result:'你仍在高強度訓練，但健康隱患沒有消除。' },
     ]
   },
   {
@@ -746,23 +784,23 @@ const EVENTS = [
     ]
   },
   {
-    id:'e4_transfer', stages:[4], once:true, weight:4, milestone:false,
-    title:'轉會傳聞',
-    text:(g)=>`有消息稱頂級戰隊正在接觸你，開出的薪水是現在的兩倍，但意味著要離開已經磨合好的隊友。市場上的傳聞鬧得滿城風雨。`,
+    id:'e4_medical_advanced', stages:[4,5], once:false, weight:3, milestone:false,
+    title:'高端健康管理',
+    text:(g)=>`作為知名選手，你的戰隊為你安排了一次高端全身檢查，醫生推薦了一套預防性治療方案，費用約 ¥20,000。`,
     choices:[
-      { text:'和現隊談續約，忠誠優先', effect:{ teamRel:15, coachRel:8, tf:5, progress:12 }, result:'你的選擇讓現隊上下動容，給你安排了更好的條件，默契度更上一層。' },
-      { text:'接受轉會，追求更高的舞台', effect:{ fans:2000, op:3, teamRel:-10, progress:15 }, result:'你加入了頂級戰隊，需要從零開始建立配合，前途更廣但挑戰更大。' },
-      { text:'讓代理人去談，自己先不表態', effect:{ cm:2, progress:8 }, result:'你保留了靈活性，最終在雙方的拉鋸中達成了滿意的結果。' },
+      { text:'全套接受，身體是最大的本錢', effect:{ money:-20000, health:'fine', fatigue:-18, op:2, progress:8 }, result:'專業的運動醫學保養讓你的狀態接近職業巔峰。' },
+      { text:'只做必要的基礎保養（¥8,000）', effect:{ money:-8000, fatigue:-10, progress:6 }, result:'你接受了最必要的部分，狀態有所回升。' },
+      { text:'暫時跳過，下個賽季再說', effect:{ fatigue:5, health:'warning', progress:5 }, result:'你節省了費用，但身體的積累問題仍在繼續。' },
     ]
   },
   {
     id:'e4_reputation_crisis', stages:[4], once:true, weight:3, milestone:false,
     title:'輿論危機',
-    text:(g)=>`有媒體爆出一篇文章，指你在私下行為不當，雖然你知道是無中生有，但文章已經被大量轉發，粉絲開始要求你回應。`,
+    text:(g)=>`有媒體爆出一篇文章，指你在私下行為不當，雖然你知道是無中生有，但文章已被大量轉發，粉絲開始要求你回應。`,
     choices:[
-      { text:'通過官方律師發聲明，準備法律行動', effect:{ pubRisk:-15, fans:-500, cm:4, progress:8 }, result:'聲明和法律警告讓謠言迅速止血，你的形象在一部分人眼中反而更正面。' },
+      { text:'通過官方律師發聲明，準備法律行動', effect:{ pubRisk:-15, money:-5000, fans:-500, cm:4, progress:8 }, result:'聲明和法律警告讓謠言迅速止血，你的形象在一部分人眼中反而更正面。' },
       { text:'自己錄影解釋，直面粉絲', effect:{ cm:8, fans:1000, pubRisk:-8, progress:10 }, result:'你真誠的解釋感動了大量路人，支持度反彈。' },
-      { text:'保持沉默，等待時間沖淡', effect:{ pubRisk:5, fans:-1500, mt:2, progress:4 }, result:'沉默讓部分粉絲感到失望，一些路人則對你的印象留下了陰影。' },
+      { text:'保持沉默，等待時間沖淡', effect:{ pubRisk:5, fans:-1500, mt:2, progress:4 }, result:'沉默讓部分粉絲感到失望，一些路人對你的印象留下了陰影。' },
     ]
   },
   {
@@ -776,7 +814,7 @@ const EVENTS = [
     ]
   },
 
-  // ── Stage 5: 生涯巔峰 ──
+  // ─── Stage 5: 生涯巔峰 ───
   {
     id:'e5_new_talent', stages:[5], once:false, weight:6, milestone:false,
     title:'後浪來了',
@@ -792,8 +830,18 @@ const EVENTS = [
     title:'嚴重傷病',
     text:(g)=>`賽季結束後，你的手腕問題徹底爆發，醫生說需要手術，術後至少三個月無法訓練。職業生涯面臨最大的考驗。`,
     choices:[
-      { text:'接受手術，好好休養，爭取回來', effect:{ health:'fine', fans:500, mt:6, progress:10 }, result:'你的康復之路成為電競圈的一個勵志故事，回歸後粉絲更多了。', setFlag:{ key:'surgery', val:true } },
-      { text:'嘗試保守治療，繼續撐著打', effect:{ health:'injured', op:-5, fatigue:15, progress:8 }, result:'你的堅持令人欽佩，但風險越來越大，最終不得不面對更長的休養期。' },
+      { text:'接受手術，好好休養，爭取回來（¥50,000）', effect:{ health:'fine', money:-50000, fans:500, mt:6, progress:10 }, result:'你的康復之路成為電競圈的一個勵志故事，回歸後粉絲更多了。', setFlag:{ key:'surgery', val:true } },
+      { text:'嘗試保守治療，繼續撐著打（¥20,000）', effect:{ health:'injured', money:-20000, op:-5, fatigue:15, progress:8 }, result:'你的堅持令人欽佩，但風險越來越大，最終不得不面對更長的休養期。' },
+    ]
+  },
+  {
+    id:'e5_legacy_investment', stages:[5], once:true, weight:4, milestone:false,
+    title:'生涯財富規劃',
+    text:(g)=>`你的財務顧問說：「你現在是知名選手，是時候做長期投資了。」他提供了幾個選擇。你的存款目前有 ${fmtMoney(Math.max(0,g.money))}。`,
+    choices:[
+      { text:'投資電競俱樂部股份', effect:{ money:-100000, cm:8, fans:1000, progress:10 }, result:'你成為電競行業的投資人，商業版圖進一步擴大。' },
+      { text:'保守存款加低風險理財', effect:{ mt:4, progress:8 }, result:'你選擇穩健的財務路線，未來的保障更加充足。' },
+      { text:'繼續專注電競，不分心投資', effect:{ op:4, aw:3, progress:12 }, result:'你把所有精力放在競技狀態上，技術維持在職業巔峰。' },
     ]
   },
   {
@@ -802,21 +850,23 @@ const EVENTS = [
     text:(g)=>`你已經${parseInt(g.char.age)+5}歲了。戰隊提出了一個方案：你可以選擇繼續打一個賽季衝擊最後的冠軍，或者以現在的成就光榮退役，轉型為教練或解說。你靜靜地看著窗外，思考了很久。`,
     choices:[
       { text:'再拼一個賽季，不留遺憾', effect:{ mt:8, fans:2000, fatigue:20, progress:30 }, result:'你燃燒最後的熱情，帶著一切繼續踏上征程。最後的高光，屬於你。', advance:true },
-      { text:'帶著尊嚴退役，開啟人生新篇章', effect:{ cm:10, fans:5000, progress:30 }, result:'退役宣言感動了無數人。你的名字，已經刻入了電競歷史。', advance:true },
+      { text:'帶著尊嚴退役，開啟人生新篇章', effect:{ cm:10, fans:5000, money:200000, progress:30 }, result:'退役宣言感動了無數人。退役合約和贊助收入讓你的下半生無憂。你的名字，已經刻入了電競歷史。', advance:true },
     ]
   },
 ];
 
 // ══════════════════════════════════════════════
-// UI HELPERS
+// HELPERS
 // ══════════════════════════════════════════════
 function $(id){ return document.getElementById(id); }
-function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); }
-
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
 function fanTier(n){
-  if(n<100) return '無名選手';
-  if(n<2000) return '初露鋒芒';
-  if(n<20000) return '小有名氣';
+  if(n<100)    return '無名選手';
+  if(n<2000)   return '初露鋒芒';
+  if(n<20000)  return '小有名氣';
   if(n<200000) return '知名選手';
   return '頂級明星';
 }
@@ -824,20 +874,30 @@ function fmtFans(n){
   if(n>=10000) return (n/10000).toFixed(1)+'萬';
   return n+'';
 }
+function fmtMoney(n){
+  const abs = Math.abs(n);
+  let s;
+  if(abs>=100000000) s=(abs/100000000).toFixed(2)+'億';
+  else if(abs>=10000) s=(abs/10000).toFixed(1)+'萬';
+  else s=abs.toLocaleString();
+  return (n<0?'-':'')+'¥'+s;
+}
 
+// ══════════════════════════════════════════════
+// PANEL REFRESH
+// ══════════════════════════════════════════════
 let deltaTimers = {};
 function refreshPanel(deltas={}){
-  $('avatar-letter').textContent = G.char.name[0] || '?';
+  $('avatar-letter').textContent = G.char.name[0]||'?';
   $('p-name').textContent = G.char.name;
-  $('p-id').textContent = '@' + G.char.id;
+  $('p-id').textContent = '@'+G.char.id;
   $('p-stage').textContent = STAGES[G.stage].name;
 
-  // stats
   const html = STAT_CFG.map(s=>{
     const v = Math.min(G.cap[s.key], Math.max(0, G.stats[s.key]));
     const d = deltas[s.key];
     const dClass = d>0?'pos':d<0?'neg':'';
-    const dText = d>0?`+${d}`:d<0?`${d}`:'';
+    const dText  = d>0?`+${d}`:d<0?`${d}`:'';
     return `<div class="stat-row">
       <div class="stat-header">
         <span class="stat-name">${s.label}</span>
@@ -852,30 +912,40 @@ function refreshPanel(deltas={}){
   if(Object.keys(deltas).length){
     STAT_CFG.forEach(s=>{
       if(deltaTimers[s.key]) clearTimeout(deltaTimers[s.key]);
-      deltaTimers[s.key] = setTimeout(()=>{
-        const el = $(`sd-${s.key}`);
-        if(el) el.classList.remove('show');
-      }, 2500);
+      deltaTimers[s.key] = setTimeout(()=>{ const el=$(`sd-${s.key}`); if(el) el.classList.remove('show'); }, 2500);
     });
   }
 
+  // Money
+  $('money-amount').textContent = fmtMoney(G.money);
+  $('money-salary').textContent = G.salary > 0 ? `月薪：${fmtMoney(G.salary)} / 回合` : '月薪：尚未職業化';
+  $('money-team').textContent = G.currentTeam
+    ? `效力：${G.currentTeam}`
+    : (G.stage === 0 ? '身份：路人/自由選手' : '');
+
+  // Fans
   $('fan-count').textContent = fmtFans(G.fans);
   $('fan-tier').textContent = fanTier(G.fans);
 
+  // Progress
   const pct = Math.min(100, G.progress);
-  $('prog-bar').style.width = pct + '%';
-  $('prog-pct').textContent = Math.round(pct) + '%';
+  $('prog-bar').style.width = pct+'%';
+  $('prog-pct').textContent = Math.round(pct)+'%';
   $('stage-from').textContent = STAGES[G.stage].name;
   $('stage-to').textContent = STAGES[G.stage].next || '功成身退';
 
-  $('turn-num').textContent = G.turn + 1;
+  // Turn
+  $('turn-num').textContent = G.turn+1;
   $('fatigue-num').textContent = Math.round(G.fatigue);
   const hMap = { fine:'正常', warning:'需要注意', injured:'受傷' };
-  $('health-state').textContent = hMap[G.health] || '正常';
+  $('health-state').textContent = hMap[G.health]||'正常';
 }
 
+// ══════════════════════════════════════════════
+// LOG
+// ══════════════════════════════════════════════
 function addLog(text){
-  G.history.push({ turn: G.turn+1, text });
+  G.history.push({ turn:G.turn+1, text });
   const el = document.createElement('div');
   el.className = 'log-entry';
   el.innerHTML = `<span class="log-turn">T${G.turn+1}</span>${text}`;
@@ -888,12 +958,10 @@ function addLog(text){
 // EVENT PICKING
 // ══════════════════════════════════════════════
 function pickEvent(){
-  // Check for milestone
   if(G.progress >= 100){
     const ms = EVENTS.find(e=>e.stages.includes(G.stage) && e.milestone && !G.seenOnce.has(e.id));
     if(ms){ G.progress = 100; return ms; }
   }
-  // Normal weighted pick
   const pool = EVENTS.filter(e=>{
     if(!e.stages.includes(G.stage)) return false;
     if(e.milestone) return false;
@@ -902,53 +970,54 @@ function pickEvent(){
   });
   if(pool.length === 0) return null;
   const total = pool.reduce((s,e)=>s+e.weight, 0);
-  let r = Math.random() * total;
-  for(const e of pool){
-    r -= e.weight;
-    if(r <= 0) return e;
-  }
+  let r = Math.random()*total;
+  for(const e of pool){ r -= e.weight; if(r<=0) return e; }
   return pool[pool.length-1];
 }
 
 // ══════════════════════════════════════════════
-// MATCH SIMULATION (every 7 turns)
+// CLEAR EVENT AREA (page-by-page switch)
+// ══════════════════════════════════════════════
+function clearPage(){
+  $('event-area').innerHTML = '';
+}
+
+// ══════════════════════════════════════════════
+// MATCH SIMULATION
 // ══════════════════════════════════════════════
 function simulateMatch(){
   const { op, aw, tf, mt } = G.stats;
   const score = (op*0.4 + aw*0.3 + tf*0.3) * (mt/100) * (1 - G.fatigue/200);
   const threshold = 50 + Math.random()*25;
   const win = score > threshold;
-  if(win){ G.matchWins++; G.fans += Math.floor(Math.random()*300+100); }
+  const bonusFans = Math.floor(Math.random()*300+100);
+  if(win){ G.matchWins++; G.fans += bonusFans; }
   else { G.matchLosses++; G.fatigue += 5; }
   G.fatigue = Math.min(100, G.fatigue + 8);
   G.progress += win ? 8 : 3;
-  return win;
+  return { win, bonusFans };
 }
 
 function renderMatch(){
-  const win = simulateMatch();
-  const ea = $('event-area');
+  const { win, bonusFans } = simulateMatch();
+  clearPage();
   const div = document.createElement('div');
   div.className = 'match-card';
   div.innerHTML = `
     <div class="match-tag">⚔ 週賽結算</div>
     <div class="match-result ${win?'win':'loss'}">${win?'勝利！':'敗北...'}</div>
-    <p style="color:var(--sub);font-size:.88rem;">
-      ${win
-        ? `你的${G.char.pos}發揮穩定，帶領隊伍拿下了比賽。`
-        : `這場比賽暴露了一些短板，需要繼續改進。`
-      }
-    </p>
-    <div class="delta-line">
+    <div class="match-detail">${win
+      ? `你的${G.char.pos}發揮穩定，帶領隊伍拿下了比賽。`
+      : `這場比賽暴露了一些短板，需要繼續改進。`
+    }</div>
+    <div class="delta-line" style="margin-top:10px;">
       <span class="${win?'d-pos':'d-neg'}">${win?'進度+8':'進度+3'}</span>
-      &nbsp;|&nbsp;
       <span class="d-neg">疲勞+${win?8:13}</span>
-      ${win?`&nbsp;|&nbsp;<span class="d-pos">粉絲+${100}-${400}</span>`:''}
+      ${win?`<span class="d-pos">粉絲+${bonusFans}</span>`:''}
     </div>
     <button class="btn-next" onclick="nextTurn()">繼續 →</button>
   `;
-  ea.appendChild(div);
-  ea.scrollTop = ea.scrollHeight;
+  $('event-area').appendChild(div);
   refreshPanel();
   addLog(`週賽：${win?'勝利':'失敗'}`);
 }
@@ -958,27 +1027,31 @@ function renderMatch(){
 // ══════════════════════════════════════════════
 function applyEffect(eff){
   const deltas = {};
-  const keys = ['op','aw','tf','mt','cm'];
-  keys.forEach(k=>{
+  ['op','aw','tf','mt','cm'].forEach(k=>{
     if(eff[k] !== undefined){
       deltas[k] = eff[k];
-      G.stats[k] = Math.min(G.cap[k], Math.max(0, G.stats[k] + eff[k]));
+      G.stats[k] = Math.min(G.cap[k], Math.max(0, G.stats[k]+eff[k]));
     }
   });
-  if(eff.fans)     G.fans     = Math.max(0, G.fans + eff.fans);
-  if(eff.fatigue)  G.fatigue  = Math.min(100, Math.max(0, G.fatigue + eff.fatigue));
-  if(eff.teamRel)  G.teamRel  = Math.min(100, Math.max(0, G.teamRel + eff.teamRel));
-  if(eff.coachRel) G.coachRel = Math.min(100, Math.max(0, G.coachRel + eff.coachRel));
-  if(eff.pubRisk)  G.pubRisk  = Math.min(100, Math.max(0, G.pubRisk + eff.pubRisk));
-  if(eff.progress) G.progress = Math.min(105, G.progress + eff.progress);
+  if(eff.fans     !== undefined) G.fans     = Math.max(0, G.fans+eff.fans);
+  if(eff.fatigue  !== undefined) G.fatigue  = Math.min(100, Math.max(0, G.fatigue+eff.fatigue));
+  if(eff.teamRel  !== undefined) G.teamRel  = Math.min(100, Math.max(0, G.teamRel+eff.teamRel));
+  if(eff.coachRel !== undefined) G.coachRel = Math.min(100, Math.max(0, G.coachRel+eff.coachRel));
+  if(eff.pubRisk  !== undefined) G.pubRisk  = Math.min(100, Math.max(0, G.pubRisk+eff.pubRisk));
+  if(eff.progress !== undefined) G.progress = Math.min(105, G.progress+eff.progress);
+  if(eff.money    !== undefined){
+    deltas.money = eff.money;
+    G.money = Math.max(0, G.money+eff.money);
+    if(eff.money > 0) G.totalEarned += eff.money;
+  }
   return deltas;
 }
 
 // ══════════════════════════════════════════════
-// RENDER EVENT
+// RENDER EVENT (replaces, not appends)
 // ══════════════════════════════════════════════
 function renderEvent(ev){
-  const ea = $('event-area');
+  clearPage();
   const div = document.createElement('div');
   div.className = 'event-card';
   div.innerHTML = `
@@ -993,9 +1066,7 @@ function renderEvent(ev){
     <div id="result-area"></div>
   `;
   div.setAttribute('data-evid', ev.id);
-  ea.appendChild(div);
-  ea.scrollTop = ea.scrollHeight;
-  // store current event
+  $('event-area').appendChild(div);
   window._curEv = ev;
 }
 
@@ -1004,49 +1075,168 @@ function chooseOption(idx){
   if(!ev) return;
   const c = ev.choices[idx];
 
-  // mark chosen
-  const btns = document.querySelectorAll('.choice-btn');
-  btns.forEach(b=>{ b.disabled=true; if(parseInt(b.dataset.idx)===idx) b.classList.add('chosen'); });
+  document.querySelectorAll('.choice-btn').forEach(b=>{
+    b.disabled = true;
+    if(parseInt(b.dataset.idx)===idx) b.classList.add('chosen');
+  });
 
-  // apply effect
   const deltas = applyEffect(c.effect);
-
-  // set health if specified
-  if(c.effect.health) G.health = c.effect.health;
-
-  // set flags if specified
+  if(c.effect.health)  G.health = c.effect.health;
   if(c.setFlag) G.flags[c.setFlag.key] = c.setFlag.val;
-
-  // mark once
   if(ev.once) G.seenOnce.add(ev.id);
 
-  // build delta display
-  const dLines = [];
+  // Build delta display
   const statLabels = { op:'操作', aw:'意識', tf:'配合', mt:'心理', cm:'魅力' };
+  const dLines = [];
   Object.keys(deltas).forEach(k=>{
-    const v = deltas[k];
-    if(v!==0) dLines.push(`<span class="${v>0?'d-pos':'d-neg'}">${statLabels[k]} ${v>0?'+':''}${v}</span>`);
+    if(k === 'money'){
+      const m = deltas[k];
+      if(m !== 0) dLines.push(`<span class="${m>0?'d-money':'d-neg'}">${m>0?'收入':'支出'} ${fmtMoney(m)}</span>`);
+    } else if(statLabels[k]) {
+      const v = deltas[k];
+      if(v!==0) dLines.push(`<span class="${v>0?'d-pos':'d-neg'}">${statLabels[k]} ${v>0?'+':''}${v}</span>`);
+    }
   });
-  if(c.effect.fans && c.effect.fans !== 0){
+  if(c.effect.fans && c.effect.fans!==0){
     const f = c.effect.fans;
     dLines.push(`<span class="${f>0?'d-pos':'d-neg'}">粉絲 ${f>0?'+':''}${f}</span>`);
   }
   if(c.effect.progress) dLines.push(`<span class="d-neu">進度 +${c.effect.progress}</span>`);
 
-  const shouldAdvance = c.advance;
-  const resultHtml = `
+  const shouldAdvance = !!c.advance;
+  $('result-area').innerHTML = `
     <div class="result-box">
       <div>${c.result}</div>
-      ${dLines.length ? `<div class="delta-line">${dLines.join(' &nbsp;')}</div>` : ''}
+      ${dLines.length?`<div class="delta-line">${dLines.join('')}</div>`:''}
     </div>
-    <button class="btn-next" onclick="${shouldAdvance?'advanceStage()':'nextTurn()'}">${shouldAdvance?'進入下一階段 →':'繼續 →'}</button>
+    <button class="btn-next" onclick="${shouldAdvance?'advanceStage()':'nextTurn()'}">
+      ${shouldAdvance?'進入下一階段 →':'繼續 →'}
+    </button>
   `;
 
-  $('result-area').innerHTML = resultHtml;
-  $('event-area').scrollTop = $('event-area').scrollHeight;
-
   refreshPanel(deltas);
-  addLog(`${ev.title} → ${c.text}`);
+  addLog(`${ev.title} → ${c.text.slice(0,20)}…`);
+}
+
+// ══════════════════════════════════════════════
+// TRANSFER WINDOW
+// ══════════════════════════════════════════════
+function generateTransferOffers(){
+  const stage = G.stage;
+  const tierList = stage <= 2 ? ['B','A'] : stage <= 3 ? ['A','S'] : ['S','S','A'];
+  const used = new Set([G.currentTeam]);
+  const offers = [];
+  const count = Math.min(3, 1 + Math.floor(Math.random()*2));
+  for(let i=0;i<count;i++){
+    const tier = tierList[Math.floor(Math.random()*tierList.length)];
+    const pool = TEAMS[tier].filter(t=>!used.has(t.name));
+    if(!pool.length) continue;
+    const team = pool[Math.floor(Math.random()*pool.length)];
+    used.add(team.name);
+    const multiplier = tier==='S'?(1.8+Math.random()*0.8):tier==='A'?(1.3+Math.random()*0.5):(1.0+Math.random()*0.3);
+    const baseSalary = G.salary > 0 ? G.salary : STAGE_SALARIES[stage];
+    const newSalary = Math.round(baseSalary * multiplier);
+    const fanBonus = tier==='S'?5000:tier==='A'?2000:500;
+    const tfPenalty = tier==='S'?-12:tier==='A'?-6:0;
+    offers.push({ team:team.name, desc:team.desc, tier, newSalary, fanBonus, tfPenalty, multiplier });
+  }
+  return offers;
+}
+
+function openTransferWindow(){
+  const offers = generateTransferOffers();
+  if(offers.length === 0){ nextTurn(); return; }
+  window._transferOffers = offers;
+
+  clearPage();
+  const offerHtml = offers.map((o,i)=>`
+    <div class="offer-item">
+      <div class="offer-header">
+        <span class="offer-name">${o.team}</span>
+        <span class="offer-tier tier-${o.tier}">${o.tier}級戰隊</span>
+      </div>
+      <div class="offer-desc">${o.desc}</div>
+      <div class="offer-stats">
+        <span class="offer-salary-val">月薪：${fmtMoney(o.newSalary)}/回合</span>
+        <span style="color:var(--sub)">薪資 ×${o.multiplier.toFixed(1)}</span>
+        <span class="d-pos">粉絲+${fmtFans(o.fanBonus)}</span>
+        ${o.tfPenalty<0?`<span class="d-neg">初期配合${o.tfPenalty}</span>`:''}
+      </div>
+      <button class="btn-offer" onclick="acceptTransfer(${i})">接受此邀約</button>
+    </div>
+  `).join('');
+
+  const div = document.createElement('div');
+  div.className = 'transfer-card';
+  div.innerHTML = `
+    <div class="transfer-tag">🔄 轉會期開啟</div>
+    <div class="event-title">市場上出現了你的身影</div>
+    <div class="event-text">本賽季的轉會窗口正式開啟。市場消息靈通的代理人帶來了幾份正式邀約——你是選擇留守，還是踏上新的旅程？</div>
+    <div class="offers-list">${offerHtml}</div>
+    <button class="btn-decline" onclick="declineTransfer()">婉拒所有邀約，繼續效力現隊</button>
+  `;
+  $('event-area').appendChild(div);
+  addLog('轉會期：收到轉會邀約');
+  refreshPanel();
+}
+
+function acceptTransfer(idx){
+  const o = window._transferOffers[idx];
+  const oldTeam = G.currentTeam;
+  G.currentTeam = o.team;
+  G.salary = o.newSalary;
+  G.fans += o.fanBonus;
+  G.totalEarned += 0;
+  G.stats.tf = Math.max(0, G.stats.tf + (o.tfPenalty||0));
+  G.teamRel = 30;
+  G.transferCooldown = 18 + Math.floor(Math.random()*8);
+
+  clearPage();
+  const div = document.createElement('div');
+  div.className = 'transfer-card';
+  div.innerHTML = `
+    <div class="transfer-tag">✅ 轉會成功</div>
+    <div class="event-title">加入 ${o.team}</div>
+    <div class="event-text">你在轉會市場掀起了一陣波瀾，正式簽約加入 ${o.team}。${oldTeam?`告別 ${oldTeam}，`:''}新的環境、新的隊友，一切從零開始磨合。</div>
+    <div class="result-box">
+      <div>合約已簽署。月薪調整為 <span class="d-money">${fmtMoney(o.newSalary)}/回合</span></div>
+      <div class="delta-line">
+        <span class="d-pos">粉絲 +${fmtFans(o.fanBonus)}</span>
+        ${o.tfPenalty<0?`<span class="d-neg">團隊配合 ${o.tfPenalty}（磨合期）</span>`:''}
+        <span class="d-neu">隊內關係重置（磨合中）</span>
+      </div>
+    </div>
+    <button class="btn-next" onclick="nextTurn()">開始新篇章 →</button>
+  `;
+  $('event-area').appendChild(div);
+  addLog(`轉會：加入${o.team}，月薪${fmtMoney(o.newSalary)}/回合`);
+  refreshPanel();
+}
+
+function declineTransfer(){
+  G.teamRel  = Math.min(100, G.teamRel + 5);
+  G.coachRel = Math.min(100, G.coachRel + 3);
+  G.transferCooldown = 15 + Math.floor(Math.random()*8);
+
+  clearPage();
+  const div = document.createElement('div');
+  div.className = 'event-card';
+  div.innerHTML = `
+    <div class="event-stage-tag">轉會期</div>
+    <div class="event-title">選擇留守，忠誠可嘉</div>
+    <div class="event-text">你婉拒了所有邀約，選擇繼續為現在的隊伍效力。你的忠誠讓教練和隊友都非常感動。</div>
+    <div class="result-box">
+      <div>你的選擇贏得了全隊的認可。</div>
+      <div class="delta-line">
+        <span class="d-pos">隊內關係+5</span>
+        <span class="d-pos">教練信任+3</span>
+      </div>
+    </div>
+    <button class="btn-next" onclick="nextTurn()">繼續 →</button>
+  `;
+  $('event-area').appendChild(div);
+  addLog('轉會期：選擇留隊');
+  refreshPanel();
 }
 
 // ══════════════════════════════════════════════
@@ -1054,17 +1244,33 @@ function chooseOption(idx){
 // ══════════════════════════════════════════════
 function nextTurn(){
   G.turn++;
-  // Natural fatigue recovery a bit each turn
+
+  // Salary income & living expenses
+  if(G.salary > 0){
+    G.money += G.salary;
+    G.totalEarned += G.salary;
+  }
+  const expense = STAGE_EXPENSES[G.stage] || 0;
+  if(expense > 0) G.money = Math.max(0, G.money - expense);
+
+  // Natural fatigue recovery
   G.fatigue = Math.max(0, G.fatigue - 2);
-  // Check end condition
-  if(G.stage >= 5 && G.progress >= 100){
-    showEnd(); return;
+
+  // End condition
+  if(G.stage >= 5 && G.progress >= 100){ showEnd(); return; }
+
+  // Transfer window check (stage >= 2, after cooldown)
+  if(G.stage >= 2 && G.transferCooldown > 0) G.transferCooldown--;
+  if(G.stage >= 2 && G.transferCooldown === 0 && Math.random() < 0.45){
+    G.transferCooldown = 15 + Math.floor(Math.random()*10);
+    openTransferWindow();
+    return;
   }
+
   // Weekly match every 7 turns
-  if(G.turn % 7 === 0 && G.stage >= 1){
-    renderMatch(); return;
-  }
-  // Pick next event
+  if(G.turn % 7 === 0 && G.stage >= 1){ renderMatch(); return; }
+
+  // Next event
   const ev = pickEvent();
   if(!ev){ showEnd(); return; }
   renderEvent(ev);
@@ -1076,27 +1282,40 @@ function advanceStage(){
   G.progress = 0;
   G.seenOnce.clear();
   G.fatigue = Math.max(0, G.fatigue - 10);
+  G.salary = STAGE_SALARIES[G.stage] || G.salary;
+
   if(G.stage >= STAGES.length){ showEnd(); return; }
-  // Team name for higher stages
-  if(G.stage >= 2 && !G.team){
-    const teams = ['焰火战队','星辰电竞','雷霆战队','极光电竞','钢铁意志'];
-    G.team = teams[Math.floor(Math.random()*teams.length)];
+
+  // Assign team
+  if(G.stage === 2 && !G.currentTeam){
+    const pool = TEAMS.B;
+    G.currentTeam = pool[Math.floor(Math.random()*pool.length)].name;
+  } else if(G.stage === 3 && !G.currentTeam){
+    const pool = TEAMS.A;
+    G.currentTeam = pool[Math.floor(Math.random()*pool.length)].name;
   }
-  // Show stage transition message
-  const ea = $('event-area');
+
+  clearPage();
   const div = document.createElement('div');
-  div.className = 'event-card';
-  div.style.borderColor = 'var(--accent)';
+  div.className = 'stage-card';
   div.innerHTML = `
     <div class="event-stage-tag" style="background:rgba(240,165,0,.15);border-color:rgba(240,165,0,.4);color:var(--accent)">
-      階段晉升
+      ✦ 階段晉升
     </div>
-    <div class="event-title">✦ 歡迎來到${STAGES[G.stage].name}</div>
-    <div class="event-text">你完成了上一個階段的挑戰，踏入了全新的競技舞台。新的對手、新的機遇、新的壓力，都在等著你。</div>
-    <button class="btn-next" style="background:linear-gradient(135deg,#f0a500,#c88000);color:#0a0c12;" onclick="nextTurn()">迎接挑戰 →</button>
+    <div class="event-title">歡迎來到${STAGES[G.stage].name}</div>
+    <div class="event-text">
+      你完成了上一個階段的挑戰，踏上了全新的競技舞台。新的對手、新的機遇、新的壓力，都在等著你。
+      ${G.currentTeam?`<br><br>你現在效力於：<strong style="color:var(--accent)">${G.currentTeam}</strong>`:''}
+    </div>
+    ${G.salary>0?`
+    <div class="result-box" style="border-color:rgba(58,213,100,.25)">
+      <div>薪資調整：月薪提升至 <span class="d-money">${fmtMoney(G.salary)}/回合</span></div>
+    </div>`:''}
+    <button class="btn-next" style="background:linear-gradient(135deg,#f0a500,#c88000);color:#0a0c12;" onclick="nextTurn()">
+      迎接挑戰 →
+    </button>
   `;
-  ea.appendChild(div);
-  ea.scrollTop = ea.scrollHeight;
+  $('event-area').appendChild(div);
   refreshPanel();
   addLog(`晉升至：${STAGES[G.stage].name}`);
 }
@@ -1107,7 +1326,7 @@ function advanceStage(){
 function showEnd(){
   const s = G.stats;
   const avgStat = Math.round((s.op+s.aw+s.tf+s.mt+s.cm)/5);
-  const stageName = STAGES[Math.min(G.stage, STAGES.length-1)].name;
+  const stageName = STAGES[Math.min(G.stage,STAGES.length-1)].name;
   let title, comment;
   if(G.stage >= 5 && G.progress >= 100){
     title = '傳奇落幕';
@@ -1128,8 +1347,10 @@ function showEnd(){
   $('end-stats').innerHTML = `
     <div class="end-stat-item"><div class="end-stat-label">最終粉絲</div><div class="end-stat-val">${fmtFans(G.fans)}</div></div>
     <div class="end-stat-item"><div class="end-stat-label">職業回合</div><div class="end-stat-val">${G.turn}</div></div>
-    <div class="end-stat-item"><div class="end-stat-label">比賽勝場</div><div class="end-stat-val">${G.matchWins}勝${G.matchLosses}敗</div></div>
+    <div class="end-stat-item"><div class="end-stat-label">比賽勝負</div><div class="end-stat-val">${G.matchWins}勝${G.matchLosses}敗</div></div>
     <div class="end-stat-item"><div class="end-stat-label">綜合能力</div><div class="end-stat-val">${avgStat}</div></div>
+    <div class="end-stat-item"><div class="end-stat-label">個人存款</div><div class="end-stat-val">${fmtMoney(G.money)}</div></div>
+    <div class="end-stat-item"><div class="end-stat-label">職業總收入</div><div class="end-stat-val">${fmtMoney(G.totalEarned)}</div></div>
   `;
   $('end-comment').textContent = comment;
   show('s-end');
@@ -1140,15 +1361,12 @@ function showEnd(){
 // ══════════════════════════════════════════════
 function goCreate(){ show('s-create'); }
 
-// Position picker
 document.querySelectorAll('.pos-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.pos-btn').forEach(b=>b.classList.remove('sel'));
     btn.classList.add('sel');
   });
 });
-
-// Career picker
 document.querySelectorAll('.career-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.career-btn').forEach(b=>b.classList.remove('sel'));
@@ -1164,19 +1382,17 @@ function startGame(){
   const gender = $('c-gender').value;
   const pos    = document.querySelector('.pos-btn.sel')?.dataset.val;
   const career = document.querySelector('.career-btn.sel')?.dataset.val;
-  const heroes = $('c-heroes').value.trim();
 
-  if(!name){ alert('請輸入真實姓名'); return; }
-  if(!id)  { alert('請輸入遊戲ID'); return; }
-  if(!pos) { alert('請選擇主要位置'); return; }
+  if(!name)  { alert('請輸入真實姓名'); return; }
+  if(!id)    { alert('請輸入遊戲ID'); return; }
+  if(!pos)   { alert('請選擇主要位置'); return; }
   if(!career){ alert('請選擇入行背景'); return; }
 
-  const char = { name, id, age, gender, pos, heroes };
+  const char = { name, id, age, gender, pos };
   initG(char, career);
   show('s-game');
   refreshPanel();
-  // First event
-  setTimeout(()=>{ const ev = pickEvent(); if(ev) renderEvent(ev); }, 300);
+  setTimeout(()=>{ const ev=pickEvent(); if(ev) renderEvent(ev); }, 300);
 }
 </script>
 </body>
