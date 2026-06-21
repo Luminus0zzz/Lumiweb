@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《KPL 職業選手人生模擬器》</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #07090f;
+  --bg2:       #0d1120;
+  --bg3:       #12192e;
+  --bg4:       #18213a;
+  --border:    #222d48;
+  --border-hi: #344268;
+  --blue:      #4d9eff;
+  --blue-dim:  #162a56;
+  --blue-glow: rgba(77,158,255,.2);
+  --purple:    #a855f7;
+  --gold:      #f1c40f;
+  --gold-dim:  rgba(241,196,15,.12);
+  --green:     #22c55e;
+  --red:       #ef4444;
+  --orange:    #f97316;
+  --text:      #c2ceea;
+  --text-dim:  #566078;
+  --text-hi:   #ffffff;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ── SCREEN SYSTEM ── */
+.screen {
+  position: fixed; inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.screen.active { display: flex; }
+
+.screen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 50%, rgba(77,158,255,.05) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 80% at 85% 25%, rgba(168,85,247,.04) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  max-width: 500px;
+  width: 92%;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+
+/* ── LOGO ── */
+.logo { text-align: center; margin-bottom: 28px; }
+.logo-title {
+  font-size: 20px; font-weight: 700;
+  color: var(--text-hi);
+  letter-spacing: 3px;
+  text-shadow: 0 0 30px var(--blue-glow);
+}
+.logo-tag {
+  font-size: 11px; color: var(--text-dim);
+  margin-top: 5px; letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.logo-line {
+  width: 48px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  margin: 12px auto 0;
+}
+
+/* ── FORM ── */
+.field { margin-bottom: 18px; }
+label {
+  display: block;
+  font-size: 11px; color: var(--text-dim);
+  letter-spacing: 1.5px; margin-bottom: 7px;
+  text-transform: uppercase;
+}
+input[type="text"], input[type="password"],
+input[type="number"], select, textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(77,158,255,.12);
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23566078' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+textarea { resize: vertical; min-height: 72px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px; border-radius: 9px; border: none;
+  cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500;
+  letter-spacing: .5px; transition: all .2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #1a4aaa, var(--blue));
+  color: #fff; width: 100%;
+}
+.btn-primary:hover { opacity: .9; box-shadow: 0 4px 20px var(--blue-glow); }
+.btn-primary:active { transform: scale(.98); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── INFO BOX ── */
+.info-box {
+  padding: 12px 16px; border-radius: 8px;
+  font-size: 12px; line-height: 1.7; margin-bottom: 18px;
+}
+.info-box.blue {
+  background: rgba(77,158,255,.07);
+  border: 1px solid rgba(77,158,255,.2);
+  color: rgba(140,190,255,.9);
+}
+.info-box.gold {
+  background: var(--gold-dim);
+  border: 1px solid rgba(241,196,15,.25);
+  color: rgba(241,215,100,.9);
+}
+
+.error-text { font-size: 12px; color: var(--red); margin-top: 8px; }
+
+/* ── MODE SCREEN ── */
+.mode-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+.mode-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mode-card:hover { border-color: var(--border-hi); background: var(--bg4); }
+.mode-card.selected {
+  border-color: var(--blue);
+  background: var(--blue-dim);
+  box-shadow: 0 0 0 1px var(--blue);
+}
+.mode-badge {
+  display: inline-block; padding: 2px 9px; border-radius: 4px;
+  font-size: 10px; letter-spacing: 1px; margin-bottom: 8px; font-weight: 500;
+}
+.badge-real { background: rgba(239,68,68,.15); color: #f87171; }
+.badge-fiction { background: rgba(168,85,247,.15); color: #c084fc; }
+.mode-card h3 { font-size: 15px; color: var(--text-hi); margin-bottom: 6px; }
+.mode-card p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+/* ── CREATE SCREEN ── */
+#screen-create {
+  overflow-y: auto;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+.create-container {
+  max-width: 580px; width: 100%;
+  margin: 0 auto;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  position: relative; z-index: 1;
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid .col-full { grid-column: 1 / -1; }
+
+/* position picker */
+.pos-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }
+.pos-tile {
+  text-align: center; padding: 9px 4px; border-radius: 8px;
+  border: 1px solid var(--border); cursor: pointer;
+  font-size: 11px; color: var(--text-dim); transition: all .2s;
+}
+.pos-tile:hover { border-color: var(--border-hi); color: var(--text); }
+.pos-tile.active { border-color: var(--blue); background: var(--blue-dim); color: var(--blue); }
+.pos-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+
+/* ── GAME SCREEN ── */
+#screen-game {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+#screen-game.active { display: flex; }
+
+/* header */
+#game-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; z-index: 10;
+}
+.gh-title { font-size: 13px; font-weight: 700; color: var(--text-hi); letter-spacing: 2px; }
+.gh-date { font-size: 11px; color: var(--blue); letter-spacing: 1px; }
+.gh-actions { display: flex; gap: 8px; }
+.gh-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text-dim);
+  padding: 5px 11px; cursor: pointer; font-size: 12px;
+  font-family: inherit; transition: all .2s;
+}
+.gh-btn:hover { border-color: var(--border-hi); color: var(--text); }
+
+/* body */
+#game-body { flex: 1; display: flex; overflow: hidden; }
+
+/* ── LEFT PANEL ── */
+#panel-left {
+  width: 256px; min-width: 256px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 14px; display: flex; flex-direction: column; gap: 12px;
+  transition: width .3s;
+}
+#panel-left.collapsed { width: 0; min-width: 0; padding: 0; overflow: hidden; }
+
+.p-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px; text-align: center;
+}
+.p-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #1a2a5e, #2d1b6e);
+  border: 2px solid var(--blue-dim);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px; font-size: 24px;
+  transition: border-color .3s;
+}
+.p-avatar.glow { border-color: var(--blue); box-shadow: 0 0 12px var(--blue-glow); }
+.p-name { font-size: 15px; font-weight: 700; color: var(--text-hi); }
+.p-id { font-size: 11px; color: var(--blue); margin-top: 2px; }
+.p-team { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+.p-pos {
+  display: inline-block; padding: 3px 11px; border-radius: 4px;
+  background: rgba(77,158,255,.1); color: var(--blue);
+  font-size: 10px; margin-top: 8px; letter-spacing: 1px;
+}
+
+.p-section {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px;
+}
+.p-section-title {
+  font-size: 10px; color: var(--text-dim);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* stat bars */
+.stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.stat-row:last-child { margin-bottom: 0; }
+.s-label { font-size: 11px; color: var(--text-dim); width: 32px; flex-shrink: 0; }
+.s-track { flex: 1; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+.s-fill { height: 100%; border-radius: 2px; transition: width .8s ease, background .5s; }
+.s-fill.hi  { background: linear-gradient(90deg,#1a6a42,var(--green)); }
+.s-fill.mid { background: linear-gradient(90deg,var(--blue-dim),var(--blue)); }
+.s-fill.lo  { background: linear-gradient(90deg,#6a2a00,var(--orange)); }
+.s-val { font-size: 11px; color: var(--text); width: 24px; text-align: right; flex-shrink: 0; }
+
+/* info rows */
+.i-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px;
+  gap: 8px;
+}
+.i-row:last-child { border-bottom: none; padding-bottom: 0; }
+.i-lbl { color: var(--text-dim); flex-shrink: 0; }
+.i-val { color: var(--text); text-align: right; }
+.i-val.gold { color: var(--gold); }
+.i-val.warn { color: var(--orange); }
+.i-val.danger { color: var(--red); }
+
+/* hero tags */
+.hero-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.hero-tag {
+  padding: 3px 9px; border-radius: 4px;
+  background: rgba(77,158,255,.08);
+  border: 1px solid rgba(77,158,255,.18);
+  font-size: 11px; color: rgba(100,170,255,.9);
+}
+
+/* ── MAIN PANEL ── */
+#panel-main {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--bg);
+}
+
+#narrative-scroll {
+  flex: 1; overflow-y: auto; padding: 28px 32px; scroll-behavior: smooth;
+}
+
+/* narrative blocks */
+.n-block { margin-bottom: 28px; animation: fadeUp .3s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.n-meta {
+  display: flex; gap: 16px; align-items: center;
+  font-size: 10px; color: var(--text-dim); letter-spacing: 1.5px;
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+.n-meta .dm-tag { color: var(--gold); font-weight: 600; }
+.n-text {
+  font-size: 14.5px; line-height: 1.95; color: var(--text);
+  white-space: pre-line;
+}
+.n-text p { margin-bottom: 12px; }
+
+.action-block {
+  margin-bottom: 20px;
+  padding: 11px 16px;
+  background: rgba(77,158,255,.06);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px; color: var(--text-dim);
+}
+.action-block::before {
+  content: '你的選擇';
+  display: block; font-size: 10px;
+  color: var(--blue); letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+.turn-sep {
+  text-align: center; margin: 22px 0;
+  position: relative;
+}
+.turn-sep::before {
+  content: ''; position: absolute;
+  top: 50%; left: 0; right: 0; height: 1px;
+  background: var(--border);
+}
+.turn-sep span {
+  position: relative; background: var(--bg);
+  padding: 0 14px; font-size: 10px;
+  color: var(--text-dim); letter-spacing: 2px;
+}
+
+/* typing indicator */
+.typing-ind {
+  display: none; padding: 8px 0;
+  align-items: center; gap: 10px;
+  font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+}
+.typing-ind.on { display: flex; }
+.dots { display: flex; gap: 4px; }
+.dots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--text-dim);
+  animation: blink 1.3s ease infinite;
+}
+.dots span:nth-child(2) { animation-delay: .2s; }
+.dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink {
+  0%,80%,100% { opacity:.25; transform:scale(.8); }
+  40%          { opacity:1;   transform:scale(1); }
+}
+
+/* error block */
+.error-block {
+  padding: 12px 16px; border: 1px solid var(--red);
+  background: rgba(239,68,68,.08); border-radius: 8px;
+  font-size: 12px; color: var(--red); margin-bottom: 16px;
+}
+
+/* ── INPUT AREA ── */
+#input-wrap {
+  border-top: 1px solid var(--border);
+  padding: 14px 18px;
+  background: var(--bg2);
+  display: flex; gap: 10px; align-items: flex-end;
+}
+#input-box {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 9px;
+  color: var(--text); padding: 10px 14px;
+  font-size: 14px; font-family: inherit;
+  outline: none; resize: none;
+  min-height: 46px; max-height: 120px; line-height: 1.5;
+  transition: border-color .2s;
+}
+#input-box:focus { border-color: var(--blue); }
+#input-box::placeholder { color: var(--text-dim); }
+#send-btn {
+  background: linear-gradient(135deg,#1a4aaa,var(--blue));
+  border: none; border-radius: 9px; color: #fff;
+  padding: 10px 20px; cursor: pointer;
+  font-size: 13px; font-family: inherit; font-weight: 500;
+  white-space: nowrap; transition: all .2s;
+}
+#send-btn:hover { opacity:.9; box-shadow: 0 4px 16px var(--blue-glow); }
+#send-btn:disabled { opacity:.4; cursor:not-allowed; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hi); }
+
+/* mobile */
+@media (max-width: 700px) {
+  #panel-left { width: 0; min-width: 0; padding: 0; overflow: hidden; }
+  #narrative-scroll { padding: 20px 18px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .pos-grid { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+  SCREEN 1 · API KEY
+════════════════════════════════════ -->
+<div id="screen-api" class="screen active">
+  <div class="card">
+    <div class="logo">
+      <div class="logo-title">《KPL 職業選手人生模擬器》</div>
+      <div class="logo-tag">King of Glory · Esports Life Simulator</div>
+      <div class="logo-line"></div>
+    </div>
+
+    <div class="info-box blue">
+      本遊戲由 <strong>Claude AI</strong> 擔任「DM 敘事大師」，為你生成長篇電競人生敘事。<br>
+      每回合 ≥ 500 字，時間緩慢流動，世界真實運行。<br><br>
+      請輸入你的 <strong>Anthropic API Key</strong> 以開始遊戲。
+    </div>
+
+    <div class="field">
+      <label>Anthropic API Key</label>
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+      <div id="api-error" class="error-text"></div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px;">
+      <input type="checkbox" id="save-key" checked
+        style="width:auto; accent-color:var(--blue); cursor:pointer;">
+      <label for="save-key"
+        style="font-size:12px; color:var(--text-dim); cursor:pointer;
+               letter-spacing:0; text-transform:none; margin:0;">
+        在瀏覽器記住 API Key
+      </label>
+    </div>
+
+    <button class="btn btn-primary" id="api-btn" onclick="validateApi()">開始遊戲 →</button>
+
+    <p style="font-size:11px; color:var(--text-dim); text-align:center; margin-top:14px; line-height:1.6;">
+      API Key 僅在你的瀏覽器中使用，不經過任何第三方服務器
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+  SCREEN 2 · MODE
+════════════════════════════════════ -->
+<div id="screen-mode" class="screen">
+  <div class="card" style="max-width:520px;">
+    <div class="logo">
+      <div class="logo-title">選擇聯賽世界</div>
+      <div class="logo-tag">Game Mode</div>
+      <div class="logo-line"></div>
+    </div>
+
+    <div class="mode-list">
+      <div class="mode-card" id="mc-real" onclick="pickMode('real')">
+        <span class="mode-badge badge-real">真實世界</span>
+        <h3>現實 KPL 世界</h3>
+        <p>存在真實戰隊（成都AG超玩會、重慶狼隊、北京WB…）與真實賽事結構。競爭更激烈，輿論更貼近現實電競圈，轉會市場複雜，壓力更高。</p>
+      </div>
+      <div class="mode-card" id="mc-fiction" onclick="pickMode('fiction')">
+        <span class="mode-badge badge-fiction">架空世界</span>
+        <h3>架空 KPL 聯賽</h3>
+        <p>全虛構戰隊與選手，完整自創KPL體系。劇情自由度高，不受現實賽事限制，可以更小說化發展，適合更戲劇性的故事。</p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="confirmMode()">確認 →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+  SCREEN 3 · CHARACTER CREATE
+════════════════════════════════════ -->
+<div id="screen-create" class="screen">
+  <div class="create-container">
+    <div class="logo" style="margin-bottom:22px;">
+      <div class="logo-title">創建選手</div>
+      <div class="logo-tag">Character Creation</div>
+      <div class="logo-line"></div>
+    </div>
+
+    <div class="info-box gold">
+      以下是唯一需要輸入的資訊。填寫完成後 DM 將根據你的設定生成隱藏天賦、性格缺陷與職業入口，然後開始第一段敘事。
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>姓名</label>
+        <input type="text" id="c-name" placeholder="例：林澈">
+      </div>
+      <div class="field">
+        <label>選手 ID</label>
+        <input type="text" id="c-id" placeholder="例：Echo、Mist">
+      </div>
+      <div class="field">
+        <label>年齡</label>
+        <input type="number" id="c-age" min="14" max="30" placeholder="17">
+      </div>
+      <div class="field">
+        <label>性別</label>
+        <select id="c-gender">
+          <option value="">選擇…</option>
+          <option>男</option>
+          <option>女</option>
+          <option>非二元</option>
+        </select>
+      </div>
+      <div class="field col-full">
+        <label>性向</label>
+        <input type="text" id="c-orient" placeholder="例：異性戀、同性戀、雙性戀、無性戀…">
+      </div>
+      <div class="field col-full">
+        <label>性格特質</label>
+        <input type="text" id="c-pers" placeholder="例：內斂好強、容易緊張、外向活潑、情緒化…">
+      </div>
+      <div class="field col-full">
+        <label>地區</label>
+        <input type="text" id="c-region" placeholder="例：成都、上海、廣州、武漢…">
+      </div>
+
+      <div class="field col-full">
+        <label>位置</label>
+        <div class="pos-grid">
+          <div class="pos-tile" onclick="pickPos(this,'對抗路')"><span class="pos-icon">⚔️</span>對抗路</div>
+          <div class="pos-tile" onclick="pickPos(this,'打野')"><span class="pos-icon">🌲</span>打野</div>
+          <div class="pos-tile" onclick="pickPos(this,'中路')"><span class="pos-icon">⚡</span>中路</div>
+          <div class="pos-tile" onclick="pickPos(this,'發育路')"><span class="pos-icon">💰</span>發育路</div>
+          <div class="pos-tile" onclick="pickPos(this,'輔助')"><span class="pos-icon">🛡️</span>輔助</div>
+        </div>
+        <input type="hidden" id="c-pos" value="">
+      </div>
+
+      <div class="field col-full">
+        <label>英雄池（至少 5 個，用頓號或逗號分隔）</label>
+        <input type="text" id="c-heroes" placeholder="例：鏡、曜、馬超、露娜、裴擒虎、韓信">
+      </div>
+
+      <div class="field col-full">
+        <label>職業背景</label>
+        <select id="c-career">
+          <option value="">選擇背景…</option>
+          <option value="巔峰賽路人王">巔峰賽路人王（高段位路人被發掘）</option>
+          <option value="青訓選手">青訓選手（正規青訓體系出身）</option>
+          <option value="技術主播">技術主播（直播起家被邀試訓）</option>
+          <option value="校園賽冠軍">校園賽冠軍（學生賽事成績突出）</option>
+          <option value="陪玩轉職">陪玩轉職（職業陪玩轉正）</option>
+          <option value="普通學生被挖掘">普通學生被挖掘（意外被發現）</option>
+          <option value="民間草根戰隊">民間草根戰隊（從民間逐步打入職業）</option>
+        </select>
+      </div>
+
+      <div class="field col-full">
+        <label>身份背景（自由描述）</label>
+        <textarea id="c-bg" rows="3" placeholder="例：來自四川農村，家裡反對打電競，靠在網咖偷偷練習…"></textarea>
+      </div>
+
+      <div class="field col-full">
+        <label>外貌描述</label>
+        <textarea id="c-look" rows="2" placeholder="例：偏瘦高挑，眼神銳利，習慣戴帽子低著頭…"></textarea>
+      </div>
+    </div>
+
+    <div id="create-error" class="error-text" style="margin-bottom:14px;"></div>
+    <button class="btn btn-primary" onclick="submitCreate()">進入電競世界 →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+  SCREEN 4 · GAME
+════════════════════════════════════ -->
+<div id="screen-game" class="screen">
+
+  <!-- Header -->
+  <div id="game-header">
+    <div class="gh-title">《KPL 職業選手人生模擬器》</div>
+    <div class="gh-date" id="gh-date">──</div>
+    <div class="gh-actions">
+      <button class="gh-btn" onclick="togglePanel()" title="切換側欄">☰</button>
+      <button class="gh-btn" onclick="tryRestart()">↺ 重置</button>
+    </div>
+  </div>
+
+  <div id="game-body">
+
+    <!-- Left Status Panel -->
+    <div id="panel-left">
+      <div class="p-card">
+        <div class="p-avatar" id="p-av">🎮</div>
+        <div class="p-name" id="p-name">──</div>
+        <div class="p-id"   id="p-id">──</div>
+        <div class="p-team" id="p-team">尚未加隊</div>
+        <div class="p-pos"  id="p-pos">──</div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">核心屬性</div>
+        <div class="stat-row">
+          <span class="s-label">操作</span>
+          <div class="s-track"><div class="s-fill mid" id="sf-op" style="width:0%"></div></div>
+          <span class="s-val" id="sv-op">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-label">意識</span>
+          <div class="s-track"><div class="s-fill mid" id="sf-aw" style="width:0%"></div></div>
+          <span class="s-val" id="sv-aw">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-label">團戰</span>
+          <div class="s-track"><div class="s-fill mid" id="sf-tf" style="width:0%"></div></div>
+          <span class="s-val" id="sv-tf">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-label">心態</span>
+          <div class="s-track"><div class="s-fill mid" id="sf-mt" style="width:0%"></div></div>
+          <span class="s-val" id="sv-mt">—</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-label">溝通</span>
+          <div class="s-track"><div class="s-fill mid" id="sf-cm" style="width:0%"></div></div>
+          <span class="s-val" id="sv-cm">—</span>
+        </div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">現況</div>
+        <div class="i-row"><span class="i-lbl">人氣</span><span class="i-val" id="iv-pop">無名</span></div>
+        <div class="i-row"><span class="i-lbl">粉絲</span><span class="i-val" id="iv-fan">0</span></div>
+        <div class="i-row"><span class="i-lbl">身體</span><span class="i-val" id="iv-hp">良好</span></div>
+        <div class="i-row"><span class="i-lbl">近況</span><span class="i-val" id="iv-st" style="max-width:130px;text-align:right">——</span></div>
+        <div class="i-row"><span class="i-lbl">榮譽</span><span class="i-val gold" id="iv-hon">無</span></div>
+      </div>
+
+      <div class="p-section">
+        <div class="p-section-title">英雄池</div>
+        <div class="hero-wrap" id="hero-wrap"></div>
+      </div>
+    </div>
+
+    <!-- Main Narrative -->
+    <div id="panel-main">
+      <div id="narrative-scroll">
+        <div class="typing-ind" id="typ-ind">
+          <span>DM 敘事中</span>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div id="input-wrap">
+        <textarea id="input-box"
+          placeholder="輸入你的行動或決定… （Enter 發送 · Shift+Enter 換行）"
+          rows="1"></textarea>
+        <button id="send-btn" onclick="userSend()">傳送</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+  JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+'use strict';
+
+const API_URL = 'https://api.anthropic.com/v1/messages';
+const MODEL   = 'claude-opus-4-8';
+const MAX_MSG = 28;   // max conversation turns kept
+
+/* ── STATE ── */
+let G = {
+  key: '',
+  mode: '',
+  char: {
+    name:'', id:'', age:0, gender:'', orient:'',
+    pers:'', region:'', pos:'', heroes:[],
+    career:'', bg:'', look:''
+  },
+  vis: {
+    op:0, aw:0, tf:0, mt:0, cm:0,
+    pop:'無名', fan:'0', hp:'良好',
+    state:'剛踏入電競圈', honor:'無',
+    date:'', team:'尚未加隊'
+  },
+  hid: {
+    techCap:70, learn:70, metaAdapt:65, coop:68,
+    stress:70, charm:60, lead:55, emo:65,
+    flaws:[], tags:[], exposure:10, speechRisk:20,
+    stage:'pre-pro'
+  },
+  msgs: [],
+  turn: 0,
+  busy: false
+};
+
+/* ── SCREEN ── */
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+/* ─────────────────────────────────────
+  SCREEN 1 · API KEY
+───────────────────────────────────── */
+(function loadSaved(){
+  const k = localStorage.getItem('kpl_key');
+  if(k) document.getElementById('api-key-input').value = k;
+})();
+
+async function validateApi(){
+  const btn = document.getElementById('api-btn');
+  const err = document.getElementById('api-error');
+  const key = document.getElementById('api-key-input').value.trim();
+  if(!key){ err.textContent='請輸入 API Key'; return; }
+  if(!key.startsWith('sk-ant-')){ err.textContent='格式有誤，應以 sk-ant- 開頭'; return; }
+
+  btn.disabled = true;
+  err.textContent = '驗證中…';
+
+  try {
+    const r = await fetch(API_URL, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: MODEL, max_tokens:5, messages:[{role:'user',content:'hi'}] })
+    });
+    if(r.status === 401){ err.textContent='API Key 無效，請確認後重試'; btn.disabled=false; return; }
+
+    G.key = key;
+    if(document.getElementById('save-key').checked) localStorage.setItem('kpl_key', key);
+    err.textContent = '';
+    show('screen-mode');
+  } catch(e){
+    err.textContent = '網路錯誤，請檢查連線';
+  }
+  btn.disabled = false;
+}
+
+/* ─────────────────────────────────────
+  SCREEN 2 · MODE
+───────────────────────────────────── */
+function pickMode(m){
+  G.mode = m;
+  document.getElementById('mc-real').classList.toggle('selected', m==='real');
+  document.getElementById('mc-fiction').classList.toggle('selected', m==='fiction');
+}
+function confirmMode(){
+  if(!G.mode){ alert('請選擇聯賽世界'); return; }
+  show('screen-create');
+}
+
+/* ─────────────────────────────────────
+  SCREEN 3 · CHARACTER
+───────────────────────────────────── */
+function pickPos(el, p){
+  document.querySelectorAll('.pos-tile').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('c-pos').value = p;
+}
+
+function submitCreate(){
+  const err = document.getElementById('create-error');
+  const v = id => document.getElementById(id).value.trim();
+  const name   = v('c-name');
+  const sid    = v('c-id');
+  const age    = parseInt(v('c-age'));
+  const gender = v('c-gender');
+  const orient = v('c-orient') || '未說明';
+  const pers   = v('c-pers')   || '普通';
+  const region = v('c-region') || '不詳';
+  const pos    = v('c-pos');
+  const heroRaw= v('c-heroes');
+  const career = v('c-career');
+  const bg     = v('c-bg')     || '普通玩家';
+  const look   = v('c-look')   || '普通外貌';
+
+  if(!name||!sid)       { err.textContent='請填寫姓名和 ID'; return; }
+  if(!age||age<14||age>30){ err.textContent='請填寫 14~30 歲之間的年齡'; return; }
+  if(!gender)           { err.textContent='請選擇性別'; return; }
+  if(!pos)              { err.textContent='請選擇位置'; return; }
+  if(!heroRaw)          { err.textContent='請填寫英雄池'; return; }
+  if(!career)           { err.textContent='請選擇職業背景'; return; }
+
+  const heroes = heroRaw.split(/[、，,，\s]+/).map(h=>h.trim()).filter(h=>h);
+  if(heroes.length < 3) { err.textContent='英雄池請至少填寫 3 個英雄'; return; }
+
+  err.textContent = '';
+  G.char = { name, id:sid, age, gender, orient, pers, region, pos, heroes, career, bg, look };
+  buildHidden();
+  initGame();
+}
+
+function buildHidden(){
+  const c = G.char;
+  const rng = (lo,hi) => lo + Math.floor(Math.random()*(hi-lo+1));
+  const clamp = v => Math.min(96, Math.max(38, v));
+
+  let tech  = rng(60,80);
+  let learn = rng(58,82);
+  let stress= rng(58,80);
+  let charm = rng(45,80);
+
+  if(c.career==='巔峰賽路人王') tech+=10;
+  if(c.career==='青訓選手')   { learn+=6; stress+=4; }
+  if(c.career==='技術主播')     charm+=12;
+  if(c.career==='校園賽冠軍')   stress+=5;
+
+  const p = c.pers;
+  if(/好強|競爭/.test(p))   { stress+=6; }
+  if(/內斂|沉默/.test(p))   { charm-=10; stress+=4; }
+  if(/外向|活潑/.test(p))   { charm+=10; }
+  if(/情緒|衝動/.test(p))   { stress-=12; }
+
+  G.hid.techCap   = clamp(tech);
+  G.hid.learn     = clamp(learn);
+  G.hid.metaAdapt = clamp(learn - 4 + rng(-4,4));
+  G.hid.coop      = clamp(rng(55,80));
+  G.hid.stress    = clamp(stress);
+  G.hid.charm     = clamp(charm);
+  G.hid.lead      = clamp(rng(45,78));
+  G.hid.emo       = clamp(stress - 6 + rng(-5,10));
+
+  const tagPool = [];
+  if(G.hid.techCap>=82)  tagPool.push('操作型天才');
+  if(G.hid.coop>=80)     tagPool.push('團戰型選手');
+  if(G.hid.emo<=58)      tagPool.push('情緒波動型');
+  if(G.hid.charm<=55)    tagPool.push('冷門潛力股');
+  if(G.hid.emo<=52)      tagPool.push('易爆爭議體質');
+  if(G.hid.learn>=82)    tagPool.push('快速成長型');
+  if(!tagPool.length)    tagPool.push('穩紮穩打型');
+  G.hid.tags = tagPool;
+
+  const flawPool = ['容易急躁','過度自責','自信過高','不擅溝通','情緒內化'];
+  const f1 = flawPool[Math.floor(Math.random()*flawPool.length)];
+  G.hid.flaws = [f1];
+  if(Math.random()<0.4){
+    const f2 = flawPool[Math.floor(Math.random()*flawPool.length)];
+    if(f2!==f1) G.hid.flaws.push(f2);
+  }
+
+  G.vis.op = rng(42,58);
+  G.vis.aw = rng(40,56);
+  G.vis.tf = rng(38,54);
+  G.vis.mt = rng(50,66);
+  G.vis.cm = rng(42,56);
+}
+
+/* ─────────────────────────────────────
+  SCREEN 4 · GAME INIT
+───────────────────────────────────── */
+function initGame(){
+  show('screen-game');
+  refreshPanel();
+  setTyping(true);
+  const kick = `請開始遊戲。根據角色的職業背景「${G.char.career}」與性格「${G.char.pers}」，決定這名選手的世界初始定位（是否被注意、是否進青訓、是否先當主播、是否從路人開始），然後以長篇小說形式開始第一段敘事。`;
+  callDM(null, kick)
+    .then(txt => { setTyping(false); parseStatus(txt); })
+    .catch(e => { setTyping(false); showError(e.message); });
+}
+
+/* ─────────────────────────────────────
+  SYSTEM PROMPT
+───────────────────────────────────── */
+function sysPrompt(){
+  const c = G.char, h = G.hid, v = G.vis;
+  const modeStr = G.mode==='real'
+    ? '真實KPL世界（含真實戰隊：成都AG超玩會、重慶狼隊、北京WB等；真實賽事結構；現實電競圈輿論生態）'
+    : '架空KPL聯賽（虛構戰隊與選手，完整自創KPL體系，劇情自由度高，可更小說化發展）';
+
+  return `你是《王者榮耀職業選手人生模擬器》的DM（敘事大師）。
+
+【世界觀】
+聯賽模式：${modeStr}
+世界同時運行：KPL聯賽、青訓體系、主播生態、巔峰賽生態、飯圈與輿論場。
+所有NPC都有自己的職業人生，世界不圍繞玩家運轉。
+
+【時間規則·禁止快轉】
+一次訓練賽＝半天～一天 | 一次賽前準備＝2~5天 | 一場正式比賽＝1~3天 | 一個賽季＝多週 | 一年＝多回合累積
+
+【角色資訊】
+姓名：${c.name} | ID：${c.id}
+年齡：${c.age}歲 | 性別：${c.gender} | 性向：${c.orient}
+性格：${c.pers} | 地區：${c.region}
+位置：${c.pos} | 英雄池：${c.heroes.join('、')}
+職業背景：${c.career}
+身份背景：${c.bg}
+外貌：${c.look}
+
+【隱藏數值·玩家不可見·DM內部使用】
+操作上限：${h.techCap} | 學習能力：${h.learn} | 版本適應：${h.metaAdapt}
+團隊協作潛力：${h.coop} | 抗壓能力：${h.stress} | 人氣吸引力：${h.charm}
+領袖性：${h.lead} | 情緒穩定：${h.emo}
+性格缺陷：${h.flaws.join('、')}
+隱藏標籤：${h.tags.join('、')}
+私生活曝光度：${h.exposure}/100 | 言論風險值：${h.speechRisk}/100
+
+【NPC命名規則】
+允許：現代自然名（陳宇、林澈、周子然）、輕古風名（沈知行、江聞笙、顧行舟、魏青川、祁安）
+禁止：霸總網文風（夜寒霆、帝天辰、霆琛、星辰王等）
+每個選手NPC需有英文/縮寫選手ID
+
+【核心規則】
+1. 每回合≥500字小說敘事，重要劇情≥1000字
+2. 情節循序漸進，時間線不可過快，禁止跳過過程
+3. 描寫細節：語氣、場景、選手互動、心理描寫
+4. NPC有自己的職業路線：成敗、退役、主播、轉會
+5. 飯圈是情緒與立場戰場，不是戀愛系統
+6. 感情＝高風險社交關係，曝光＝風險，關係自然生成變動，無強制戀愛線
+7. 傷病系統真實：手傷/腱鞘炎/視覺疲勞/乾眼症/心理焦慮/睡眠障礙
+8. 直播是第二戰場：言論風險/觀眾結構/戰隊控制/爭議事件
+9. 訓練日常細化：上午巔峰賽排位/下午專項訓練/晚上訓練賽覆盤
+10. 輿論不一定正確，可能被帶節奏/反轉/誤解
+
+【禁止行為】
+- 主角光環，世界圍繞玩家運轉
+- 快速升級或跳過時間流動
+- 霸總化NPC或爽文式戀愛追求
+
+【每回合末尾必須附上狀態更新（格式固定，不可省略）】
+[STATUS_UPDATE]
+操作: 數值（0-100）
+意識: 數值（0-100）
+團戰: 數值（0-100）
+心態: 數值（0-100）
+溝通: 數值（0-100）
+人氣: 無名/初露鋒芒/小有名氣/知名選手/頂級明星
+粉絲數: 數字（如 0、500、2萬、50萬）
+身體狀況: 良好/輕微疲勞/手腕不適/嚴重傷病
+近期狀態: 一句簡短描述
+生涯榮譽: 獎項列表或「無」
+當前時間: 年份和賽季描述（如「2025年春季賽 第二週」）
+當前戰隊: 戰隊名或「尚未加隊」
+[/STATUS_UPDATE]
+
+這是一個正在運行的電競世界，而不是圍繞玩家的故事。有人會崛起，有人會隕落，有人成為傳奇，也有人默默消失。故事的重量取決於你在這個世界裡走了多久。`;
+}
+
+/* ─────────────────────────────────────
+  CLAUDE API · STREAMING
+───────────────────────────────────── */
+async function callDM(userMsg, override){
+  G.busy = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('input-box').disabled = true;
+
+  const msgs = [...G.msgs];
+  const content = override || userMsg;
+  if(content) msgs.push({ role:'user', content });
+
+  const trimmed = msgs.length > MAX_MSG ? msgs.slice(msgs.length - MAX_MSG) : msgs;
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': G.key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 4096,
+        stream: true,
+        system: sysPrompt(),
+        messages: trimmed
+      })
+    });
+
+    if(!res.ok){
+      const d = await res.json().catch(()=>({error:{message:'Unknown error'}}));
+      throw new Error(d.error?.message || `HTTP ${res.status}`);
+    }
+
+    // Create narrative block
+    const scrollEl = document.getElementById('narrative-scroll');
+    const typEl    = document.getElementById('typ-ind');
+    typEl.classList.remove('on');
+
+    const block = document.createElement('div');
+    block.className = 'n-block';
+    block.innerHTML = `
+      <div class="n-meta">
+        <span class="dm-tag">DM 敘事</span>
+        <span>第 ${G.turn+1} 回合</span>
+        <span id="bk-date-${G.turn}"></span>
+      </div>
+      <div class="n-text" id="bk-txt-${G.turn}"></div>
+    `;
+    scrollEl.insertBefore(block, typEl);
+
+    const txtEl = document.getElementById(`bk-txt-${G.turn}`);
+    let full = '', buf = '';
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+
+    while(true){
+      const { done, value } = await reader.read();
+      if(done) break;
+      buf += dec.decode(value, { stream:true });
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+
+      for(const line of lines){
+        if(!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if(raw==='[DONE]') continue;
+        try {
+          const p = JSON.parse(raw);
+          if(p.type==='content_block_delta' && p.delta?.type==='text_delta'){
+            full += p.delta.text;
+            let disp = full
+              .replace(/\[STATUS_UPDATE\][\s\S]*?\[\/STATUS_UPDATE\]/g,'')
+              .replace(/\[STATUS_UPDATE\][\s\S]*$/,'')
+              .trim();
+            txtEl.textContent = disp;
+            scrollEl.scrollTop = scrollEl.scrollHeight;
+          }
+        } catch(_){ /* ignore parse errors */ }
+      }
+    }
+
+    // Update conversation
+    if(content) G.msgs.push({ role:'user', content });
+    G.msgs.push({ role:'assistant', content:full });
+    G.turn++;
+
+    return full;
+
+  } finally {
+    G.busy = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('input-box').disabled = false;
+  }
+}
+
+/* ─────────────────────────────────────
+  STATUS PARSING
+───────────────────────────────────── */
+function parseStatus(txt){
+  const m = txt.match(/\[STATUS_UPDATE\]([\s\S]*?)\[\/STATUS_UPDATE\]/);
+  if(!m) return;
+  const c = m[1];
+  const get = key => { const r=new RegExp(key+':\\s*(.+)'); const x=c.match(r); return x?x[1].trim():null; };
+
+  const n = s => { const v=parseInt(s); return isNaN(v)?null:v; };
+  const op=get('操作'), aw=get('意識'), tf=get('團戰'), mt=get('心態'), cm=get('溝通');
+  if(n(op)!==null) G.vis.op=n(op);
+  if(n(aw)!==null) G.vis.aw=n(aw);
+  if(n(tf)!==null) G.vis.tf=n(tf);
+  if(n(mt)!==null) G.vis.mt=n(mt);
+  if(n(cm)!==null) G.vis.cm=n(cm);
+
+  const pop=get('人氣'), fan=get('粉絲數'), hp=get('身體狀況'),
+        st=get('近期狀態'), hon=get('生涯榮譽'),
+        date=get('當前時間'), team=get('當前戰隊');
+  if(pop)  G.vis.pop   = pop;
+  if(fan)  G.vis.fan   = fan;
+  if(hp)   G.vis.hp    = hp;
+  if(st)   G.vis.state = st;
+  if(hon)  G.vis.honor = hon;
+  if(date) G.vis.date  = date;
+  if(team) G.vis.team  = team;
+
+  refreshPanel();
+}
+
+/* ─────────────────────────────────────
+  UI
+───────────────────────────────────── */
+function refreshPanel(){
+  const c = G.char, v = G.vis;
+  const posEmoji = {'對抗路':'⚔️','打野':'🌲','中路':'⚡','發育路':'💰','輔助':'🛡️'};
+
+  // card
+  document.getElementById('p-name').textContent = c.name || '──';
+  document.getElementById('p-id').textContent   = c.id   ? `ID: ${c.id}` : '──';
+  document.getElementById('p-team').textContent = v.team || '尚未加隊';
+  document.getElementById('p-pos').textContent  = c.pos  || '──';
+  const av = document.getElementById('p-av');
+  av.textContent = posEmoji[c.pos] || '🎮';
+  if(v.pop !== '無名') av.classList.add('glow'); else av.classList.remove('glow');
+
+  // stats
+  setStat('op', v.op);
+  setStat('aw', v.aw);
+  setStat('tf', v.tf);
+  setStat('mt', v.mt);
+  setStat('cm', v.cm);
+
+  // info
+  document.getElementById('iv-pop').textContent = v.pop;
+  document.getElementById('iv-fan').textContent = v.fan;
+
+  const hpEl = document.getElementById('iv-hp');
+  hpEl.textContent = v.hp;
+  hpEl.className = 'i-val';
+  if(/嚴重/.test(v.hp))    hpEl.classList.add('danger');
+  else if(/不適/.test(v.hp)) hpEl.classList.add('warn');
+
+  document.getElementById('iv-st').textContent  = v.state;
+  document.getElementById('iv-hon').textContent = v.honor;
+
+  if(v.date) document.getElementById('gh-date').textContent = v.date;
+
+  // heroes
+  const hw = document.getElementById('hero-wrap');
+  hw.innerHTML = c.heroes.map(h=>`<span class="hero-tag">${h}</span>`).join('');
+}
+
+function setStat(key, val){
+  const f = document.getElementById(`sf-${key}`);
+  const v = document.getElementById(`sv-${key}`);
+  if(!f||!v) return;
+  const n = val||0;
+  f.style.width = n+'%';
+  v.textContent = n;
+  f.className = 's-fill ' + (n>=78?'hi': n>=54?'mid':'lo');
+}
+
+function setTyping(on){
+  document.getElementById('typ-ind').classList.toggle('on', on);
+  if(on) document.getElementById('narrative-scroll').scrollTop = 999999;
+}
+
+function showError(msg){
+  const el = document.createElement('div');
+  el.className = 'error-block';
+  el.textContent = '錯誤：' + msg;
+  const sc = document.getElementById('narrative-scroll');
+  sc.insertBefore(el, document.getElementById('typ-ind'));
+  sc.scrollTop = sc.scrollHeight;
+}
+
+/* ─────────────────────────────────────
+  USER INPUT
+───────────────────────────────────── */
+async function userSend(){
+  if(G.busy) return;
+  const box = document.getElementById('input-box');
+  const txt = box.value.trim();
+  if(!txt) return;
+
+  box.value = '';
+  box.style.height = 'auto';
+
+  // separator
+  const sc = document.getElementById('narrative-scroll');
+  const typEl = document.getElementById('typ-ind');
+
+  const sep = document.createElement('div');
+  sep.className = 'turn-sep';
+  sep.innerHTML = `<span>TURN ${G.turn+1}</span>`;
+  sc.insertBefore(sep, typEl);
+
+  // action block
+  const act = document.createElement('div');
+  act.className = 'action-block';
+  act.textContent = txt;
+  sc.insertBefore(act, typEl);
+
+  sc.scrollTop = sc.scrollHeight;
+  setTyping(true);
+
+  try {
+    const resp = await callDM(txt);
+    setTyping(false);
+    parseStatus(resp);
+  } catch(e){
+    setTyping(false);
+    showError(e.message);
+  }
+}
+
+document.getElementById('input-box').addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); userSend(); }
+  setTimeout(()=>{
+    const el = e.target;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120)+'px';
+  }, 0);
+});
+
+/* ─────────────────────────────────────
+  MISC
+───────────────────────────────────── */
+let panelVisible = true;
+function togglePanel(){
+  panelVisible = !panelVisible;
+  document.getElementById('panel-left').classList.toggle('collapsed', !panelVisible);
+}
+
+function tryRestart(){
+  if(!confirm('確定要重置遊戲？所有進度將消失。')) return;
+  G.mode=''; G.char={}; G.msgs=[]; G.turn=0; G.busy=false;
+  G.vis = { op:0,aw:0,tf:0,mt:0,cm:0, pop:'無名',fan:'0',hp:'良好',state:'剛踏入電競圈',honor:'無',date:'',team:'尚未加隊' };
+  G.hid = { techCap:70,learn:70,metaAdapt:65,coop:68,stress:70,charm:60,lead:55,emo:65, flaws:[],tags:[],exposure:10,speechRisk:20,stage:'pre-pro' };
+  // Clear narrative
+  const sc = document.getElementById('narrative-scroll');
+  const typEl = document.getElementById('typ-ind');
+  while(sc.firstChild && sc.firstChild !== typEl) sc.removeChild(sc.firstChild);
+  typEl.classList.remove('on');
+  show('screen-mode');
+}
+</script>
+</body>
+</html>
